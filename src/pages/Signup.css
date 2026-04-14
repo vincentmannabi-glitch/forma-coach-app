@@ -1,0 +1,193 @@
+.signup-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--color-bg);
+  position: relative;
+  z-index: 1;
+  animation: forma-route-slide var(--forma-route-duration) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.signup-page .signup-container {
+  position: relative;
+  z-index: 2;
+}
+
+.signup-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Header */
+.signup-header {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+}
+
+.signup-logo {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 800;
+  color: #C8A040;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-sm);
+}
+
+.signup-tagline {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--color-text-dimmed);
+  font-weight: 300;
+}
+
+/* Card */
+.signup-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  border: 1px solid var(--color-border-card);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.signup-card:hover {
+  border-color: var(--color-border-card-hover);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(200, 160, 64, 0.06);
+}
+
+/* Form */
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.form-group label {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.form-group input {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: var(--space-md) var(--space-lg);
+  background: #1c1c16;
+  border: 1px solid rgba(240, 236, 216, 0.12);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #C8A040;
+  box-shadow: 0 0 0 1px #C8A040;
+}
+
+.form-message {
+  font-size: 0.875rem;
+  padding: var(--space-md);
+  border-radius: var(--radius-sm);
+}
+
+.form-message.success {
+  background: rgba(72, 187, 120, 0.15);
+  color: #68d391;
+}
+
+.form-message.error {
+  background: rgba(245, 101, 101, 0.15);
+  color: #fc8181;
+}
+
+/* Continue Button */
+.btn-continue {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: var(--space-md) var(--space-xl);
+  background: #C8A040;
+  color: #0e0e0a;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  margin-top: var(--space-sm);
+}
+
+.btn-continue:hover:not(:disabled) {
+  background: #d4af50;
+  box-shadow: 0 0 20px rgba(200, 160, 64, 0.25);
+}
+
+.btn-continue:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.btn-continue:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Divider */
+.signup-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  margin: var(--space-xl) 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.divider-text {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  text-transform: lowercase;
+}
+
+/* Apple Button */
+.btn-apple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  padding: var(--space-md) var(--space-xl);
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-apple:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--color-border);
+}
+
+.apple-icon {
+  flex-shrink: 0;
+}

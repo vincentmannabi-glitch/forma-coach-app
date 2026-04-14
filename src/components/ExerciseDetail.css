@@ -1,0 +1,205 @@
+.exercise-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+@media (min-width: 480px) {
+  .exercise-detail-overlay {
+    align-items: center;
+    padding: var(--space-xl);
+  }
+}
+
+.exercise-detail {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-card);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  max-height: 85vh;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 480px;
+  padding: var(--space-xl);
+  position: relative;
+}
+
+@media (min-width: 480px) {
+  .exercise-detail {
+    border-radius: var(--radius-lg);
+  }
+}
+
+.exercise-detail-close {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: #F0ECD8;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.exercise-detail-name {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #F0ECD8;
+  margin-bottom: var(--space-sm);
+}
+
+.exercise-detail-last {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: rgba(240, 236, 216, 0.6);
+  margin-bottom: var(--space-md);
+}
+
+.exercise-detail-muscles {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: #c8a040;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.exercise-detail-line {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 300;
+  color: #f0ecd8;
+  margin: 0 0 8px;
+  line-height: 1.45;
+}
+
+.exercise-detail-links {
+  display: flex;
+  gap: 16px;
+  margin: 8px 0 12px;
+}
+
+.exercise-detail-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: #c8a040;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.exercise-detail-reveal {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 300;
+  color: #7a7058;
+  margin: 0 0 12px;
+  line-height: 1.45;
+}
+
+.exercise-detail-reveal-block .exercise-detail-reveal {
+  margin-bottom: 6px;
+}
+
+.exercise-detail-desc {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: #F0ECD8;
+  line-height: 1.6;
+  margin-bottom: var(--space-lg);
+}
+
+.exercise-detail-form-tip {
+  background: rgba(200, 160, 64, 0.12);
+  border-left: 3px solid #C8A040;
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-lg);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.form-tip-label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #C8A040;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
+.exercise-detail-form-tip p {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: #C8A040;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.exercise-detail-section {
+  margin-bottom: var(--space-lg);
+}
+
+.exercise-detail-section h4 {
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #F0ECD8;
+  margin-bottom: var(--space-sm);
+}
+
+.exercise-detail-section ul {
+  margin: 0;
+  padding-left: var(--space-lg);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: rgba(240, 236, 216, 0.9);
+  line-height: 1.6;
+}
+
+.exercise-detail-section p {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: rgba(240, 236, 216, 0.9);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.exercise-detail-weight {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: rgba(240, 236, 216, 0.6);
+  margin-top: var(--space-md);
+}
+
+.exercise-detail-suggestion {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+}
+
+.exercise-detail-suggestion.progression {
+  background: rgba(200, 160, 64, 0.15);
+  border: 1px solid rgba(200, 160, 64, 0.4);
+  color: #C8A040;
+}
+
+.exercise-detail-suggestion.regression {
+  background: rgba(240, 236, 216, 0.08);
+  border: 1px solid rgba(240, 236, 216, 0.2);
+  color: #F0ECD8;
+}

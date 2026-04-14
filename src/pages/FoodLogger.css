@@ -1,0 +1,225 @@
+.food-log-page {
+  min-height: 100vh;
+  background: var(--color-bg);
+  padding: var(--space-lg) var(--space-lg) calc(var(--space-3xl) + 72px);
+  position: relative;
+  z-index: 1;
+}
+
+.food-log-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.food-log-back {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.food-log-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+
+.food-log-sub {
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: var(--color-text-dimmed);
+  margin: 0;
+}
+
+.food-log-running {
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(200, 160, 64, 0.25);
+  background: rgba(200, 160, 64, 0.06);
+  margin-bottom: var(--space-lg);
+}
+
+.food-log-running-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+  margin: 0 0 4px;
+}
+
+.food-log-running-values {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.food-log-tabs {
+  display: flex;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.food-log-tabs button {
+  flex: 1;
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-dimmed);
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.food-log-tabs button.active {
+  border-color: rgba(200, 160, 64, 0.45);
+  color: var(--color-accent);
+  background: rgba(200, 160, 64, 0.08);
+}
+
+.food-log-panel {
+  margin-bottom: var(--space-xl);
+}
+
+.food-log-search {
+  width: 100%;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-input);
+  background: #12120e;
+  color: var(--color-text);
+  font-size: 1rem;
+  margin-bottom: var(--space-md);
+}
+
+.food-log-hint {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-sm);
+}
+
+.food-log-results {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.food-log-result-btn {
+  width: 100%;
+  text-align: left;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.food-log-result-btn:hover {
+  border-color: rgba(200, 160, 64, 0.35);
+}
+
+.food-log-result-name {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.food-log-result-macros {
+  font-size: 0.75rem;
+  color: var(--color-text-dimmed);
+}
+
+.food-log-barcode-row {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.food-log-barcode-input {
+  flex: 1;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-input);
+  background: #12120e;
+  color: var(--color-text);
+}
+
+.food-log-barcode-go {
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(200, 160, 64, 0.45);
+  background: rgba(200, 160, 64, 0.12);
+  color: var(--color-accent);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.food-log-quick {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.food-log-quick-btn {
+  width: 100%;
+  text-align: left;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(200, 160, 64, 0.25);
+  background: rgba(200, 160, 64, 0.06);
+  color: var(--color-text);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.food-log-h2 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  margin-bottom: var(--space-md);
+}
+
+.food-log-entry-list {
+  list-style: none;
+}
+
+.food-log-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid rgba(240, 236, 216, 0.06);
+}
+
+.food-log-entry-name {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.food-log-entry-macros {
+  font-size: 0.75rem;
+  color: var(--color-text-dimmed);
+}
+
+.food-log-entry-del {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.food-log-today {
+  margin-top: var(--space-xl);
+}

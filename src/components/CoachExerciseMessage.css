@@ -1,0 +1,132 @@
+.coach-exercise {
+  text-align: left;
+}
+
+.coach-exercise__section {
+  margin-bottom: 1rem;
+}
+
+.coach-exercise__section--variations {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-card);
+}
+
+.coach-exercise__section--demo {
+  margin-top: 0.25rem;
+}
+
+.coach-exercise__h {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(200, 160, 64, 0.95);
+  margin: 0 0 0.4rem;
+}
+
+.coach-exercise__p {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--color-text);
+}
+
+.coach-exercise__ol,
+.coach-exercise__ul {
+  margin: 0;
+  padding-left: 1.15rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--color-text);
+}
+
+.coach-exercise__li {
+  margin-bottom: 0.35rem;
+}
+
+.coach-exercise__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.coach-ex-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-card);
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.coach-ex-card:hover {
+  border-color: var(--color-border-card-hover);
+  box-shadow: 0 0 24px rgba(200, 160, 64, 0.08);
+}
+
+.coach-ex-card:focus-within {
+  border-color: rgba(200, 160, 64, 0.45);
+  box-shadow: 0 0 0 1px rgba(200, 160, 64, 0.12);
+}
+
+.coach-ex-card__title {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem;
+  color: var(--color-text);
+}
+
+.coach-ex-card__diff {
+  font-size: 0.8125rem;
+  font-weight: 300;
+  line-height: 1.45;
+  margin: 0;
+  color: rgba(230, 226, 214, 0.82);
+}
+
+.coach-ex-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+
+.coach-ex-card__btn {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid rgba(200, 160, 64, 0.35);
+  background: rgba(200, 160, 64, 0.08);
+  color: #e8dcc8;
+  cursor: pointer;
+}
+
+.coach-ex-card__btn:hover {
+  background: rgba(200, 160, 64, 0.15);
+}
+
+.coach-ex-card__more {
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(200, 160, 64, 0.12);
+}
+
+.coach-ex-card__more-text {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  margin: 0;
+  color: rgba(230, 226, 214, 0.88);
+  white-space: pre-wrap;
+}
+
+.coach-exercise__sr-hint {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}

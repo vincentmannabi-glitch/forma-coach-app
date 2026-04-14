@@ -1,0 +1,99 @@
+.program-training-checkin {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.program-training-checkin__title {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.program-training-checkin__hint {
+  margin: 0 0 14px;
+  font-size: 0.85rem;
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
+.program-training-checkin__block {
+  margin-bottom: 14px;
+}
+
+.program-training-checkin__q {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.program-training-checkin__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.program-training-checkin__pill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.program-training-checkin__pill.is-on {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.15);
+}
+
+.program-training-checkin__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+
+.program-training-checkin__input {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.25);
+  color: inherit;
+}
+
+.program-training-checkin__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.program-training-checkin__primary {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #c9a227, #8b6914);
+  color: #111;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.program-training-checkin__primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.program-training-checkin__secondary {
+  padding: 10px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+}

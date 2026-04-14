@@ -1,0 +1,280 @@
+/* FORMA Coach — luxury fitness design system (strict palette) */
+:root {
+  /* Six core colors only */
+  --color-bg: #0e0e0a;
+  --color-surface: #1c1c16;
+  --color-elevated: #242420;
+  --color-accent: #c8a040;
+  --color-text: #f0ecd8;
+  --color-muted: #7a7058;
+
+  --color-accent-hover: #d4af50;
+  --color-text-dimmed: #7a7058;
+  --color-text-muted: #7a7058;
+  --color-border: rgba(200, 160, 64, 0.15);
+  --color-border-card: rgba(200, 160, 64, 0.15);
+  --color-border-card-hover: rgba(200, 160, 64, 0.38);
+  --color-border-input: rgba(200, 160, 64, 0.2);
+  --forma-glow-gold: rgba(200, 160, 64, 0.22);
+  --forma-glow-gold-soft: rgba(200, 160, 64, 0.12);
+
+  --font-heading: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  --padding-screen-x: 24px;
+  --padding-card: 20px;
+  --gap-cards: 16px;
+
+  --font-screen-title: 28px;
+  --font-section: 20px;
+  --font-card-title: 16px;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-card: 20px;
+  --radius-full: 9999px;
+
+  --body-min-size: 15px;
+  --body-line-height: 1.7;
+
+  --forma-route-duration: 300ms;
+  --forma-ease-luxury: ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+}
+
+#root {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--color-bg);
+}
+
+/* Film grain — depth & warmth (barely visible) */
+#root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: max(15px, var(--body-min-size));
+  font-weight: 300;
+  line-height: var(--body-line-height);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Luxury surface card — use across screens */
+.forma-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-card);
+  border-radius: var(--radius-card);
+  transition: border-color 0.35s var(--forma-ease-luxury), box-shadow 0.4s var(--forma-ease-luxury);
+}
+
+.forma-card:hover {
+  border-color: var(--color-border-card-hover);
+}
+
+.forma-body {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: max(15px, 0.9375rem);
+  line-height: var(--body-line-height);
+  color: var(--color-text);
+}
+
+.forma-muted {
+  color: var(--color-muted);
+}
+
+strong,
+b,
+th {
+  font-weight: 500;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+/* Gold pulse — active indicators, nav, dots */
+@keyframes forma-gold-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(200, 160, 64, 0.35), 0 0 20px rgba(200, 160, 64, 0.08);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(200, 160, 64, 0.08), 0 0 28px rgba(200, 160, 64, 0.2);
+    opacity: 1;
+  }
+}
+
+@keyframes forma-rest-gold-pulse {
+  0%,
+  100% {
+    color: #c8a040;
+    text-shadow: 0 0 40px rgba(200, 160, 64, 0.35), 0 0 80px rgba(200, 160, 64, 0.12);
+    transform: scale(1);
+  }
+  50% {
+    color: #c8a040;
+    text-shadow: 0 0 56px rgba(200, 160, 64, 0.5), 0 0 100px rgba(200, 160, 64, 0.2);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes forma-streak-cell-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 6px rgba(200, 160, 64, 0.25);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 14px rgba(200, 160, 64, 0.45);
+    filter: brightness(1.08);
+  }
+}
+
+@keyframes forma-checkin-dot {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(200, 160, 64, 0.45);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 8px rgba(200, 160, 64, 0.12);
+    opacity: 0.95;
+  }
+}
+
+@keyframes forma-route-slide {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Radial gold glow — use behind hero cards (position parent relative + overflow visible) */
+.forma-radial-glow {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  inset: -35% -20% auto -20%;
+  height: 85%;
+  background: radial-gradient(
+    ellipse 70% 65% at 50% 0%,
+    rgba(200, 160, 64, 0.2),
+    rgba(200, 160, 64, 0.06) 45%,
+    transparent 72%
+  );
+  opacity: 0.95;
+}
+
+.auth-guard-loading,
+.app-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0e0e0a;
+}
+
+.onboarding-page--loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.onboarding-loading {
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(200, 160, 64, 0.2);
+  border-top-color: #C8A040;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.auth-guard-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(200, 160, 64, 0.2);
+  border-top-color: #C8A040;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.auth-switch {
+  margin-top: var(--space-lg);
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: max(15px, 0.9375rem);
+  color: var(--color-muted);
+}
+
+.auth-switch a {
+  color: #C8A040;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}

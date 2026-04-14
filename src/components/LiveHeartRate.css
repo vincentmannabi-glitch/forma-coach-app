@@ -1,0 +1,28 @@
+.live-hr {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-md);
+  background: rgba(200, 64, 64, 0.15);
+  border: 1px solid rgba(200, 64, 64, 0.35);
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #e88a8a;
+}
+
+.live-hr-icon {
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+.live-hr-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.live-hr-unit {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(232, 138, 138, 0.85);
+}
