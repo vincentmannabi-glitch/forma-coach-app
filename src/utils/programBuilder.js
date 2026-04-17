@@ -230,7 +230,7 @@ export function getSnackRecommendations(goalRaw) {
       ],
     }
   }
-  if (g === 'endurance' || g === 'athletic' || g === 'hyrox') {
+  if (g === 'endurance' || g === 'athletic') {
     return {
       core: [
         'Pre-session: banana with almond butter',
@@ -283,7 +283,6 @@ function findExerciseIdByName(name) {
 
 export function normalizeGoal(goalRaw) {
   const g = String(goalRaw || '').toLowerCase()
-  if (g.includes('hyrox')) return 'hyrox'
   if (g.includes('fat')) return 'fatLoss'
   if (g.includes('muscle')) return 'muscleBuilding'
   if (g.includes('strength')) return 'strength'
@@ -733,9 +732,9 @@ function supersetAllowedForCatalog(goal, sessionFocus, level, ssIndex, type) {
   if (type === 'agonist') return goal === 'muscleBuilding' && upper && (level === 'intermediate' || level === 'advanced') && i >= 13 && i <= 22
   if (type === 'preExhaust') return goal === 'muscleBuilding' && upper && level === 'advanced' && i >= 23 && i <= 30
   if (type === 'postExhaust') return goal === 'muscleBuilding' && upper && (level === 'intermediate' || level === 'advanced') && i >= 31 && i <= 38
-  if (type === 'contrast') return (goal === 'athletic' || goal === 'hyrox') && upper && i >= 39 && i <= 46
-  if (type === 'functionalComplex' || type === 'hyrox')
-    return (goal === 'fatLoss' || goal === 'hyrox' || goal === 'athletic') && i >= 47 && i <= 60
+  if (type === 'contrast') return (goal === 'athletic') && upper && i >= 39 && i <= 46
+  if (type === 'functionalComplex' || type === 'conditioning')
+    return (goal === 'fatLoss' || goal === 'athletic') && i >= 47 && i <= 60
   return false
 }
 
@@ -783,10 +782,10 @@ function buildEquipmentDeduped(movements) {
   return list
 }
 
-// ——— HYROX finishers ———
+// ——— Conditioning finishers (metabolic circuits) ———
 
-function hyroxFinisherBlock(level, goal) {
-  if (goal !== 'fatLoss' && goal !== 'hyrox' && goal !== 'athletic') return null
+function conditioningFinisherBlock(level, goal) {
+  if (goal !== 'fatLoss' && goal !== 'athletic') return null
   const lv = mapExperienceToTrainLevel(level) || 'beginner'
   if (lv === 'advanced') {
     return {
@@ -849,11 +848,11 @@ function sessionPlanForDuration(sessionMinutes, goal) {
     return { sessionMinutes: 45, movements: 6, finisherMode: 'none', warmUpMinutes: 7, coolDownMinutes: 5, shortCoolDownOnly: false }
   }
   if (min === 60) {
-    const finisherOptional = goal === 'fatLoss' || goal === 'athletic' || goal === 'hyrox'
+    const finisherOptional = goal === 'fatLoss' || goal === 'athletic'
     return { sessionMinutes: 60, movements: 7, finisherMode: finisherOptional ? 'optional' : 'none', warmUpMinutes: 10, coolDownMinutes: 10, shortCoolDownOnly: false }
   }
   if (min === 75) {
-    const include = goal === 'fatLoss' || goal === 'athletic' || goal === 'hyrox'
+    const include = goal === 'fatLoss' || goal === 'athletic'
     return { sessionMinutes: 75, movements: 8, finisherMode: include ? 'included' : 'none', warmUpMinutes: 10, coolDownMinutes: 10, shortCoolDownOnly: false }
   }
   return { sessionMinutes: 90, movements: 9, finisherMode: 'included', warmUpMinutes: 10, coolDownMinutes: 10, shortCoolDownOnly: false }
@@ -897,7 +896,6 @@ function withinSessionLoadCue(goalNorm) {
     case 'endurance':
       return ' Within session: same load all sets; increase weight next session only if all four sets were clean.'
     case 'athletic':
-    case 'hyrox':
       return ' Within session: wave loading — adjust load to stay explosive on low-rep sets and continuous on the 10s.'
     default:
       return ''
@@ -1010,8 +1008,8 @@ function legacyTrainSession(session, entry) {
     style: entry.environment,
     environment: entry.environment,
     exercises: sessionToTrainExercises(session),
-    hyroxFinisher: session.hyroxFinisher,
-    hyroxFinisherOptional: session.hyroxFinisherOptional,
+    conditioningFinisher: session.conditioningFinisher,
+    conditioningFinisherOptional: session.conditioningFinisherOptional,
     sessionEquipmentList: session.sessionEquipmentList,
     estimatedDuration: session.estimatedDuration,
     warmUp: session.warmUp,
@@ -1106,7 +1104,7 @@ export function checkDeload(profile = {}, sessionHistory = []) {
       volumeReductionPercent: 40,
       weightPercent: 60,
       restAddSeconds: 30,
-      noHyroxFinisher: true,
+      noConditioningFinisher: true,
       noSupersets: true,
     },
   }
@@ -1170,9 +1168,12 @@ export function adjustSessionForCheckIn(session, checkIn = {}) {
     next.shortSessionOptionMinutes = 20
   }
   if (energy === 'high') {
-    next.morningUnlock = { bonusSetOptional: true, hyroxOptional: true }
-    if (goalN === 'muscleBuilding' && !next.hyroxFinisher) {
-      next.hyroxFinisherOptional = hyroxFinisherBlock(c.trainLevel ?? mapExperienceToTrainLevel(c.experienceLevel), 'hyrox')
+    next.morningUnlock = { bonusSetOptional: true, conditioningOptional: true }
+    if (goalN === 'muscleBuilding' && !next.conditioningFinisher) {
+      next.conditioningFinisherOptional = conditioningFinisherBlock(
+        c.trainLevel ?? mapExperienceToTrainLevel(c.experienceLevel),
+        'athletic',
+      )
     }
   }
 
@@ -1391,9 +1392,8 @@ export function buildCalendarWeekPlanFromProgram(program, anchorDate = new Date(
     const entry = sched.find((w) => w.day === longName)
     let chipLabel = 'Rest'
     if (entry && entry.sessionKey) {
-      const env = entry.environment === 'gym' ? 'Gym' : entry.environment === 'home' ? 'Home' : 'Train'
       const type = (entry.sessionType || 'session').replace(/([A-Z])/g, ' $1').trim()
-      chipLabel = `${type} · ${env}`
+      chipLabel = type
     }
     days.push({
       dateKey: dk,
@@ -1440,7 +1440,9 @@ export function buildProgram(profile = {}, opts = {}) {
   let scheme = repSchemeForGoal(goal)
   scheme = applyDeloadToScheme(scheme, deloadActive)
 
-  const finisherForGoal = !deloadActive ? (hyroxFinisherBlock(experienceLevel, goal) || hyroxFinisherBlock(experienceLevel, 'athletic')) : null
+  const finisherForGoal = !deloadActive
+    ? conditioningFinisherBlock(experienceLevel, goal) || conditioningFinisherBlock(experienceLevel, 'athletic')
+    : null
   const timePlan = sessionPlanForDuration(sessionMinutes, goal)
 
   const split = splitMeta(daysPerWeek)
@@ -1471,7 +1473,7 @@ export function buildProgram(profile = {}, opts = {}) {
     )
 
     const ss = pickSupersetForSession(goal, focus, profile, weekIndex + i)
-    const supersetGoals = ['muscleBuilding', 'athletic', 'fatLoss', 'hyrox']
+    const supersetGoals = ['muscleBuilding', 'athletic', 'fatLoss']
     if (ss && !deloadActive && supersetGoals.includes(goal)) {
       movements = mergeSupersetPair(movements, ss)
     }
@@ -1485,8 +1487,8 @@ export function buildProgram(profile = {}, opts = {}) {
         : WARM_UP_PROTOCOL_1
     const warmUp = warmUpForSession(warmUpBase, timePlan.warmUpMinutes)
 
-    const hyroxFinisher = timePlan.finisherMode === 'included' ? finisherForGoal : null
-    const hyroxFinisherOptional = timePlan.finisherMode === 'optional' ? finisherForGoal : null
+    const conditioningFinisher = timePlan.finisherMode === 'included' ? finisherForGoal : null
+    const conditioningFinisherOptional = timePlan.finisherMode === 'optional' ? finisherForGoal : null
     const coolDown = coolDownForSession(timePlan.coolDownMinutes, timePlan.shortCoolDownOnly)
     const estimatedDuration = timePlan.sessionMinutes
 
@@ -1495,8 +1497,8 @@ export function buildProgram(profile = {}, opts = {}) {
       environment,
       warmUp,
       movements,
-      hyroxFinisher: hyroxFinisher,
-      hyroxFinisherOptional,
+      conditioningFinisher,
+      conditioningFinisherOptional,
       coolDown,
       estimatedDuration,
       sessionEquipmentList,

@@ -10,7 +10,6 @@ import {
 } from '../utils/reengagement'
 import { buildReengagementChatMessageSoft, buildReengagementChatMessageWeek } from '../utils/reengagementCopy'
 import CoachExerciseMessage from '../components/CoachExerciseMessage'
-import { buildSafeHomeUser } from '../utils/homeSafeUser'
 import './Chat.css'
 
 function SportDetailMessage({ text, learnMore }) {

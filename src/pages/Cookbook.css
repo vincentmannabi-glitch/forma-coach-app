@@ -2,7 +2,7 @@
   min-height: 100vh;
   background: var(--color-bg);
   padding: var(--padding-screen-x);
-  padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
   position: relative;
   z-index: 1;
 }
@@ -57,7 +57,7 @@
   font-size: 10px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #FF3C78;
+  color: #FF3D6B;
 }
 
 .cookbook-featured-overlay {
@@ -75,7 +75,7 @@
   font-family: var(--font-heading);
   font-size: 22px;
   font-weight: 800;
-  color: #f0ecd8;
+  color: #ffffff;
   line-height: 1.2;
   text-align: left;
 }
@@ -93,7 +93,7 @@
   font-family: var(--font-body);
   font-weight: 300;
   font-size: 13px;
-  color: #FF3C78;
+  color: #FF3D6B;
 }
 
 .cookbook-filters {
@@ -114,7 +114,7 @@
   flex: 0 0 auto;
   padding: 8px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 60, 120, 0.15);
+  border: 1px solid rgba(255, 61, 107, 0.15);
   background: var(--color-surface);
   color: var(--color-text);
   font-family: var(--font-body);
@@ -125,8 +125,8 @@
 }
 
 .cookbook-filter-pill.is-active {
-  background: linear-gradient(135deg, #FF3C78, #FF8C00);
-  border-color: #FF3C78;
+  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  border-color: #FF3D6B;
   color: #0e0e0a;
 }
 
@@ -154,7 +154,7 @@
   padding: 0 0 16px;
   background: none;
   border: none;
-  border-bottom: 1px solid rgba(255, 60, 120, 0.06);
+  border-bottom: 1px solid rgba(255, 61, 107, 0.06);
   cursor: pointer;
   text-align: left;
   transition: opacity 300ms ease;
@@ -198,7 +198,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 300;
-  color: #FF3C78;
+  color: #FF3D6B;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -209,6 +209,6 @@
   flex-shrink: 0;
   font-size: 1.25rem;
   font-weight: 300;
-  color: #FF3C78;
+  color: #FF3D6B;
   line-height: 1;
 }

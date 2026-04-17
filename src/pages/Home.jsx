@@ -81,15 +81,6 @@ export default function Home() {
 
   const snacks = useMemo(() => pickSnacks(program, 3), [program])
 
-  const envLabel =
-    todaySession?.environment === 'rest'
-      ? 'Recovery day'
-      : todaySession?.environment === 'home'
-        ? 'Home day'
-        : todaySession?.environment === 'gym'
-          ? 'Gym day'
-          : 'Training'
-
   const exCount = Array.isArray(todaySession?.exercises) ? todaySession.exercises.length : 0
   const duration =
     todaySession?.estimatedDuration != null && Number.isFinite(Number(todaySession.estimatedDuration))
@@ -128,7 +119,6 @@ export default function Home() {
       strength: 'Strength',
       endurance: 'Endurance',
       athletic: 'Athletic',
-      hyrox: 'Athletic',
     }
     if (g && map[g]) return map[g]
     return user?.goal && String(user.goal).trim() ? user.goal : g || '—'
@@ -148,7 +138,7 @@ export default function Home() {
           <h2 className="home-hero-title">Today&apos;s training</h2>
           <p className="home-hero-meta home-hero-session-title">{sessionTitle}</p>
           <p className="home-hero-meta">
-            {envLabel} · {duration} · {exCount} exercise{exCount === 1 ? '' : 's'}
+            {duration} · {exCount} exercise{exCount === 1 ? '' : 's'}
           </p>
           <p className="home-hero-meta">
             Goal: {goalLabel} · Level: {levelLabel} · Split: {splitLabel}
@@ -167,7 +157,7 @@ export default function Home() {
             </div>
           ) : null}
           <div className="home-hero-actions">
-            <button type="button" className="home-hero-cta" onClick={() => navigate('/train/gym')}>
+            <button type="button" className="home-hero-cta" onClick={() => navigate('/train/session')}>
               Start session
             </button>
           </div>

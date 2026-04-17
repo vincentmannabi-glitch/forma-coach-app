@@ -136,12 +136,7 @@ export function clampTrainingStyleId(user, styleId) {
   return resolveDefaultTrainingStyleId(user)
 }
 
-export function trainPathForStyleId(styleId) {
-  const map = {
-    gym: '/train/gym',
-    calisthenics: '/train/calisthenics',
-    both: '/train/both',
-    home: '/train/home',
-  }
-  return map[styleId] || '/train/gym'
+/** Primary train URL — program is driven by equipment + schedule from onboarding. */
+export function trainPathForStyleId(_styleId) {
+  return '/train/session'
 }

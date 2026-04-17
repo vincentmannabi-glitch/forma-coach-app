@@ -12,11 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import MainLayout from './components/MainLayout'
 import InstallPromptBanner from './components/InstallPromptBanner'
 
-const GymTrain = lazy(() => import('./pages/GymTrain'))
-const CalisthenicsTrain = lazy(() => import('./pages/CalisthenicsTrain'))
-const HybridTrain = lazy(() => import('./pages/HybridTrain'))
-const HomeWorkoutSession = lazy(() => import('./pages/HomeWorkoutSession'))
-const HyroxTrain = lazy(() => import('./pages/HyroxTrain'))
+const TrainSession = lazy(() => import('./pages/TrainSession'))
 const CardioTrain = lazy(() => import('./pages/CardioTrain'))
 const ReconnectTrain = lazy(() => import('./pages/ReconnectTrain'))
 const Progress = lazy(() => import('./pages/Progress'))
@@ -48,13 +44,14 @@ function App() {
             />
             <Route path="/train" element={<TrainLayout />}>
               <Route index element={<WorkoutHub />} />
-              <Route path="gym" element={<GymTrain />} />
-              <Route path="calisthenics" element={<CalisthenicsTrain />} />
-              <Route path="both" element={<HybridTrain />} />
-              <Route path="home" element={<HomeWorkoutSession />} />
-              <Route path="hyrox" element={<HyroxTrain />} />
+              <Route path="session" element={<TrainSession />} />
+              <Route path="gym" element={<Navigate to="/train/session" replace />} />
+              <Route path="calisthenics" element={<Navigate to="/train/session" replace />} />
+              <Route path="both" element={<Navigate to="/train/session" replace />} />
+              <Route path="home" element={<Navigate to="/train/session" replace />} />
               <Route path="cardio" element={<CardioTrain />} />
               <Route path="reconnect" element={<ReconnectTrain />} />
+              <Route path="*" element={<Navigate to="/train/session" replace />} />
             </Route>
             <Route path="/cookbook" element={<Cookbook />} />
             <Route path="/cookbook/:recipeId" element={<RecipeDetail />} />

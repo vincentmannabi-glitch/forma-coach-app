@@ -40,7 +40,7 @@
 
 .install-pwa-banner__arrow {
   font-size: 1.25rem;
-  color: #FF3C78;
+  color: #FF3D6B;
   line-height: 1;
   animation: installArrowNudge 1.2s ease-in-out infinite;
 }
@@ -63,7 +63,7 @@
   height: 2rem;
   border: none;
   background: transparent;
-  color: rgba(255, 60, 120, 0.75);
+  color: rgba(255, 61, 107, 0.75);
   font-size: 1.35rem;
   line-height: 1;
   cursor: pointer;
@@ -71,8 +71,8 @@
 }
 
 .install-pwa-banner__dismiss:hover {
-  color: #e8c86a;
-  background: rgba(255, 60, 120, 0.1);
+  color: #ff8c00;
+  background: rgba(255, 61, 107, 0.1);
 }
 
 @media (prefers-reduced-motion: reduce) {

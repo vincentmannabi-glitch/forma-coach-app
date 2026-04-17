@@ -35,7 +35,7 @@
 
 .progress-trend {
   font-size: 28px;
-  color: #FF3C78;
+  color: #FF3D6B;
   line-height: 1;
 }
 
@@ -47,7 +47,7 @@
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 64px;
-  color: #FF3C78;
+  color: #FF3D6B;
   line-height: 1;
   margin: 0;
 }
@@ -57,7 +57,7 @@
   font-weight: 300;
   font-size: 13px;
   line-height: 1.5;
-  color: #7a7058;
+  color: rgba(255, 255, 255, 0.6);
   margin: 8px 0 0;
 }
 
@@ -66,7 +66,7 @@
   font-weight: 300;
   font-size: 13px;
   line-height: 1.5;
-  color: #7a7058;
+  color: rgba(255, 255, 255, 0.6);
   text-align: center;
   margin: var(--space-lg) 0;
   padding: 0 var(--space-md);
@@ -89,8 +89,8 @@
   padding: var(--space-md) var(--space-lg);
   margin-bottom: var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.45);
-  background: linear-gradient(135deg, rgba(255, 60, 120, 0.18), rgba(255, 60, 120, 0.06));
+  border: 1px solid rgba(255, 61, 107, 0.45);
+  background: linear-gradient(135deg, rgba(255, 61, 107, 0.18), rgba(255, 61, 107, 0.06));
 }
 
 .progress-pr-banner--pop {
@@ -219,11 +219,11 @@
   width: 10px;
   height: 10px;
   border-radius: 2px;
-  background: #242420;
+  background: #1a1a1a;
 }
 
 .progress-grid-square.is-on {
-  background: linear-gradient(135deg, #FF3C78, #FF8C00);
+  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
 }
 
 .progress-grid-square.is-today {
@@ -233,10 +233,10 @@
 @keyframes progress-today-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(255, 60, 120, 0.35);
+    box-shadow: 0 0 0 0 rgba(255, 61, 107, 0.35);
   }
   50% {
-    box-shadow: 0 0 0 4px rgba(255, 60, 120, 0);
+    box-shadow: 0 0 0 4px rgba(255, 61, 107, 0);
   }
 }
 
@@ -302,7 +302,7 @@
   flex-shrink: 0;
   font-size: 1.25rem;
   line-height: 1;
-  filter: drop-shadow(0 0 10px rgba(255, 60, 120, 0.4));
+  filter: drop-shadow(0 0 10px rgba(255, 61, 107, 0.4));
 }
 
 .progress-pr-row--celebrate {
@@ -312,12 +312,12 @@
 @keyframes progressRowGlow {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(255, 60, 120, 0);
+    box-shadow: 0 0 0 0 rgba(255, 61, 107, 0);
     border-color: var(--color-border-card);
   }
   50% {
-    box-shadow: 0 0 20px rgba(255, 60, 120, 0.15);
-    border-color: rgba(255, 60, 120, 0.35);
+    box-shadow: 0 0 20px rgba(255, 61, 107, 0.15);
+    border-color: rgba(255, 61, 107, 0.35);
   }
 }
 
@@ -365,7 +365,7 @@
   letter-spacing: 0.06em;
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, rgba(255, 60, 120, 0.95), rgba(255, 60, 120, 0.75));
+  background: linear-gradient(135deg, rgba(255, 61, 107, 0.95), rgba(255, 61, 107, 0.75));
   color: #0e0e0a;
 }
 
@@ -423,7 +423,7 @@
 
 .progress-field input:focus {
   outline: none;
-  border-color: rgba(255, 60, 120, 0.45);
+  border-color: rgba(255, 61, 107, 0.45);
 }
 
 .progress-save-btn {
@@ -431,14 +431,14 @@
   font-weight: 600;
   padding: var(--space-sm) var(--space-xl);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.45);
-  background: rgba(255, 60, 120, 0.12);
+  border: 1px solid rgba(255, 61, 107, 0.45);
+  background: rgba(255, 61, 107, 0.12);
   color: var(--color-accent);
   cursor: pointer;
 }
 
 .progress-save-btn:hover {
-  background: rgba(255, 60, 120, 0.2);
+  background: rgba(255, 61, 107, 0.2);
 }
 
 .progress-nutrition-charts {
@@ -510,7 +510,7 @@
   flex-direction: column;
   gap: var(--space-xs);
   padding: var(--space-sm) 0;
-  border-bottom: 1px solid rgba(240, 236, 216, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   font-size: 0.8125rem;
 }
 
@@ -546,13 +546,13 @@
   font-size: 0.9375rem;
   padding: var(--space-sm) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.45);
-  background: rgba(255, 60, 120, 0.1);
+  border: 1px solid rgba(255, 61, 107, 0.45);
+  background: rgba(255, 61, 107, 0.1);
   color: var(--color-accent);
 }
 
 .progress-photo-upload:hover .progress-photo-upload-btn {
-  background: rgba(255, 60, 120, 0.18);
+  background: rgba(255, 61, 107, 0.18);
 }
 
 .progress-photo-compare {
@@ -572,7 +572,7 @@
   object-fit: cover;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
-  background: #12120e;
+  background: #0e0e0a;
 }
 
 .progress-photo-fig figcaption {

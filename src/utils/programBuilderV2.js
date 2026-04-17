@@ -22,7 +22,7 @@ export function normalizeGoal(raw) {
   if (g.includes('fat') || g.includes('lose') || g.includes('weight')) return 'fatLoss'
   if (g.includes('muscle') || g.includes('build') || g.includes('hyper')) return 'muscleBuilding'
   if (g.includes('strength') || g.includes('strong') || g.includes('power')) return 'strength'
-  if (g.includes('hyrox') || g.includes('functional') || g.includes('athletic') || g.includes('sport')) return 'athletic'
+  if (g.includes('functional') || g.includes('athletic') || g.includes('sport')) return 'athletic'
   if (g.includes('endurance') || g.includes('cardio') || g.includes('run')) return 'endurance'
   return 'fatLoss'
 }

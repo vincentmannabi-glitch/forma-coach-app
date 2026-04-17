@@ -10,7 +10,7 @@
 .train-session-progress {
   height: 5px;
   border-radius: var(--radius-full);
-  background: rgba(240, 236, 216, 0.08);
+  background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
   margin: 0 0 var(--space-lg);
   position: relative;
@@ -20,9 +20,9 @@
 .train-session-progress-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, rgba(255, 60, 120, 0.35), #FF3C78);
+  background: linear-gradient(90deg, rgba(255, 61, 107, 0.35), #FF3D6B);
   transition: width 0.75s var(--forma-ease-luxury);
-  box-shadow: 0 0 16px rgba(255, 60, 120, 0.2);
+  box-shadow: 0 0 16px rgba(255, 61, 107, 0.2);
 }
 
 .train-page-v2 > * {
@@ -51,7 +51,7 @@
 
 .train-unit-toggle {
   display: inline-flex;
-  border: 1px solid rgba(255, 60, 120, 0.35);
+  border: 1px solid rgba(255, 61, 107, 0.35);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -59,7 +59,7 @@
 .train-unit-btn {
   border: none;
   background: transparent;
-  color: rgba(240, 236, 216, 0.72);
+  color: rgba(255, 255, 255, 0.72);
   font-size: 0.6875rem;
   font-weight: 700;
   padding: 6px 10px;
@@ -67,7 +67,7 @@
 }
 
 .train-unit-btn.active {
-  background: linear-gradient(135deg, #FF3C78, #FF8C00);
+  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
   color: #0e0e0a;
 }
 
@@ -75,7 +75,7 @@
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 800;
-  color: #F0ECD8;
+  color: #ffffff;
   margin: 0 0 var(--space-sm);
   letter-spacing: -0.02em;
 }
@@ -84,7 +84,7 @@
   font-family: var(--font-body);
   font-size: 0.875rem;
   font-weight: 300;
-  color: rgba(240, 236, 216, 0.55);
+  color: rgba(255, 255, 255, 0.55);
   margin: 0;
   line-height: 1.45;
 }
@@ -93,16 +93,16 @@
   display: inline-block;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #FF3C78;
+  color: #FF3D6B;
   text-decoration: none;
   margin-bottom: var(--space-md);
-  border-bottom: 1px solid rgba(255, 60, 120, 0.35);
+  border-bottom: 1px solid rgba(255, 61, 107, 0.35);
   padding-bottom: 2px;
 }
 
 .train-back-hub:hover {
-  color: #e8c86a;
-  border-bottom-color: rgba(255, 60, 120, 0.55);
+  color: #ff8c00;
+  border-bottom-color: rgba(255, 61, 107, 0.55);
 }
 
 .train-coach-banner {
@@ -112,8 +112,8 @@
   margin-bottom: var(--space-lg);
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.35);
-  background: rgba(255, 60, 120, 0.08);
+  border: 1px solid rgba(255, 61, 107, 0.35);
+  background: rgba(255, 61, 107, 0.08);
 }
 
 .train-page .train-coach-banner,
@@ -128,7 +128,7 @@
 
 .train-coach-banner-text {
   font-size: 0.875rem;
-  color: rgba(240, 236, 216, 0.9);
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.5;
   margin: 0;
 }
@@ -138,9 +138,9 @@
   font-size: 0.8125rem;
   padding: var(--space-xs) var(--space-md);
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(255, 60, 120, 0.4);
+  border: 1px solid rgba(255, 61, 107, 0.4);
   background: transparent;
-  color: #FF3C78;
+  color: #FF3D6B;
   cursor: pointer;
 }
 
@@ -148,13 +148,13 @@
   margin-bottom: var(--space-lg);
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.25);
-  background: rgba(255, 60, 120, 0.06);
+  border: 1px solid rgba(255, 61, 107, 0.25);
+  background: rgba(255, 61, 107, 0.06);
   font-family: var(--font-body);
   font-size: 0.875rem;
   font-weight: 300;
   line-height: 1.5;
-  color: rgba(240, 236, 216, 0.75);
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .train-coach-banner--sleep,
@@ -163,16 +163,16 @@
 .train-coach-banner--recovery,
 .train-coach-banner--pattern,
 .train-coach-banner--progression {
-  border-color: rgba(255, 60, 120, 0.45);
-  background: linear-gradient(135deg, rgba(255, 60, 120, 0.12), rgba(28, 28, 22, 0.96));
+  border-color: rgba(255, 61, 107, 0.45);
+  background: linear-gradient(135deg, rgba(255, 61, 107, 0.12), rgba(28, 28, 22, 0.96));
 }
 
 .train-snack-banner {
   margin-bottom: var(--space-lg);
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.32);
-  background: rgba(255, 60, 120, 0.06);
+  border: 1px solid rgba(255, 61, 107, 0.32);
+  background: rgba(255, 61, 107, 0.06);
 }
 
 .train-snack-banner-label {
@@ -181,20 +181,20 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: rgba(255, 60, 120, 0.95);
+  color: rgba(255, 61, 107, 0.95);
   margin: 0 0 var(--space-xs);
 }
 
 .train-snack-banner-text {
   font-size: 0.875rem;
-  color: rgba(240, 236, 216, 0.88);
+  color: rgba(255, 255, 255, 0.88);
   line-height: 1.5;
   margin: 0;
 }
 
 .train-complete-snack {
   font-size: 0.875rem;
-  color: rgba(240, 236, 216, 0.85);
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.5;
   margin: var(--space-md) 0 0;
   text-align: left;
@@ -207,7 +207,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: rgba(255, 60, 120, 0.95);
+  color: rgba(255, 61, 107, 0.95);
   margin-bottom: var(--space-xs);
 }
 
@@ -215,13 +215,13 @@
 .train-intensity-note {
   font-size: 0.875rem;
   font-weight: 300;
-  color: rgba(255, 60, 120, 0.95);
+  color: rgba(255, 61, 107, 0.95);
   line-height: 1.45;
   margin-bottom: var(--space-md);
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.2);
-  background: rgba(255, 60, 120, 0.06);
+  border: 1px solid rgba(255, 61, 107, 0.2);
+  background: rgba(255, 61, 107, 0.06);
 }
 
 .train-rehab-section {
@@ -243,7 +243,7 @@
   font-family: var(--font-heading);
   font-size: 0.9375rem;
   font-weight: 800;
-  color: #FF3C78;
+  color: #FF3D6B;
   margin: 0 0 var(--space-sm);
 }
 
@@ -253,13 +253,13 @@
   font-size: 0.875rem;
   font-weight: 300;
   line-height: 1.5;
-  color: rgba(240, 236, 216, 0.88);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .train-card-badge {
   font-size: 0.75rem;
   font-weight: 500;
-  color: rgba(255, 60, 120, 0.85);
+  color: rgba(255, 61, 107, 0.85);
 }
 
 .train-level-pills {
@@ -277,21 +277,21 @@
   font-weight: 600;
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-full);
-  border: 1px solid rgba(255, 60, 120, 0.35);
+  border: 1px solid rgba(255, 61, 107, 0.35);
   background: transparent;
-  color: rgba(240, 236, 216, 0.75);
+  color: rgba(255, 255, 255, 0.75);
   cursor: pointer;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .train-level-pill:hover {
-  border-color: rgba(255, 60, 120, 0.55);
-  color: #F0ECD8;
+  border-color: rgba(255, 61, 107, 0.55);
+  color: #ffffff;
 }
 
 .train-level-pill.active {
-  background: linear-gradient(135deg, #FF3C78, #FF8C00);
-  border-color: #FF3C78;
+  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  border-color: #FF3D6B;
   color: #0e0e0a;
 }
 
@@ -316,8 +316,8 @@
 }
 
 .train-card.expanded {
-  border-color: rgba(255, 60, 120, 0.42);
-  box-shadow: 0 0 0 1px rgba(255, 60, 120, 0.12), 0 12px 40px rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 61, 107, 0.42);
+  box-shadow: 0 0 0 1px rgba(255, 61, 107, 0.12), 0 12px 40px rgba(0, 0, 0, 0.25);
   transform: scale(1.008);
 }
 
@@ -344,9 +344,9 @@
   font-size: 1.0625rem;
   font-weight: 800;
   color: #0e0e0a;
-  background: linear-gradient(135deg, #FF3C78, #FF8C00);
+  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
   border-radius: 10px;
-  box-shadow: 0 0 0 1px rgba(255, 60, 120, 0.35), 0 4px 14px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 0 1px rgba(255, 61, 107, 0.35), 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
 .train-card-meta {
@@ -363,7 +363,7 @@
   font-family: var(--font-heading);
   font-size: 1rem;
   font-weight: 700;
-  color: #F0ECD8;
+  color: #ffffff;
   margin-bottom: 4px;
   white-space: normal;
   overflow: visible;
@@ -373,14 +373,14 @@
 .train-card-sets {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: rgba(240, 236, 216, 0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .train-card-last-under-name {
   font-family: var(--font-body);
   font-size: 0.6875rem;
   font-weight: 500;
-  color: rgba(255, 60, 120, 0.85);
+  color: rgba(255, 61, 107, 0.85);
   line-height: 1.3;
 }
 
@@ -388,19 +388,19 @@
   font-family: var(--font-heading);
   font-size: 0.8125rem;
   font-weight: 700;
-  color: rgba(240, 236, 216, 0.72);
+  color: rgba(255, 255, 255, 0.72);
   letter-spacing: 0.02em;
 }
 
 .train-card-chevron {
   flex-shrink: 0;
-  color: rgba(255, 60, 120, 0.6);
+  color: rgba(255, 61, 107, 0.6);
   font-size: 0.75rem;
 }
 
 .train-card-body {
   padding: 0 var(--space-lg) var(--space-lg);
-  border-top: 1px solid rgba(255, 60, 120, 0.12);
+  border-top: 1px solid rgba(255, 61, 107, 0.12);
   animation: train-card-body-in 0.5s var(--forma-ease-luxury) both;
 }
 
@@ -419,7 +419,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 500;
-  color: #FF3C78;
+  color: #FF3D6B;
   margin: var(--space-md) 0 8px;
   line-height: 1.4;
 }
@@ -428,13 +428,13 @@
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 300;
-  color: #f0ecd8;
+  color: #ffffff;
   margin: 0 0 8px;
   line-height: 1.45;
 }
 
 .train-coach-line--subtle {
-  color: #7a7058;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 12px;
 }
 
@@ -452,7 +452,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 500;
-  color: #FF3C78;
+  color: #FF3D6B;
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -462,7 +462,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 300;
-  color: #7a7058;
+  color: rgba(255, 255, 255, 0.6);
   margin: 0 0 10px;
   line-height: 1.45;
 }
@@ -474,21 +474,21 @@
 .train-coach-last {
   font-family: var(--font-body);
   font-size: 12px;
-  color: #7a7058;
+  color: rgba(255, 255, 255, 0.6);
   margin: 0 0 10px;
 }
 
 .train-video-note {
   margin: 4px 0 10px;
   font-size: 0.75rem;
-  color: rgba(255, 60, 120, 0.9);
+  color: rgba(255, 61, 107, 0.9);
 }
 
 .train-card-desc {
   font-family: var(--font-body);
   font-size: 0.9375rem;
   font-weight: 300;
-  color: #f0ecd8;
+  color: #ffffff;
   line-height: 1.55;
   margin: var(--space-lg) 0 var(--space-md);
 }
@@ -497,12 +497,12 @@
   margin: var(--space-md) 0;
   padding: var(--space-md);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.18);
+  border: 1px solid rgba(255, 61, 107, 0.18);
   background: var(--color-bg);
 }
 
 .train-card-section--muscles {
-  border-color: rgba(255, 60, 120, 0.28);
+  border-color: rgba(255, 61, 107, 0.28);
 }
 
 .train-card-section-title {
@@ -511,7 +511,7 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #FF3C78;
+  color: #FF3D6B;
   margin: 0 0 var(--space-sm);
 }
 
@@ -519,20 +519,20 @@
   margin: 0;
   font-size: 0.9375rem;
   line-height: 1.5;
-  color: rgba(240, 236, 216, 0.9);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .train-card-starting {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: rgba(240, 236, 216, 0.55);
+  color: rgba(255, 255, 255, 0.55);
   margin: 0 0 var(--space-xs);
 }
 
 .train-card-last {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: rgba(255, 60, 120, 0.85);
+  color: rgba(255, 61, 107, 0.85);
   margin: 0 0 var(--space-lg);
 }
 
@@ -549,7 +549,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: rgba(240, 236, 216, 0.45);
+  color: rgba(255, 255, 255, 0.45);
   margin-bottom: var(--space-sm);
   padding: 0 2px;
 }
@@ -576,7 +576,7 @@
 .train-set-idx {
   font-family: var(--font-body);
   font-size: 0.9375rem;
-  color: #F0ECD8;
+  color: #ffffff;
   text-align: center;
 }
 
@@ -585,16 +585,16 @@
   font-size: 0.9375rem;
   padding: var(--space-sm) var(--space-md);
   background: #0e0e0a;
-  border: 1px solid rgba(255, 60, 120, 0.2);
+  border: 1px solid rgba(255, 61, 107, 0.2);
   border-radius: var(--radius-md);
-  color: #F0ECD8;
+  color: #ffffff;
   width: 100%;
   min-width: 0;
 }
 
 .train-set-input:focus {
   outline: none;
-  border-color: #FF3C78;
+  border-color: #FF3D6B;
 }
 
 .train-set-input:disabled {
@@ -611,9 +611,9 @@
   width: 44px;
   height: 44px;
   border-radius: var(--radius-full);
-  border: 2px solid rgba(255, 60, 120, 0.35);
+  border: 2px solid rgba(255, 61, 107, 0.35);
   background: transparent;
-  color: rgba(240, 236, 216, 0.45);
+  color: rgba(255, 255, 255, 0.45);
   font-size: 1.125rem;
   cursor: pointer;
   display: flex;
@@ -624,8 +624,8 @@
 }
 
 .train-set-check:hover {
-  border-color: #FF3C78;
-  color: #FF3C78;
+  border-color: #FF3D6B;
+  color: #FF3D6B;
 }
 
 .train-set-check:active {
@@ -633,10 +633,10 @@
 }
 
 .train-set-check.on {
-  background: linear-gradient(135deg, #FF3C78, #FF8C00);
-  border-color: #FF3C78;
+  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  border-color: #FF3D6B;
   color: #0e0e0a;
-  box-shadow: 0 0 20px rgba(255, 60, 120, 0.35);
+  box-shadow: 0 0 20px rgba(255, 61, 107, 0.35);
   font-weight: 800;
 }
 
@@ -648,7 +648,7 @@
   font-family: var(--font-heading);
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #F0ECD8;
+  color: #ffffff;
   margin: 0 0 var(--space-sm);
 }
 
@@ -657,13 +657,13 @@
   padding-left: var(--space-lg);
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: rgba(240, 236, 216, 0.85);
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.5;
 }
 
 .train-card-form-tip {
-  background: rgba(255, 60, 120, 0.1);
-  border-left: 3px solid #FF3C78;
+  background: rgba(255, 61, 107, 0.1);
+  border-left: 3px solid #FF3D6B;
   padding: var(--space-md) var(--space-lg);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
@@ -672,7 +672,7 @@
   font-family: var(--font-heading);
   font-size: 0.6875rem;
   font-weight: 700;
-  color: #FF3C78;
+  color: #FF3D6B;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   display: block;
@@ -682,7 +682,7 @@
 .train-card-form-tip p {
   font-family: var(--font-body);
   font-size: 0.9375rem;
-  color: #FF3C78;
+  color: #FF3D6B;
   margin: 0;
   line-height: 1.5;
 }
@@ -704,7 +704,7 @@
   font-family: var(--font-heading);
   font-size: 0.875rem;
   font-weight: 600;
-  color: rgba(240, 236, 216, 0.5);
+  color: rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin: 0 0 var(--space-md);
@@ -725,8 +725,8 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 2px solid rgba(255, 60, 120, 0.35);
-  box-shadow: 0 0 0 0 rgba(255, 60, 120, 0.25);
+  border: 2px solid rgba(255, 61, 107, 0.35);
+  box-shadow: 0 0 0 0 rgba(255, 61, 107, 0.25);
   animation: forma-rest-ring-pulse 2s ease-in-out infinite;
   pointer-events: none;
 }
@@ -737,7 +737,7 @@
   font-family: var(--font-heading);
   font-size: clamp(4rem, 18vw, 6.5rem);
   font-weight: 800;
-  color: #FF3C78;
+  color: #FF3D6B;
   line-height: 1;
   margin: 0;
   animation: forma-rest-gold-pulse 1.8s ease-in-out infinite;
@@ -747,20 +747,20 @@
   0%,
   100% {
     transform: scale(1);
-    border-color: rgba(255, 60, 120, 0.35);
-    box-shadow: 0 0 0 0 rgba(255, 60, 120, 0.2);
+    border-color: rgba(255, 61, 107, 0.35);
+    box-shadow: 0 0 0 0 rgba(255, 61, 107, 0.2);
   }
   50% {
     transform: scale(1.03);
-    border-color: rgba(255, 60, 120, 0.55);
-    box-shadow: 0 0 0 12px rgba(255, 60, 120, 0.06);
+    border-color: rgba(255, 61, 107, 0.55);
+    box-shadow: 0 0 0 12px rgba(255, 61, 107, 0.06);
   }
 }
 
 .train-rest-unit {
   font-family: var(--font-body);
   font-size: 1rem;
-  color: rgba(240, 236, 216, 0.45);
+  color: rgba(255, 255, 255, 0.45);
   margin: var(--space-sm) 0 var(--space-2xl);
 }
 
@@ -770,14 +770,14 @@
   font-weight: 500;
   padding: var(--space-md) var(--space-2xl);
   background: transparent;
-  border: 1px solid rgba(255, 60, 120, 0.4);
-  color: #FF3C78;
+  border: 1px solid rgba(255, 61, 107, 0.4);
+  color: #FF3D6B;
   border-radius: var(--radius-md);
   cursor: pointer;
 }
 
 .train-rest-skip:hover {
-  background: rgba(255, 60, 120, 0.1);
+  background: rgba(255, 61, 107, 0.1);
 }
 
 /* Session complete */
@@ -802,33 +802,33 @@
   font-size: 4rem;
   line-height: 1;
   margin-bottom: var(--space-lg);
-  filter: drop-shadow(0 0 24px rgba(255, 60, 120, 0.35));
+  filter: drop-shadow(0 0 24px rgba(255, 61, 107, 0.35));
 }
 
 .train-complete-title {
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 800;
-  color: #F0ECD8;
+  color: #ffffff;
   margin: 0 0 var(--space-md);
 }
 
 .train-complete-volume {
   font-family: var(--font-body);
   font-size: 1.125rem;
-  color: rgba(240, 236, 216, 0.85);
+  color: rgba(255, 255, 255, 0.85);
   margin: 0 0 var(--space-lg);
 }
 
 .train-complete-volume strong {
-  color: #FF3C78;
+  color: #FF3D6B;
   font-weight: 700;
 }
 
 .train-complete-message {
   font-family: var(--font-body);
   font-size: 0.9375rem;
-  color: rgba(240, 236, 216, 0.7);
+  color: rgba(255, 255, 255, 0.7);
   line-height: 1.55;
   margin: 0 0 var(--space-xl);
 }
@@ -838,7 +838,7 @@
   font-size: 1rem;
   font-weight: 600;
   padding: var(--space-md) var(--space-3xl);
-  background: linear-gradient(135deg, #FF3C78, #FF8C00);
+  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
   color: #0e0e0a;
   border: none;
   border-radius: var(--radius-md);
@@ -847,8 +847,8 @@
 }
 
 .train-complete-btn:hover {
-  background: #d4af50;
-  box-shadow: 0 0 24px rgba(255, 60, 120, 0.3);
+  background: #ff5a82;
+  box-shadow: 0 0 24px rgba(255, 61, 107, 0.3);
 }
 
 /* --- Weekly program strip + written cardio / functional / core blocks --- */
@@ -883,7 +883,7 @@
 }
 
 .week-program-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 60, 120, 0.35);
+  background: rgba(255, 61, 107, 0.35);
   border-radius: 4px;
 }
 
@@ -898,9 +898,9 @@
   justify-content: space-between;
   padding: 8px 6px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 60, 120, 0.15);
-  background: #1c1c16;
-  color: #f0ecd8;
+  border: 1px solid rgba(255, 61, 107, 0.15);
+  background: #1a1a1a;
+  color: #ffffff;
   cursor: pointer;
   text-align: center;
   transition: border-color 0.2s, background 0.2s;
@@ -908,18 +908,18 @@
 }
 
 .week-program-day:hover {
-  border-color: rgba(255, 60, 120, 0.35);
+  border-color: rgba(255, 61, 107, 0.35);
 }
 
 .week-program-day.is-today {
-  border-color: #FF3C78;
-  box-shadow: 0 0 0 1px rgba(255, 60, 120, 0.25);
+  border-color: #FF3D6B;
+  box-shadow: 0 0 0 1px rgba(255, 61, 107, 0.25);
 }
 
 .week-program-day.is-selected {
-  background: #242420;
-  border-color: #FF3C78;
-  box-shadow: 0 0 0 1px rgba(255, 60, 120, 0.2);
+  background: #1a1a1a;
+  border-color: #FF3D6B;
+  box-shadow: 0 0 0 1px rgba(255, 61, 107, 0.2);
 }
 
 .week-program-day.is-future {
@@ -931,14 +931,14 @@
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #FF3C78;
+  color: #FF3D6B;
 }
 
 .week-program-date {
   font-family: var(--font-heading);
   font-size: 1.55rem;
   line-height: 1;
-  color: #f0ecd8;
+  color: #ffffff;
 }
 
 .week-program-chip {
@@ -953,7 +953,7 @@
   right: 6px;
   top: 6px;
   font-size: 0.625rem;
-  color: #FF3C78;
+  color: #FF3D6B;
   opacity: 0.8;
 }
 
@@ -965,15 +965,15 @@
 }
 
 .session-plan-card {
-  background: #1c1c16;
-  border: 1px solid rgba(255, 60, 120, 0.15);
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 61, 107, 0.15);
   border-radius: var(--radius-card);
   padding: 14px 16px;
 }
 
 .session-plan-card-title {
   margin: 0 0 10px;
-  color: #FF3C78;
+  color: #FF3D6B;
   font-family: var(--font-heading);
   font-size: 0.95rem;
   font-weight: 800;
@@ -994,7 +994,7 @@
 }
 
 .session-plan-row-name {
-  color: #f0ecd8;
+  color: #ffffff;
   font-size: 0.9375rem;
   font-weight: 300;
   white-space: normal;
@@ -1019,14 +1019,14 @@
 .program-block-card {
   padding: 14px 16px;
   border-radius: var(--radius-card);
-  border: 1px solid rgba(255, 60, 120, 0.15);
-  background: #1c1c16;
+  border: 1px solid rgba(255, 61, 107, 0.15);
+  background: #1a1a1a;
 }
 
 .program-block-h4 {
   font-size: 0.95rem;
   font-weight: 800;
-  color: #FF3C78;
+  color: #FF3D6B;
   margin: 0 0 10px;
 }
 
@@ -1045,7 +1045,7 @@
 }
 
 .program-plan-name {
-  color: #f0ecd8;
+  color: #ffffff;
   font-size: 0.9375rem;
   font-weight: 300;
   white-space: normal;
@@ -1070,8 +1070,8 @@
   margin-bottom: var(--space-lg);
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-md);
-  background: rgba(255, 60, 120, 0.08);
-  border: 1px solid rgba(255, 60, 120, 0.25);
+  background: rgba(255, 61, 107, 0.08);
+  border: 1px solid rgba(255, 61, 107, 0.25);
 }
 
 .session-summary-label {
@@ -1079,27 +1079,27 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: #FF3C78;
+  color: #FF3D6B;
   margin: 0 0 var(--space-xs);
 }
 
 .session-summary-line {
   font-size: 0.9375rem;
   line-height: 1.5;
-  color: #f0ecd8;
+  color: #ffffff;
   margin: 0;
 }
 
 .session-summary-hint {
   font-size: 0.8125rem;
-  color: rgba(240, 236, 216, 0.5);
+  color: rgba(255, 255, 255, 0.5);
   margin: var(--space-xs) 0 0;
 }
 
 .session-section {
   margin-bottom: var(--space-md);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(240, 236, 216, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(14, 14, 10, 0.5);
   overflow: visible;
 }
@@ -1120,30 +1120,30 @@
 }
 
 .session-section-header:hover {
-  background: rgba(240, 236, 216, 0.04);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .session-section-title {
   font-family: var(--font-heading);
   font-size: 0.9375rem;
   font-weight: 700;
-  color: #f0ecd8;
+  color: #ffffff;
 }
 
 .session-section-subtitle {
   font-size: 0.8125rem;
-  color: rgba(240, 236, 216, 0.55);
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .session-section-meta {
   font-size: 0.75rem;
-  color: rgba(255, 60, 120, 0.8);
+  color: rgba(255, 61, 107, 0.8);
   margin-left: auto;
 }
 
 .session-section-chevron {
   font-size: 0.6875rem;
-  color: rgba(240, 236, 216, 0.4);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .session-section-body {
@@ -1160,7 +1160,7 @@
   padding-left: 1.25rem;
   font-size: 0.875rem;
   line-height: 1.6;
-  color: rgba(240, 236, 216, 0.85);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .session-content-list li {
@@ -1170,7 +1170,7 @@
 .session-content-why {
   display: block;
   font-size: 0.8125rem;
-  color: rgba(240, 236, 216, 0.5);
+  color: rgba(255, 255, 255, 0.5);
   font-style: italic;
   margin-top: 2px;
 }
@@ -1179,12 +1179,12 @@
 .session-cardio-block {
   font-size: 0.875rem;
   line-height: 1.55;
-  color: rgba(240, 236, 216, 0.85);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .session-core-note {
   margin: 0 0 var(--space-md);
-  color: rgba(240, 236, 216, 0.6);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .train-rest-banner {
@@ -1196,7 +1196,7 @@
   justify-content: center;
   gap: 12px;
   padding: 10px 16px;
-  background: rgba(255, 60, 120, 0.95);
+  background: rgba(255, 61, 107, 0.95);
   color: #0e0e0a;
   font-size: 0.9375rem;
   font-weight: 600;
@@ -1216,21 +1216,21 @@
   margin: var(--space-lg) 0;
   padding: var(--space-md);
   border-radius: 16px;
-  background: rgba(240, 236, 216, 0.04);
-  border: 1px solid rgba(255, 60, 120, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 61, 107, 0.2);
 }
 
 .train-protocol-title {
   font-family: var(--font-heading);
   font-size: 1.125rem;
   margin: 0 0 var(--space-sm);
-  color: #f0ecd8;
+  color: #ffffff;
 }
 
 .train-protocol-ref,
 .train-protocol-note {
   font-size: 0.8125rem;
-  color: rgba(240, 236, 216, 0.65);
+  color: rgba(255, 255, 255, 0.65);
   margin: 0 0 var(--space-sm);
   line-height: 1.4;
 }
@@ -1240,15 +1240,15 @@
   padding-left: 1.25rem;
   font-size: 0.875rem;
   line-height: 1.55;
-  color: rgba(240, 236, 216, 0.88);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .train-finisher {
-  border-color: rgba(255, 60, 120, 0.35);
+  border-color: rgba(255, 61, 107, 0.35);
 }
 
 .train-checkin-badge {
-  color: rgba(255, 60, 120, 0.9);
+  color: rgba(255, 61, 107, 0.9);
   font-weight: 500;
 }
 
@@ -1262,7 +1262,7 @@
 
 .train-skipped-label {
   font-size: 0.875rem;
-  color: rgba(240, 236, 216, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   margin: 0 0 6px;
 }
 
@@ -1271,7 +1271,7 @@
   font-size: 0.75rem;
   background: transparent;
   border: none;
-  color: rgba(255, 60, 120, 0.85);
+  color: rgba(255, 61, 107, 0.85);
   text-decoration: underline;
   cursor: pointer;
   padding: 4px 0;
@@ -1283,38 +1283,38 @@
   gap: 6px;
   margin-top: var(--space-md);
   font-size: 0.8125rem;
-  color: rgba(240, 236, 216, 0.75);
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .train-pain-field input {
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 60, 120, 0.25);
+  border: 1px solid rgba(255, 61, 107, 0.25);
   background: rgba(0, 0, 0, 0.2);
   color: inherit;
 }
 
 .train-empty-msg {
   font-size: 0.875rem;
-  color: rgba(240, 236, 216, 0.6);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .train-card-weight-hint {
   display: block;
   font-size: 0.6875rem;
-  color: rgba(240, 236, 216, 0.55);
+  color: rgba(255, 255, 255, 0.55);
   margin-top: 4px;
   line-height: 1.35;
 }
 
 .train-coach-line--emph {
-  color: rgba(240, 236, 216, 0.92);
+  color: rgba(255, 255, 255, 0.92);
   font-weight: 500;
 }
 
 .train-program-detail {
   margin: var(--space-sm) 0;
   padding-top: var(--space-sm);
-  border-top: 1px solid rgba(255, 60, 120, 0.12);
+  border-top: 1px solid rgba(255, 61, 107, 0.12);
 }
 

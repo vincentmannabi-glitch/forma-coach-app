@@ -1,7 +1,7 @@
 .settings-page {
   min-height: 100vh;
   background: var(--color-bg);
-  padding: var(--space-lg) var(--space-lg) calc(var(--space-3xl) + 72px);
+  padding: var(--space-lg) var(--space-lg) calc(var(--space-3xl) + 96px);
   position: relative;
   z-index: 1;
 }
@@ -69,15 +69,15 @@
   padding: var(--space-md);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border-input);
-  background: #12120e;
+  background: #0e0e0a;
   color: var(--color-text);
 }
 
 .settings-save {
   padding: var(--space-md) var(--space-2xl);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.45);
-  background: rgba(255, 60, 120, 0.12);
+  border: 1px solid rgba(255, 61, 107, 0.45);
+  background: rgba(255, 61, 107, 0.12);
   color: var(--color-accent);
   font-weight: 600;
   cursor: pointer;
@@ -137,7 +137,7 @@
   width: 48px;
   height: 28px;
   border-radius: 999px;
-  background: rgba(240, 236, 216, 0.12);
+  background: rgba(255, 255, 255, 0.12);
   border: 1px solid var(--color-border);
   transition: background 0.2s;
   position: relative;
@@ -151,18 +151,18 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: rgba(240, 236, 216, 0.85);
+  background: rgba(255, 255, 255, 0.85);
   transition: transform 0.2s;
 }
 
 .settings-switch input:checked + .settings-switch-ui {
-  background: rgba(255, 60, 120, 0.35);
-  border-color: rgba(255, 60, 120, 0.55);
+  background: rgba(255, 61, 107, 0.35);
+  border-color: rgba(255, 61, 107, 0.55);
 }
 
 .settings-switch input:checked + .settings-switch-ui::after {
   transform: translateX(20px);
-  background: #e8c86a;
+  background: #ff8c00;
 }
 
 .settings-connected-devices-intro {
@@ -184,7 +184,7 @@
   padding: var(--space-xl);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-card);
-  background: #1c1c16;
+  background: #1a1a1a;
   position: relative;
 }
 
@@ -223,8 +223,8 @@
   width: 100%;
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.5);
-  background: rgba(255, 60, 120, 0.15);
+  border: 1px solid rgba(255, 61, 107, 0.5);
+  background: rgba(255, 61, 107, 0.15);
   color: var(--color-accent);
   font-family: var(--font-heading);
   font-size: 0.9375rem;
@@ -234,8 +234,8 @@
 }
 
 .settings-device-connect-btn:hover {
-  background: rgba(255, 60, 120, 0.25);
-  border-color: rgba(255, 60, 120, 0.7);
+  background: rgba(255, 61, 107, 0.25);
+  border-color: rgba(255, 61, 107, 0.7);
 }
 
 .settings-connected-notice {
@@ -280,13 +280,13 @@
 }
 
 .settings-unit-btn.active {
-  background: rgba(255, 60, 120, 0.14);
+  background: rgba(255, 61, 107, 0.14);
   color: var(--color-accent);
   font-weight: 600;
 }
 
 .settings-unit-btn:hover:not(.active) {
-  background: rgba(240, 236, 216, 0.04);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--color-text);
 }
 
@@ -306,17 +306,17 @@
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  border: 1px solid rgba(255, 60, 120, 0.4);
+  border: 1px solid rgba(255, 61, 107, 0.4);
   transition: background 0.2s, border-color 0.2s;
 }
 
 .settings-btn--secondary {
-  background: rgba(255, 60, 120, 0.1);
+  background: rgba(255, 61, 107, 0.1);
   color: var(--color-text);
 }
 
 .settings-btn--secondary:hover {
-  background: rgba(255, 60, 120, 0.16);
+  background: rgba(255, 61, 107, 0.16);
 }
 
 .settings-btn--danger {

@@ -16,14 +16,16 @@ const PROFILE_KEY = 'forma_user_profile'
 const EQUIPMENT_OPTIONS = [
   {
     id: 'full_gym',
-    label: 'Full gym access',
+    label: 'Full gym',
     blurb: 'Barbell, rack, cables, machines',
     snippet: 'full gym, barbell, squat rack, cables, machines',
   },
-  { id: 'dumbbells', label: 'Dumbbells', snippet: 'dumbbells' },
-  { id: 'kettlebell', label: 'Kettlebell', snippet: 'kettlebell' },
-  { id: 'bench', label: 'Bench', snippet: 'bench' },
-  { id: 'pullup', label: 'Pull-up bar', snippet: 'pull-up bar' },
+  {
+    id: 'dumbbells',
+    label: 'Dumbbells & basics',
+    blurb: 'Dumbbells, bench, kettlebell, pull-up bar',
+    snippet: 'dumbbells, bench, kettlebell, pull-up bar',
+  },
   { id: 'bands', label: 'Resistance bands', snippet: 'resistance bands' },
   { id: 'bodyweight', label: 'Bodyweight only', snippet: 'bodyweight only' },
 ]

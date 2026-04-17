@@ -70,7 +70,7 @@ function FinisherBlock({ label, finisher }) {
 /**
  * Full program-driven train session: warm-up, exercises, optional conditioning finisher, cool-down, rest timer, history append.
  */
-export default function ProgramTrainRunner({ styleId = 'gym', title = 'Training session', showBackLink = true }) {
+export default function ProgramTrainRunner({ styleId = 'program', title = 'Training session', showBackLink = true }) {
   const { profile: authProfile } = useAuth()
   const safeUser = useMemo(() => buildSafeHomeUser(authProfile), [authProfile])
 
@@ -200,15 +200,6 @@ export default function ProgramTrainRunner({ styleId = 'gym', title = 'Training 
     setPainNote('')
   }
 
-  const envLabel =
-    session?.environment === 'rest'
-      ? 'Recovery day'
-      : session?.environment === 'home'
-        ? 'Home day'
-        : session?.environment === 'gym'
-          ? 'Gym day'
-          : 'Training'
-
   if (session?.environment === 'rest') {
     return (
       <div className="train-page train-page-v2">
@@ -242,9 +233,9 @@ export default function ProgramTrainRunner({ styleId = 'gym', title = 'Training 
             ← All workouts
           </Link>
         ) : null}
-        <h1 className="train-v2-title">{title}</h1>
+        <h1 className="train-v2-title">{session?.name || title}</h1>
         <p className="train-v2-subtitle">
-          {session?.name || 'Today'} · {envLabel} · Goal {program?.profileSnapshot?.goal ?? '—'} · Level {level}
+          Goal {program?.profileSnapshot?.goal ?? '—'} · Level {level}
           {fromCheckIn ? <span className="train-checkin-badge"> · adjusted from check-in</span> : null}
         </p>
         {session?.estimatedDuration != null ? (
@@ -292,11 +283,11 @@ export default function ProgramTrainRunner({ styleId = 'gym', title = 'Training 
         )}
       </section>
 
-      {session?.morningUnlock?.hyroxOptional && session?.hyroxFinisherOptional ? (
-        <FinisherBlock label="Optional conditioning finisher (high energy day)" finisher={session.hyroxFinisherOptional} />
+      {session?.morningUnlock?.conditioningOptional && session?.conditioningFinisherOptional ? (
+        <FinisherBlock label="Optional conditioning finisher (high energy day)" finisher={session.conditioningFinisherOptional} />
       ) : null}
 
-      <FinisherBlock label="Conditioning finisher" finisher={session?.hyroxFinisher} />
+      <FinisherBlock label="Conditioning finisher" finisher={session?.conditioningFinisher} />
 
       <label className="train-pain-field">
         Pain or flags for your coach (optional)

@@ -42,7 +42,7 @@
   height: 40px;
   border: none;
   background: transparent;
-  color: #F0ECD8;
+  color: #ffffff;
   font-size: 1.5rem;
   cursor: pointer;
   line-height: 1;
@@ -52,14 +52,14 @@
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 700;
-  color: #F0ECD8;
+  color: #ffffff;
   margin-bottom: var(--space-sm);
 }
 
 .exercise-detail-last {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: rgba(240, 236, 216, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: var(--space-md);
 }
 
@@ -67,7 +67,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 500;
-  color: #FF3C78;
+  color: #FF3D6B;
   margin: 0 0 8px;
   line-height: 1.4;
 }
@@ -76,7 +76,7 @@
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 300;
-  color: #f0ecd8;
+  color: #ffffff;
   margin: 0 0 8px;
   line-height: 1.45;
 }
@@ -94,7 +94,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 500;
-  color: #FF3C78;
+  color: #FF3D6B;
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -104,7 +104,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 300;
-  color: #7a7058;
+  color: rgba(255, 255, 255, 0.6);
   margin: 0 0 12px;
   line-height: 1.45;
 }
@@ -116,14 +116,14 @@
 .exercise-detail-desc {
   font-family: var(--font-body);
   font-size: 1rem;
-  color: #F0ECD8;
+  color: #ffffff;
   line-height: 1.6;
   margin-bottom: var(--space-lg);
 }
 
 .exercise-detail-form-tip {
-  background: rgba(255, 60, 120, 0.12);
-  border-left: 3px solid #FF3C78;
+  background: rgba(255, 61, 107, 0.12);
+  border-left: 3px solid #FF3D6B;
   padding: var(--space-md) var(--space-lg);
   margin-bottom: var(--space-lg);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
@@ -133,7 +133,7 @@
   font-family: var(--font-heading);
   font-size: 0.75rem;
   font-weight: 600;
-  color: #FF3C78;
+  color: #FF3D6B;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   display: block;
@@ -143,7 +143,7 @@
 .exercise-detail-form-tip p {
   font-family: var(--font-body);
   font-size: 0.9375rem;
-  color: #FF3C78;
+  color: #FF3D6B;
   margin: 0;
   line-height: 1.5;
 }
@@ -156,7 +156,7 @@
   font-family: var(--font-heading);
   font-size: 0.875rem;
   font-weight: 600;
-  color: #F0ECD8;
+  color: #ffffff;
   margin-bottom: var(--space-sm);
 }
 
@@ -165,14 +165,14 @@
   padding-left: var(--space-lg);
   font-family: var(--font-body);
   font-size: 0.9375rem;
-  color: rgba(240, 236, 216, 0.9);
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
 }
 
 .exercise-detail-section p {
   font-family: var(--font-body);
   font-size: 0.9375rem;
-  color: rgba(240, 236, 216, 0.9);
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
   margin: 0;
 }
@@ -180,7 +180,7 @@
 .exercise-detail-weight {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: rgba(240, 236, 216, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   margin-top: var(--space-md);
 }
 
@@ -193,13 +193,13 @@
 }
 
 .exercise-detail-suggestion.progression {
-  background: rgba(255, 60, 120, 0.15);
-  border: 1px solid rgba(255, 60, 120, 0.4);
-  color: #FF3C78;
+  background: rgba(255, 61, 107, 0.15);
+  border: 1px solid rgba(255, 61, 107, 0.4);
+  color: #FF3D6B;
 }
 
 .exercise-detail-suggestion.regression {
-  background: rgba(240, 236, 216, 0.08);
-  border: 1px solid rgba(240, 236, 216, 0.2);
-  color: #F0ECD8;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }

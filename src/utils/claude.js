@@ -31,11 +31,10 @@ function equipmentLabel(profile) {
     .join(', ')
 }
 
-function trainingStyleLine(profile) {
-  const styles = profile?.training_styles?.length
-    ? profile.training_styles
-    : [profile?.training_style].filter(Boolean)
-  return styles.length ? styles.join(', ') : 'Not specified'
+function equipmentSummaryLine(profile) {
+  const raw = (profile?.equipment || '').trim()
+  if (raw) return raw
+  return equipmentLabel(profile)
 }
 
 function dietaryLine(profile) {
@@ -99,11 +98,10 @@ Here is everything you know about the person you are talking to.
 
 Name — ${name}.
 Goal — ${goal}.
-Training style — ${trainingStyleLine(profile)}.
 Experience level — ${(profile?.experience_level || '').trim() || 'Not specified'}.
 Current program week — week ${extras.programWeek} (derived from completed sessions and days per week).
 Days per week — ${profile?.days_per_week ?? 'Not specified'}.
-Equipment available — ${equipmentLabel(profile)}.
+Equipment — ${equipmentSummaryLine(profile)}.
 Injuries and conditions — ${injuriesLine(profile)}.
 Dietary approach — ${dietaryLine(profile)}.
 Foods to avoid — ${foodsToAvoidLine(profile)}.

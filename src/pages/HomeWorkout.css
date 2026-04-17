@@ -29,12 +29,12 @@
   display: inline-block;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #FF3C78;
+  color: #FF3D6B;
   text-decoration: none;
   margin-bottom: var(--space-md);
   background: none;
   border: none;
-  border-bottom: 1px solid rgba(255, 60, 120, 0.35);
+  border-bottom: 1px solid rgba(255, 61, 107, 0.35);
   padding: 0 0 2px;
   cursor: pointer;
   font-family: inherit;
@@ -42,15 +42,15 @@
 
 .home-workout-back:hover,
 .home-workout-back-btn:hover {
-  color: #e8c86a;
-  border-bottom-color: rgba(255, 60, 120, 0.55);
+  color: #ff8c00;
+  border-bottom-color: rgba(255, 61, 107, 0.55);
 }
 
 .home-workout-title {
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 800;
-  color: #f0ecd8;
+  color: #ffffff;
   margin: 0 0 var(--space-sm);
   letter-spacing: -0.02em;
 }
@@ -59,7 +59,7 @@
   font-family: var(--font-body);
   font-size: 0.875rem;
   font-weight: 300;
-  color: rgba(240, 236, 216, 0.55);
+  color: rgba(255, 255, 255, 0.55);
   margin: 0;
   line-height: 1.45;
   max-width: 32rem;
@@ -69,30 +69,30 @@
   margin-bottom: var(--space-lg);
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.22);
-  background: rgba(255, 60, 120, 0.06);
+  border: 1px solid rgba(255, 61, 107, 0.22);
+  background: rgba(255, 61, 107, 0.06);
 }
 
 .home-workout-intro {
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.55;
-  color: rgba(240, 236, 216, 0.88);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .home-circuit-banner {
   margin-bottom: var(--space-lg);
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.4);
-  background: linear-gradient(135deg, rgba(255, 60, 120, 0.12), rgba(28, 28, 22, 0.96));
+  border: 1px solid rgba(255, 61, 107, 0.4);
+  background: linear-gradient(135deg, rgba(255, 61, 107, 0.12), rgba(28, 28, 22, 0.96));
 }
 
 .home-circuit-banner p {
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.5;
-  color: rgba(240, 236, 216, 0.92);
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .home-equip-grid {
@@ -109,8 +109,8 @@
   gap: var(--space-xs);
   padding: var(--space-xl);
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 60, 120, 0.4);
-  background: linear-gradient(155deg, rgba(255, 60, 120, 0.16), rgba(18, 18, 14, 0.98));
+  border: 1px solid rgba(255, 61, 107, 0.4);
+  background: linear-gradient(155deg, rgba(255, 61, 107, 0.16), rgba(18, 18, 14, 0.98));
   cursor: pointer;
   text-align: left;
   font-family: inherit;
@@ -128,20 +128,20 @@
   font-family: var(--font-heading);
   font-size: 1.2rem;
   font-weight: 800;
-  color: #e8c86a;
+  color: #ff8c00;
 }
 
 .home-equip-card-sub {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: rgba(240, 236, 216, 0.85);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .home-equip-card-detail {
   font-size: 0.8125rem;
   font-weight: 300;
   line-height: 1.45;
-  color: rgba(240, 236, 216, 0.6);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .home-program-grid {
@@ -158,8 +158,8 @@
   gap: var(--space-xs);
   padding: var(--space-lg) var(--space-xl);
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 60, 120, 0.35);
-  background: linear-gradient(145deg, rgba(255, 60, 120, 0.1), rgba(22, 22, 18, 0.98));
+  border: 1px solid rgba(255, 61, 107, 0.35);
+  background: linear-gradient(145deg, rgba(255, 61, 107, 0.1), rgba(22, 22, 18, 0.98));
   cursor: pointer;
   text-align: left;
   font-family: inherit;
@@ -168,7 +168,7 @@
 }
 
 .home-program-card:hover {
-  border-color: rgba(255, 60, 120, 0.5);
+  border-color: rgba(255, 61, 107, 0.5);
   transform: translateY(-1px);
 }
 
@@ -176,13 +176,13 @@
   font-family: var(--font-heading);
   font-size: 1.05rem;
   font-weight: 800;
-  color: #e8c86a;
+  color: #ff8c00;
 }
 
 .home-program-blurb {
   font-size: 0.8125rem;
   font-weight: 300;
-  color: rgba(240, 236, 216, 0.65);
+  color: rgba(255, 255, 255, 0.65);
   line-height: 1.45;
 }
 
@@ -194,16 +194,16 @@
   margin: var(--space-md) 0;
   padding: var(--space-md);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.25);
+  border: 1px solid rgba(255, 61, 107, 0.25);
   background: rgba(0, 0, 0, 0.25);
   font-size: 0.875rem;
   line-height: 1.5;
-  color: rgba(240, 236, 216, 0.88);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .home-band-anchor strong {
   display: block;
-  color: #e8c86a;
+  color: #ff8c00;
   margin-bottom: var(--space-xs);
   font-size: 0.8125rem;
   letter-spacing: 0.04em;
@@ -213,7 +213,7 @@
 .home-band-tension {
   margin: var(--space-sm) 0 0;
   font-size: 0.8125rem;
-  color: rgba(255, 60, 120, 0.85);
+  color: rgba(255, 61, 107, 0.85);
 }
 
 .home-regression-block {

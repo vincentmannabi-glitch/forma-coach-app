@@ -220,11 +220,11 @@ function formatProgramDetails(user) {
   const ctx = getProgramContextSync(dpw)
   const level = getTrainLevel(user)
   ensureProgramLoaded()
-  const workout = getTodayTrainExercisesSync('gym', new Date())
+  const workout = getTodayTrainExercisesSync('program', new Date())
   const names = workout.map((e) => e.displayName || e.name).join(', ')
   const goal = user?.goal || 'your goal'
-  const style = user?.training_style || 'your preferred training style'
-  return { ctx, names, goal, style, level, sessions: getSessionCount() }
+  const equipment = (user?.equipment || '').trim() || 'see your profile for equipment'
+  return { ctx, names, goal, equipment, level, sessions: getSessionCount() }
 }
 
 function formatNutrition(user) {
@@ -513,7 +513,7 @@ export function getCoachResponse(userMessage, options = {}) {
     const d = formatProgramDetails(user)
     return {
       type: 'text',
-      text: `${hi}Here is your setup: goal is "${d.goal}". You are in program week ${d.ctx.programWeek}, training ${d.ctx.daysPerWeek} days per week (${d.ctx.weekday} today). Your current level is ${d.level} — today’s session is built around: ${d.names}. Style you picked: ${d.style}. You have logged ${d.sessions} completed sessions so far. That is the real program — not a generic template.`,
+      text: `${hi}Here is your setup: goal is "${d.goal}". You are in program week ${d.ctx.programWeek}, training ${d.ctx.daysPerWeek} days per week (${d.ctx.weekday} today). Your current level is ${d.level} — today’s session is built around: ${d.names}. Equipment: ${d.equipment}. You have logged ${d.sessions} completed sessions so far. That is the real program — not a generic template.`,
     }
   }
 

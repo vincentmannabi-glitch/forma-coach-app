@@ -46,7 +46,7 @@
 }
 
 .program-training-checkin__pill.is-on {
-  border-color: #d4af37;
+  border-color: #ff3d6b;
   background: rgba(212, 175, 55, 0.15);
 }
 
@@ -78,7 +78,7 @@
   border-radius: 10px;
   border: none;
   background: linear-gradient(135deg, #c9a227, #8b6914);
-  color: #111;
+  color: var(--color-bg);
   font-weight: 600;
   cursor: pointer;
 }

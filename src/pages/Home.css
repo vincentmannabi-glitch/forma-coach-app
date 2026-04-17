@@ -3,7 +3,7 @@
 .home-page {
   min-height: 100vh;
   background: var(--color-bg);
-  padding: 16px var(--padding-screen-x) calc(88px + env(safe-area-inset-bottom, 0px));
+  padding: 16px var(--padding-screen-x) calc(96px + env(safe-area-inset-bottom, 0px));
   position: relative;
   z-index: 1;
   display: flex;
@@ -26,7 +26,7 @@
   background: var(--color-bg);
   color: var(--color-text);
   padding: var(--padding-screen-x);
-  padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,8 +57,8 @@
   font-weight: 600;
   padding: 12px 20px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 60, 120, 0.35);
-  background: rgba(255, 60, 120, 0.12);
+  border: 1px solid rgba(255, 61, 107, 0.35);
+  background: rgba(255, 61, 107, 0.12);
   color: var(--color-accent);
   cursor: pointer;
 }
@@ -67,7 +67,7 @@
   width: 28px;
   height: 28px;
   margin: 80px auto;
-  border: 2px solid rgba(255, 60, 120, 0.2);
+  border: 2px solid rgba(255, 61, 107, 0.2);
   border-top-color: var(--color-accent);
   border-radius: 50%;
   animation: home-spin 0.8s linear infinite;
@@ -89,7 +89,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 60, 120, 0.3);
+  border: 1px solid rgba(255, 61, 107, 0.3);
   border-radius: 12px;
   background: var(--color-surface);
   color: var(--color-accent);
@@ -98,7 +98,7 @@
 }
 
 .home-settings-fab:hover {
-  border-color: rgba(255, 60, 120, 0.45);
+  border-color: rgba(255, 61, 107, 0.45);
 }
 
 /* Zone 1 — greeting + streak + today card */
@@ -117,7 +117,7 @@
   font-size: clamp(4rem, 22vw, 7.5rem);
   line-height: 0.9;
   letter-spacing: -0.06em;
-  color: #FF3C78;
+  color: #FF3D6B;
   margin: 0;
   text-align: center;
 }
@@ -137,8 +137,8 @@
 .home-checkin-card {
   padding: var(--padding-card);
   border-radius: 20px;
-  background: #1c1c16;
-  border: 1px solid rgba(255, 60, 120, 0.15);
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 61, 107, 0.15);
 }
 
 .home-zone-stats {
@@ -153,8 +153,8 @@
   max-width: calc(100vw - 48px);
   padding: var(--padding-card);
   border-radius: 24px;
-  background: #1c1c16;
-  border: 1px solid rgba(255, 60, 120, 0.3);
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 61, 107, 0.3);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -165,7 +165,7 @@
   padding: 10px 12px;
   border: none;
   border-radius: 12px;
-  background: rgba(255, 60, 120, 0.12);
+  background: rgba(255, 61, 107, 0.12);
   color: var(--color-accent);
   font-family: var(--font-body);
   font-weight: 400;
@@ -176,7 +176,7 @@
 }
 
 .home-checkin-banner:hover {
-  background: rgba(255, 60, 120, 0.18);
+  background: rgba(255, 61, 107, 0.18);
 }
 
 .home-hero-checkin {
@@ -190,7 +190,7 @@
   font-size: 32px;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  color: #f0ecd8;
+  color: #ffffff;
   margin: 0;
 }
 
@@ -198,20 +198,20 @@
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 13px;
-  color: #FF3C78;
+  color: #FF3D6B;
   margin: 0;
 }
 
 .home-hero-session-title {
   font-weight: 600;
-  color: #f0ecd8;
+  color: #ffffff;
   font-size: 15px;
 }
 
 .home-nutrition-line {
   font-size: 12px;
   line-height: 1.45;
-  color: rgba(240, 236, 216, 0.72);
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .home-snack-block {
@@ -223,7 +223,7 @@
   font-weight: 600;
   font-size: 13px;
   margin: 0 0 6px;
-  color: #f0ecd8;
+  color: #ffffff;
 }
 
 .home-snack-list {
@@ -231,7 +231,7 @@
   padding-left: 1.2rem;
   font-size: 12px;
   line-height: 1.45;
-  color: rgba(240, 236, 216, 0.85);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .home-hero-actions {
@@ -245,7 +245,7 @@
   margin: 0;
   border: none;
   border-radius: 12px;
-  background: linear-gradient(135deg, #FF3C78, #FF8C00);
+  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
   color: #0e0e0a;
   font-family: var(--font-heading);
   font-weight: 600;
@@ -301,18 +301,18 @@
   padding: 6px 4px;
   border: none;
   border-radius: 12px;
-  background: #1c1c16;
-  border: 1px solid rgba(255, 60, 120, 0.15);
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 61, 107, 0.15);
   cursor: pointer;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .home-week-pill.is-today {
-  box-shadow: 0 0 0 1px rgba(255, 60, 120, 0.35);
+  box-shadow: 0 0 0 1px rgba(255, 61, 107, 0.35);
 }
 
 .home-week-pill.is-selected {
-  border-color: rgba(255, 60, 120, 0.45);
+  border-color: rgba(255, 61, 107, 0.45);
 }
 
 .home-week-pill-wd {
@@ -328,7 +328,7 @@
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 18px;
-  color: #f0ecd8;
+  color: #ffffff;
   line-height: 1;
 }
 
@@ -336,13 +336,13 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 60, 120, 0.25);
+  border: 1px solid rgba(255, 61, 107, 0.25);
   background: transparent;
 }
 
 .home-week-pill-dot.is-on {
-  background: linear-gradient(135deg, #FF3C78, #FF8C00);
-  border-color: #FF3C78;
+  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  border-color: #FF3D6B;
 }
 
 .home-week-pill-dot.is-pulse {
@@ -352,10 +352,10 @@
 @keyframes home-dot-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(255, 60, 120, 0.4);
+    box-shadow: 0 0 0 0 rgba(255, 61, 107, 0.4);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(255, 60, 120, 0);
+    box-shadow: 0 0 0 6px rgba(255, 61, 107, 0);
   }
 }
 
@@ -370,11 +370,11 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: rgba(255, 60, 120, 0.2);
+  background: rgba(255, 61, 107, 0.2);
 }
 
 .home-week-dot.is-on {
-  background: linear-gradient(135deg, #FF3C78, #FF8C00);
+  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
 }
 
 .home-stats-row {
@@ -403,7 +403,7 @@
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 20px;
-  color: #FF3C78;
+  color: #FF3D6B;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
 }
@@ -412,15 +412,15 @@
   font-family: var(--font-body);
   font-weight: 300;
   font-size: 11px;
-  color: #7a7058;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* Zone 3 */
 .home-zone3-card {
   padding: var(--padding-card);
   border-radius: 20px;
-  background: #1c1c16;
-  border: 1px solid rgba(255, 60, 120, 0.15);
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 61, 107, 0.15);
 }
 
 .home-page .morning-checkin__hint {
@@ -435,7 +435,7 @@
   align-self: flex-end;
   margin-bottom: 8px;
   padding: 6px 12px;
-  border: 1px solid rgba(255, 60, 120, 0.3);
+  border: 1px solid rgba(255, 61, 107, 0.3);
   border-radius: 12px;
   background: transparent;
   color: var(--color-muted);

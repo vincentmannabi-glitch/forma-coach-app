@@ -17,7 +17,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #e8c86a;
+  background: #ff8c00;
   box-shadow: 0 0 12px rgba(232, 200, 106, 0.75);
   animation: morning-coach-pulse 2s ease-in-out infinite;
 }
@@ -39,21 +39,21 @@
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(255, 60, 120, 0.95);
+  color: rgba(255, 61, 107, 0.95);
 }
 
 .morning-checkin__opener {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.55;
-  color: rgba(240, 236, 216, 0.92);
+  color: rgba(255, 255, 255, 0.92);
   margin: 0 0 var(--space-md);
 }
 
 .morning-checkin__intro-next {
   font-size: 0.875rem;
   font-weight: 300;
-  color: rgba(240, 236, 216, 0.55);
+  color: rgba(255, 255, 255, 0.55);
   margin: 0 0 var(--space-lg);
   line-height: 1.45;
 }
@@ -69,8 +69,8 @@
   font-weight: 800;
   padding: var(--space-md) var(--space-xl);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.5);
-  background: linear-gradient(145deg, #e8c86a, #FF3C78);
+  border: 1px solid rgba(255, 61, 107, 0.5);
+  background: linear-gradient(145deg, #FF3D6B, #FF8C00);
   color: #0e0e0a;
   cursor: pointer;
 }
@@ -81,7 +81,7 @@
 
 .morning-checkin__recap {
   font-size: 0.8125rem;
-  color: rgba(240, 236, 216, 0.55);
+  color: rgba(255, 255, 255, 0.55);
   margin: 0 0 var(--space-md);
   line-height: 1.45;
 }
@@ -94,7 +94,7 @@
   font-family: var(--font-heading);
   font-size: 1rem;
   font-weight: 800;
-  color: #f0ecd8;
+  color: #ffffff;
   margin: 0 0 var(--space-md);
 }
 
@@ -106,7 +106,7 @@
   font-family: var(--font-heading);
   font-size: 0.9375rem;
   font-weight: 800;
-  color: #FF3C78;
+  color: #FF3D6B;
   margin: 0 0 var(--space-md);
   letter-spacing: 0.02em;
 }
@@ -136,7 +136,7 @@
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-full);
   border: 1px solid var(--color-border-card);
-  background: rgba(255, 60, 120, 0.06);
+  background: rgba(255, 61, 107, 0.06);
   color: var(--color-text);
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s, color 0.2s, box-shadow 0.2s;
@@ -148,20 +148,20 @@
 }
 
 .morning-checkin__pill:hover {
-  border-color: rgba(255, 60, 120, 0.45);
+  border-color: rgba(255, 61, 107, 0.45);
 }
 
 .morning-checkin__pill.is-selected {
-  border-color: rgba(255, 60, 120, 0.65);
-  background: linear-gradient(145deg, rgba(232, 200, 106, 0.2), rgba(255, 60, 120, 0.18));
-  color: #f0ecd8;
-  box-shadow: 0 0 24px rgba(255, 60, 120, 0.12);
+  border-color: rgba(255, 61, 107, 0.65);
+  background: linear-gradient(145deg, rgba(255, 61, 107, 0.2), rgba(255, 61, 107, 0.12));
+  color: #ffffff;
+  box-shadow: 0 0 24px rgba(255, 61, 107, 0.12);
 }
 
 .morning-checkin__sub {
   margin-top: var(--space-lg);
   padding-top: var(--space-lg);
-  border-top: 1px solid rgba(255, 60, 120, 0.12);
+  border-top: 1px solid rgba(255, 61, 107, 0.12);
 }
 
 .morning-checkin__hint {
@@ -193,12 +193,12 @@
 }
 
 .morning-checkin__level:hover {
-  border-color: rgba(255, 60, 120, 0.4);
+  border-color: rgba(255, 61, 107, 0.4);
 }
 
 .morning-checkin__level.is-selected {
-  border-color: rgba(255, 60, 120, 0.55);
-  background: rgba(255, 60, 120, 0.08);
+  border-color: rgba(255, 61, 107, 0.55);
+  background: rgba(255, 61, 107, 0.08);
 }
 
 .morning-checkin__level-main {
@@ -221,8 +221,8 @@
   font-weight: 800;
   padding: var(--space-md) var(--space-xl);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.5);
-  background: linear-gradient(145deg, #e8c86a, #FF3C78);
+  border: 1px solid rgba(255, 61, 107, 0.5);
+  background: linear-gradient(145deg, #FF3D6B, #FF8C00);
   color: #0e0e0a;
   cursor: pointer;
   transition: filter 0.2s;

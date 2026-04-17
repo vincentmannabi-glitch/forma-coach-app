@@ -1,7 +1,7 @@
 .grocery-page {
   min-height: 100vh;
   background: var(--color-bg);
-  padding: var(--space-lg) var(--space-lg) calc(var(--space-3xl) + 72px);
+  padding: var(--space-lg) var(--space-lg) calc(var(--space-3xl) + 96px);
   position: relative;
   z-index: 1;
 }
@@ -34,7 +34,7 @@
 }
 
 .grocery-icon-btn:hover {
-  border-color: rgba(255, 60, 120, 0.45);
+  border-color: rgba(255, 61, 107, 0.45);
 }
 
 .grocery-share-btn {
@@ -43,14 +43,14 @@
   font-weight: 600;
   padding: var(--space-sm) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.45);
-  background: rgba(255, 60, 120, 0.12);
+  border: 1px solid rgba(255, 61, 107, 0.45);
+  background: rgba(255, 61, 107, 0.12);
   color: var(--color-accent);
   cursor: pointer;
 }
 
 .grocery-share-btn:hover {
-  background: rgba(255, 60, 120, 0.2);
+  background: rgba(255, 61, 107, 0.2);
 }
 
 .grocery-h1 {
@@ -131,8 +131,8 @@
   margin-bottom: var(--space-lg);
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 60, 120, 0.45);
-  background: linear-gradient(135deg, rgba(255, 60, 120, 0.14), rgba(255, 60, 120, 0.04));
+  border: 1px solid rgba(255, 61, 107, 0.45);
+  background: linear-gradient(135deg, rgba(255, 61, 107, 0.14), rgba(255, 61, 107, 0.04));
 }
 
 .grocery-protein-alert-title {
@@ -180,7 +180,7 @@
   height: 40px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
-  background: rgba(255, 60, 120, 0.1);
+  background: rgba(255, 61, 107, 0.1);
   color: var(--color-accent);
   font-size: 1.25rem;
   font-weight: 600;
@@ -194,7 +194,7 @@
 }
 
 .grocery-stepper:not(:disabled):hover {
-  border-color: rgba(255, 60, 120, 0.5);
+  border-color: rgba(255, 61, 107, 0.5);
 }
 
 .grocery-serves-num {
@@ -281,7 +281,7 @@
   font-weight: 600;
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(255, 60, 120, 0.35);
+  border: 1px solid rgba(255, 61, 107, 0.35);
   background: transparent;
   color: var(--color-accent);
   cursor: pointer;
@@ -289,7 +289,7 @@
 }
 
 .grocery-swap-btn:hover {
-  background: rgba(255, 60, 120, 0.1);
+  background: rgba(255, 61, 107, 0.1);
 }
 
 .grocery-list-wrap {
@@ -335,7 +335,7 @@
 
 .grocery-item--done {
   opacity: 0.55;
-  border-color: rgba(255, 60, 120, 0.15);
+  border-color: rgba(255, 61, 107, 0.15);
 }
 
 .grocery-item-check {
@@ -357,11 +357,11 @@
 }
 
 .grocery-item-check:hover .grocery-checkbox {
-  border-color: rgba(255, 60, 120, 0.5);
+  border-color: rgba(255, 61, 107, 0.5);
 }
 
 .grocery-checkbox--on {
-  background: rgba(255, 60, 120, 0.25);
+  background: rgba(255, 61, 107, 0.25);
   border-color: var(--color-accent);
   box-shadow: inset 0 0 0 3px var(--color-bg);
 }
@@ -384,7 +384,7 @@
   white-space: nowrap;
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(240, 236, 216, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   background: transparent;
   color: var(--color-text-muted);
   cursor: pointer;
@@ -392,7 +392,7 @@
 
 .grocery-have-btn:hover {
   color: var(--color-text-dimmed);
-  border-color: rgba(240, 236, 216, 0.25);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .grocery-modal-backdrop {
@@ -458,7 +458,7 @@
 }
 
 .grocery-swap-option:hover {
-  border-color: rgba(255, 60, 120, 0.4);
+  border-color: rgba(255, 61, 107, 0.4);
 }
 
 .grocery-swap-option-img {
