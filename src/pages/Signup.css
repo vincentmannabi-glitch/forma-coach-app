@@ -30,7 +30,7 @@
   font-family: var(--font-heading);
   font-size: clamp(2rem, 5vw, 2.5rem);
   font-weight: 800;
-  color: #C8A040;
+  color: #FF3C78;
   letter-spacing: -0.02em;
   margin-bottom: var(--space-sm);
 }
@@ -54,7 +54,7 @@
 
 .signup-card:hover {
   border-color: var(--color-border-card-hover);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(200, 160, 64, 0.06);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 60, 120, 0.06);
 }
 
 /* Form */
@@ -94,8 +94,8 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #C8A040;
-  box-shadow: 0 0 0 1px #C8A040;
+  border-color: #FF3C78;
+  box-shadow: 0 0 0 1px #FF3C78;
 }
 
 .form-message {
@@ -120,7 +120,7 @@
   font-size: 1rem;
   font-weight: 600;
   padding: var(--space-md) var(--space-xl);
-  background: #C8A040;
+  background: linear-gradient(135deg, #FF3C78, #FF8C00);
   color: #0e0e0a;
   border: none;
   border-radius: var(--radius-md);
@@ -131,7 +131,7 @@
 
 .btn-continue:hover:not(:disabled) {
   background: #d4af50;
-  box-shadow: 0 0 20px rgba(200, 160, 64, 0.25);
+  box-shadow: 0 0 20px rgba(255, 60, 120, 0.25);
 }
 
 .btn-continue:active:not(:disabled) {

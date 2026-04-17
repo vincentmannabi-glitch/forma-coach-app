@@ -12,7 +12,7 @@
 .workout-hub-start-link {
   display: inline-block;
   margin-top: 12px;
-  color: #c8a040;
+  color: #FF3C78;
   font-weight: 600;
   text-decoration: none;
 }
@@ -74,7 +74,7 @@
   padding: 10px 16px;
   border-radius: 12px;
   background: #1c1c16;
-  border: 1px solid rgba(200, 160, 64, 0.3);
+  border: 1px solid rgba(255, 60, 120, 0.3);
   color: #f0ecd8;
   text-decoration: none;
   font-family: var(--font-heading);
@@ -86,13 +86,13 @@
 }
 
 .workout-hub-style-pill.is-selected {
-  background: #c8a040;
-  border-color: #c8a040;
+  background: linear-gradient(135deg, #FF3C78, #FF8C00);
+  border-color: #FF3C78;
   color: #0e0e0a;
 }
 
 .workout-hub-style-pill:hover {
-  border-color: rgba(200, 160, 64, 0.35);
+  border-color: rgba(255, 60, 120, 0.35);
 }
 
 .workout-hub-h2 {
@@ -190,7 +190,7 @@
 .workout-hub-week-tab.is-active {
   background: transparent;
   border: none;
-  border-bottom: 2px solid #c8a040;
+  border-bottom: 2px solid #FF3C78;
   border-radius: 0;
   color: #f0ecd8;
   padding-bottom: 6px;
@@ -256,7 +256,7 @@
   user-select: none;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #c8a040;
+  color: #FF3C78;
 }
 
 .workout-hub-switch input {
@@ -270,8 +270,8 @@
   width: 36px;
   height: 20px;
   border-radius: 999px;
-  background: rgba(200, 160, 64, 0.2);
-  border: 1px solid rgba(200, 160, 64, 0.45);
+  background: rgba(255, 60, 120, 0.2);
+  border: 1px solid rgba(255, 60, 120, 0.45);
   position: relative;
   transition: background 0.2s, border-color 0.2s;
 }
@@ -289,7 +289,7 @@
 }
 
 .workout-hub-switch input:checked + .workout-hub-switch-track {
-  background: rgba(200, 160, 64, 0.35);
+  background: rgba(255, 60, 120, 0.35);
   border-color: rgba(232, 200, 106, 0.65);
 }
 
@@ -307,7 +307,7 @@
   font-weight: 600;
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(200, 160, 64, 0.45);
+  border: 1px solid rgba(255, 60, 120, 0.45);
   background: rgba(18, 18, 14, 0.95);
   color: #e8c86a;
   cursor: pointer;
@@ -343,15 +343,15 @@
   gap: var(--space-sm);
   padding: var(--space-xl);
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(200, 160, 64, 0.35);
-  background: linear-gradient(155deg, rgba(200, 160, 64, 0.12), rgba(18, 18, 14, 0.98));
+  border: 1px solid rgba(255, 60, 120, 0.35);
+  background: linear-gradient(155deg, rgba(255, 60, 120, 0.12), rgba(18, 18, 14, 0.98));
   text-decoration: none;
   color: inherit;
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .workout-hub-card:hover {
-  border-color: rgba(200, 160, 64, 0.55);
+  border-color: rgba(255, 60, 120, 0.55);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
   transform: translateY(-2px);
 }
@@ -359,11 +359,11 @@
 .workout-hub-card--preferred {
   border-width: 2px;
   border-color: rgba(232, 200, 106, 0.88);
-  box-shadow: 0 0 0 1px rgba(232, 200, 106, 0.2), inset 0 0 24px rgba(200, 160, 64, 0.06);
+  box-shadow: 0 0 0 1px rgba(232, 200, 106, 0.2), inset 0 0 24px rgba(255, 60, 120, 0.06);
 }
 
 .workout-hub-card--today:not(.workout-hub-card--preferred) {
-  border-color: rgba(200, 160, 64, 0.55);
+  border-color: rgba(255, 60, 120, 0.55);
 }
 
 .workout-hub-today-pill {
@@ -374,7 +374,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #0e0e0a;
-  background: linear-gradient(135deg, #e8c86a, #c8a040);
+  background: linear-gradient(135deg, #e8c86a, #FF3C78);
   padding: 4px 8px;
   border-radius: 6px;
   font-weight: 800;
@@ -451,7 +451,7 @@
   justify-content: space-between;
   padding: 8px 4px;
   border-radius: 12px;
-  border: 1px solid rgba(200, 160, 64, 0.15);
+  border: 1px solid rgba(255, 60, 120, 0.15);
   background: #1c1c16;
   color: #f0ecd8;
   cursor: pointer;
@@ -459,7 +459,7 @@
 }
 
 .train-hub-day.is-today {
-  border: 1.5px solid #c8a040;
+  border: 1.5px solid #FF3C78;
 }
 
 .train-hub-day-check {
@@ -467,7 +467,7 @@
   top: 4px;
   right: 4px;
   font-size: 9px;
-  color: #c8a040;
+  color: #FF3C78;
   line-height: 1;
 }
 
@@ -505,7 +505,7 @@
 
 .train-hub-section-card {
   background: #1c1c16;
-  border: 1px solid rgba(200, 160, 64, 0.15);
+  border: 1px solid rgba(255, 60, 120, 0.15);
   border-radius: 20px;
   padding: var(--padding-card);
 }
@@ -516,7 +516,7 @@
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #c8a040;
+  color: #FF3C78;
   margin: 0 0 12px;
 }
 
@@ -557,12 +557,12 @@
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 13px;
-  color: #c8a040;
+  color: #FF3C78;
   flex-shrink: 0;
 }
 
 .train-hub-ex-wrap {
-  border-bottom: 1px solid rgba(200, 160, 64, 0.08);
+  border-bottom: 1px solid rgba(255, 60, 120, 0.08);
 }
 
 .train-hub-section-rows > .train-hub-ex-wrap:last-child {
@@ -577,7 +577,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 500;
-  color: #c8a040;
+  color: #FF3C78;
   margin: 0 0 8px;
   line-height: 1.4;
 }
@@ -605,7 +605,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 500;
-  color: #c8a040;
+  color: #FF3C78;
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -650,7 +650,7 @@
 }
 
 .routine-compact-row {
-  border-bottom: 1px solid rgba(200, 160, 64, 0.08);
+  border-bottom: 1px solid rgba(255, 60, 120, 0.08);
   background: transparent;
 }
 
@@ -681,7 +681,7 @@
 
 .routine-compact-dur {
   font-weight: 500;
-  color: #c8a040;
+  color: #FF3C78;
   flex-shrink: 0;
 }
 

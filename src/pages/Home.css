@@ -57,8 +57,8 @@
   font-weight: 600;
   padding: 12px 20px;
   border-radius: 12px;
-  border: 1px solid rgba(200, 160, 64, 0.35);
-  background: rgba(200, 160, 64, 0.12);
+  border: 1px solid rgba(255, 60, 120, 0.35);
+  background: rgba(255, 60, 120, 0.12);
   color: var(--color-accent);
   cursor: pointer;
 }
@@ -67,7 +67,7 @@
   width: 28px;
   height: 28px;
   margin: 80px auto;
-  border: 2px solid rgba(200, 160, 64, 0.2);
+  border: 2px solid rgba(255, 60, 120, 0.2);
   border-top-color: var(--color-accent);
   border-radius: 50%;
   animation: home-spin 0.8s linear infinite;
@@ -89,7 +89,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(200, 160, 64, 0.3);
+  border: 1px solid rgba(255, 60, 120, 0.3);
   border-radius: 12px;
   background: var(--color-surface);
   color: var(--color-accent);
@@ -98,7 +98,7 @@
 }
 
 .home-settings-fab:hover {
-  border-color: rgba(200, 160, 64, 0.45);
+  border-color: rgba(255, 60, 120, 0.45);
 }
 
 /* Zone 1 — greeting + streak + today card */
@@ -117,7 +117,7 @@
   font-size: clamp(4rem, 22vw, 7.5rem);
   line-height: 0.9;
   letter-spacing: -0.06em;
-  color: #c8a040;
+  color: #FF3C78;
   margin: 0;
   text-align: center;
 }
@@ -138,7 +138,7 @@
   padding: var(--padding-card);
   border-radius: 20px;
   background: #1c1c16;
-  border: 1px solid rgba(200, 160, 64, 0.15);
+  border: 1px solid rgba(255, 60, 120, 0.15);
 }
 
 .home-zone-stats {
@@ -154,7 +154,7 @@
   padding: var(--padding-card);
   border-radius: 24px;
   background: #1c1c16;
-  border: 1px solid rgba(200, 160, 64, 0.3);
+  border: 1px solid rgba(255, 60, 120, 0.3);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -165,7 +165,7 @@
   padding: 10px 12px;
   border: none;
   border-radius: 12px;
-  background: rgba(200, 160, 64, 0.12);
+  background: rgba(255, 60, 120, 0.12);
   color: var(--color-accent);
   font-family: var(--font-body);
   font-weight: 400;
@@ -176,7 +176,7 @@
 }
 
 .home-checkin-banner:hover {
-  background: rgba(200, 160, 64, 0.18);
+  background: rgba(255, 60, 120, 0.18);
 }
 
 .home-hero-checkin {
@@ -198,7 +198,7 @@
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 13px;
-  color: #c8a040;
+  color: #FF3C78;
   margin: 0;
 }
 
@@ -245,7 +245,7 @@
   margin: 0;
   border: none;
   border-radius: 12px;
-  background: #c8a040;
+  background: linear-gradient(135deg, #FF3C78, #FF8C00);
   color: #0e0e0a;
   font-family: var(--font-heading);
   font-weight: 600;
@@ -302,17 +302,17 @@
   border: none;
   border-radius: 12px;
   background: #1c1c16;
-  border: 1px solid rgba(200, 160, 64, 0.15);
+  border: 1px solid rgba(255, 60, 120, 0.15);
   cursor: pointer;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .home-week-pill.is-today {
-  box-shadow: 0 0 0 1px rgba(200, 160, 64, 0.35);
+  box-shadow: 0 0 0 1px rgba(255, 60, 120, 0.35);
 }
 
 .home-week-pill.is-selected {
-  border-color: rgba(200, 160, 64, 0.45);
+  border-color: rgba(255, 60, 120, 0.45);
 }
 
 .home-week-pill-wd {
@@ -336,13 +336,13 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  border: 1px solid rgba(200, 160, 64, 0.25);
+  border: 1px solid rgba(255, 60, 120, 0.25);
   background: transparent;
 }
 
 .home-week-pill-dot.is-on {
-  background: #c8a040;
-  border-color: #c8a040;
+  background: linear-gradient(135deg, #FF3C78, #FF8C00);
+  border-color: #FF3C78;
 }
 
 .home-week-pill-dot.is-pulse {
@@ -352,10 +352,10 @@
 @keyframes home-dot-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(200, 160, 64, 0.4);
+    box-shadow: 0 0 0 0 rgba(255, 60, 120, 0.4);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(200, 160, 64, 0);
+    box-shadow: 0 0 0 6px rgba(255, 60, 120, 0);
   }
 }
 
@@ -370,11 +370,11 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: rgba(200, 160, 64, 0.2);
+  background: rgba(255, 60, 120, 0.2);
 }
 
 .home-week-dot.is-on {
-  background: #c8a040;
+  background: linear-gradient(135deg, #FF3C78, #FF8C00);
 }
 
 .home-stats-row {
@@ -403,7 +403,7 @@
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 20px;
-  color: #c8a040;
+  color: #FF3C78;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
 }
@@ -420,7 +420,7 @@
   padding: var(--padding-card);
   border-radius: 20px;
   background: #1c1c16;
-  border: 1px solid rgba(200, 160, 64, 0.15);
+  border: 1px solid rgba(255, 60, 120, 0.15);
 }
 
 .home-page .morning-checkin__hint {
@@ -435,7 +435,7 @@
   align-self: flex-end;
   margin-bottom: 8px;
   padding: 6px 12px;
-  border: 1px solid rgba(200, 160, 64, 0.3);
+  border: 1px solid rgba(255, 60, 120, 0.3);
   border-radius: 12px;
   background: transparent;
   color: var(--color-muted);

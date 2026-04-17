@@ -8,8 +8,8 @@
   padding: var(--space-xl);
   padding-bottom: calc(var(--space-xl) + env(safe-area-inset-bottom, 0px));
   background:
-    radial-gradient(ellipse 120% 80% at 50% -10%, rgba(200, 160, 64, 0.28), transparent 50%),
-    radial-gradient(ellipse 90% 60% at 50% 100%, rgba(200, 160, 64, 0.12), transparent 55%),
+    radial-gradient(ellipse 120% 80% at 50% -10%, rgba(255, 60, 120, 0.28), transparent 50%),
+    radial-gradient(ellipse 90% 60% at 50% 100%, rgba(255, 60, 120, 0.12), transparent 55%),
     linear-gradient(180deg, #0a0906 0%, #050504 50%, #020201 100%);
   box-shadow: inset 0 0 160px rgba(0, 0, 0, 0.85);
   animation: reengagementIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -21,8 +21,8 @@
   pointer-events: none;
   background: radial-gradient(
     ellipse 70% 45% at 50% 18%,
-    rgba(200, 160, 64, 0.35),
-    rgba(200, 160, 64, 0.06) 42%,
+    rgba(255, 60, 120, 0.35),
+    rgba(255, 60, 120, 0.06) 42%,
     transparent 65%
   );
   filter: blur(2px);
@@ -54,8 +54,8 @@
   letter-spacing: -0.03em;
   line-height: 1.05;
   text-shadow:
-    0 0 40px rgba(200, 160, 64, 0.45),
-    0 0 80px rgba(200, 160, 64, 0.2);
+    0 0 40px rgba(255, 60, 120, 0.45),
+    0 0 80px rgba(255, 60, 120, 0.2);
 }
 
 .reengagement-overlay__body {
@@ -71,7 +71,7 @@
   font-size: 0.875rem;
   font-weight: 300;
   line-height: 1.5;
-  color: rgba(200, 160, 64, 0.88);
+  color: rgba(255, 60, 120, 0.88);
   margin: 0 0 var(--space-xl);
 }
 
@@ -82,14 +82,14 @@
   font-weight: 800;
   padding: var(--space-md) var(--space-xl);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(200, 160, 64, 0.55);
-  background: linear-gradient(145deg, #e8c86a, #c8a040);
+  border: 1px solid rgba(255, 60, 120, 0.55);
+  background: linear-gradient(145deg, #e8c86a, #FF3C78);
   color: #0e0e0a;
   cursor: pointer;
   margin-bottom: var(--space-md);
   box-shadow:
-    0 8px 32px rgba(200, 160, 64, 0.35),
-    0 0 24px rgba(200, 160, 64, 0.15);
+    0 8px 32px rgba(255, 60, 120, 0.35),
+    0 0 24px rgba(255, 60, 120, 0.15);
   transition: filter 0.2s, transform 0.2s;
 }
 
@@ -118,5 +118,5 @@
 }
 
 .reengagement-overlay__secondary:hover {
-  color: rgba(200, 160, 64, 0.95);
+  color: rgba(255, 60, 120, 0.95);
 }

@@ -11,13 +11,13 @@
 }
 
 .body-diagram__silhouette {
-  stroke: rgba(200, 160, 64, 0.35);
+  stroke: rgba(255, 60, 120, 0.35);
   fill: rgba(28, 28, 22, 0.6);
 }
 
 .body-diagram__hit {
-  fill: rgba(200, 160, 64, 0.12);
-  stroke: rgba(200, 160, 64, 0.25);
+  fill: rgba(255, 60, 120, 0.12);
+  stroke: rgba(255, 60, 120, 0.25);
   stroke-width: 0.4;
   cursor: pointer;
   transition: fill 0.2s ease, stroke 0.2s ease;
@@ -25,20 +25,20 @@
 
 .body-diagram__hit:hover,
 .body-diagram__hit:focus-visible {
-  fill: rgba(200, 160, 64, 0.28);
-  stroke: rgba(200, 160, 64, 0.55);
+  fill: rgba(255, 60, 120, 0.28);
+  stroke: rgba(255, 60, 120, 0.55);
   outline: none;
 }
 
 .body-diagram__hit--on {
-  fill: rgba(200, 160, 64, 0.38);
-  stroke: rgba(200, 160, 64, 0.75);
+  fill: rgba(255, 60, 120, 0.38);
+  stroke: rgba(255, 60, 120, 0.75);
   animation: forma-checkin-dot 2s ease-in-out infinite;
 }
 
 .body-diagram__gold-dot {
   fill: #e8c86a;
-  stroke: rgba(200, 160, 64, 0.9);
+  stroke: rgba(255, 60, 120, 0.9);
   stroke-width: 0.35;
   filter: drop-shadow(0 0 4px rgba(232, 200, 106, 0.65));
   pointer-events: none;
@@ -75,7 +75,7 @@
 }
 
 .body-diagram-toggle button.is-active {
-  border-color: rgba(200, 160, 64, 0.55);
-  color: #c8a040;
-  background: rgba(200, 160, 64, 0.1);
+  border-color: rgba(255, 60, 120, 0.55);
+  color: #FF3C78;
+  background: rgba(255, 60, 120, 0.1);
 }

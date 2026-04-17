@@ -29,12 +29,12 @@
   display: inline-block;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #c8a040;
+  color: #FF3C78;
   text-decoration: none;
   margin-bottom: var(--space-md);
   background: none;
   border: none;
-  border-bottom: 1px solid rgba(200, 160, 64, 0.35);
+  border-bottom: 1px solid rgba(255, 60, 120, 0.35);
   padding: 0 0 2px;
   cursor: pointer;
   font-family: inherit;
@@ -43,7 +43,7 @@
 .home-workout-back:hover,
 .home-workout-back-btn:hover {
   color: #e8c86a;
-  border-bottom-color: rgba(200, 160, 64, 0.55);
+  border-bottom-color: rgba(255, 60, 120, 0.55);
 }
 
 .home-workout-title {
@@ -69,8 +69,8 @@
   margin-bottom: var(--space-lg);
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(200, 160, 64, 0.22);
-  background: rgba(200, 160, 64, 0.06);
+  border: 1px solid rgba(255, 60, 120, 0.22);
+  background: rgba(255, 60, 120, 0.06);
 }
 
 .home-workout-intro {
@@ -84,8 +84,8 @@
   margin-bottom: var(--space-lg);
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(200, 160, 64, 0.4);
-  background: linear-gradient(135deg, rgba(200, 160, 64, 0.12), rgba(28, 28, 22, 0.96));
+  border: 1px solid rgba(255, 60, 120, 0.4);
+  background: linear-gradient(135deg, rgba(255, 60, 120, 0.12), rgba(28, 28, 22, 0.96));
 }
 
 .home-circuit-banner p {
@@ -109,8 +109,8 @@
   gap: var(--space-xs);
   padding: var(--space-xl);
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(200, 160, 64, 0.4);
-  background: linear-gradient(155deg, rgba(200, 160, 64, 0.16), rgba(18, 18, 14, 0.98));
+  border: 1px solid rgba(255, 60, 120, 0.4);
+  background: linear-gradient(155deg, rgba(255, 60, 120, 0.16), rgba(18, 18, 14, 0.98));
   cursor: pointer;
   text-align: left;
   font-family: inherit;
@@ -158,8 +158,8 @@
   gap: var(--space-xs);
   padding: var(--space-lg) var(--space-xl);
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(200, 160, 64, 0.35);
-  background: linear-gradient(145deg, rgba(200, 160, 64, 0.1), rgba(22, 22, 18, 0.98));
+  border: 1px solid rgba(255, 60, 120, 0.35);
+  background: linear-gradient(145deg, rgba(255, 60, 120, 0.1), rgba(22, 22, 18, 0.98));
   cursor: pointer;
   text-align: left;
   font-family: inherit;
@@ -168,7 +168,7 @@
 }
 
 .home-program-card:hover {
-  border-color: rgba(200, 160, 64, 0.5);
+  border-color: rgba(255, 60, 120, 0.5);
   transform: translateY(-1px);
 }
 
@@ -194,7 +194,7 @@
   margin: var(--space-md) 0;
   padding: var(--space-md);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(200, 160, 64, 0.25);
+  border: 1px solid rgba(255, 60, 120, 0.25);
   background: rgba(0, 0, 0, 0.25);
   font-size: 0.875rem;
   line-height: 1.5;
@@ -213,7 +213,7 @@
 .home-band-tension {
   margin: var(--space-sm) 0 0;
   font-size: 0.8125rem;
-  color: rgba(200, 160, 64, 0.85);
+  color: rgba(255, 60, 120, 0.85);
 }
 
 .home-regression-block {

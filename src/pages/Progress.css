@@ -35,7 +35,7 @@
 
 .progress-trend {
   font-size: 28px;
-  color: #c8a040;
+  color: #FF3C78;
   line-height: 1;
 }
 
@@ -47,7 +47,7 @@
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 64px;
-  color: #c8a040;
+  color: #FF3C78;
   line-height: 1;
   margin: 0;
 }
@@ -89,8 +89,8 @@
   padding: var(--space-md) var(--space-lg);
   margin-bottom: var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(200, 160, 64, 0.45);
-  background: linear-gradient(135deg, rgba(200, 160, 64, 0.18), rgba(200, 160, 64, 0.06));
+  border: 1px solid rgba(255, 60, 120, 0.45);
+  background: linear-gradient(135deg, rgba(255, 60, 120, 0.18), rgba(255, 60, 120, 0.06));
 }
 
 .progress-pr-banner--pop {
@@ -223,7 +223,7 @@
 }
 
 .progress-grid-square.is-on {
-  background: #c8a040;
+  background: linear-gradient(135deg, #FF3C78, #FF8C00);
 }
 
 .progress-grid-square.is-today {
@@ -233,10 +233,10 @@
 @keyframes progress-today-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(200, 160, 64, 0.35);
+    box-shadow: 0 0 0 0 rgba(255, 60, 120, 0.35);
   }
   50% {
-    box-shadow: 0 0 0 4px rgba(200, 160, 64, 0);
+    box-shadow: 0 0 0 4px rgba(255, 60, 120, 0);
   }
 }
 
@@ -302,7 +302,7 @@
   flex-shrink: 0;
   font-size: 1.25rem;
   line-height: 1;
-  filter: drop-shadow(0 0 10px rgba(200, 160, 64, 0.4));
+  filter: drop-shadow(0 0 10px rgba(255, 60, 120, 0.4));
 }
 
 .progress-pr-row--celebrate {
@@ -312,12 +312,12 @@
 @keyframes progressRowGlow {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(200, 160, 64, 0);
+    box-shadow: 0 0 0 0 rgba(255, 60, 120, 0);
     border-color: var(--color-border-card);
   }
   50% {
-    box-shadow: 0 0 20px rgba(200, 160, 64, 0.15);
-    border-color: rgba(200, 160, 64, 0.35);
+    box-shadow: 0 0 20px rgba(255, 60, 120, 0.15);
+    border-color: rgba(255, 60, 120, 0.35);
   }
 }
 
@@ -365,7 +365,7 @@
   letter-spacing: 0.06em;
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, rgba(200, 160, 64, 0.95), rgba(200, 160, 64, 0.75));
+  background: linear-gradient(135deg, rgba(255, 60, 120, 0.95), rgba(255, 60, 120, 0.75));
   color: #0e0e0a;
 }
 
@@ -423,7 +423,7 @@
 
 .progress-field input:focus {
   outline: none;
-  border-color: rgba(200, 160, 64, 0.45);
+  border-color: rgba(255, 60, 120, 0.45);
 }
 
 .progress-save-btn {
@@ -431,14 +431,14 @@
   font-weight: 600;
   padding: var(--space-sm) var(--space-xl);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(200, 160, 64, 0.45);
-  background: rgba(200, 160, 64, 0.12);
+  border: 1px solid rgba(255, 60, 120, 0.45);
+  background: rgba(255, 60, 120, 0.12);
   color: var(--color-accent);
   cursor: pointer;
 }
 
 .progress-save-btn:hover {
-  background: rgba(200, 160, 64, 0.2);
+  background: rgba(255, 60, 120, 0.2);
 }
 
 .progress-nutrition-charts {
@@ -546,13 +546,13 @@
   font-size: 0.9375rem;
   padding: var(--space-sm) var(--space-lg);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(200, 160, 64, 0.45);
-  background: rgba(200, 160, 64, 0.1);
+  border: 1px solid rgba(255, 60, 120, 0.45);
+  background: rgba(255, 60, 120, 0.1);
   color: var(--color-accent);
 }
 
 .progress-photo-upload:hover .progress-photo-upload-btn {
-  background: rgba(200, 160, 64, 0.18);
+  background: rgba(255, 60, 120, 0.18);
 }
 
 .progress-photo-compare {

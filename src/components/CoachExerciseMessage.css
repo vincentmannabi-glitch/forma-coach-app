@@ -22,7 +22,7 @@
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(200, 160, 64, 0.95);
+  color: rgba(255, 60, 120, 0.95);
   margin: 0 0 0.4rem;
 }
 
@@ -63,12 +63,12 @@
 
 .coach-ex-card:hover {
   border-color: var(--color-border-card-hover);
-  box-shadow: 0 0 24px rgba(200, 160, 64, 0.08);
+  box-shadow: 0 0 24px rgba(255, 60, 120, 0.08);
 }
 
 .coach-ex-card:focus-within {
-  border-color: rgba(200, 160, 64, 0.45);
-  box-shadow: 0 0 0 1px rgba(200, 160, 64, 0.12);
+  border-color: rgba(255, 60, 120, 0.45);
+  box-shadow: 0 0 0 1px rgba(255, 60, 120, 0.12);
 }
 
 .coach-ex-card__title {
@@ -99,20 +99,20 @@
   font-weight: 600;
   padding: 0.4rem 0.75rem;
   border-radius: 6px;
-  border: 1px solid rgba(200, 160, 64, 0.35);
-  background: rgba(200, 160, 64, 0.08);
+  border: 1px solid rgba(255, 60, 120, 0.35);
+  background: rgba(255, 60, 120, 0.08);
   color: #e8dcc8;
   cursor: pointer;
 }
 
 .coach-ex-card__btn:hover {
-  background: rgba(200, 160, 64, 0.15);
+  background: rgba(255, 60, 120, 0.15);
 }
 
 .coach-ex-card__more {
   margin-top: 0.65rem;
   padding-top: 0.65rem;
-  border-top: 1px solid rgba(200, 160, 64, 0.12);
+  border-top: 1px solid rgba(255, 60, 120, 0.12);
 }
 
 .coach-ex-card__more-text {

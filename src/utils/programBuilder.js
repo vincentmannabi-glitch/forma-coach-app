@@ -3,6 +3,18 @@
  */
 import { EXERCISE_LIBRARY, SUPERSET_LIBRARY } from './programBuilderData.js'
 import { mapExperienceToTrainLevel } from './experienceLevel.js'
+import {
+  normalizeGoal as normalizeGoalV2,
+  getRepSchemeForGoal,
+  buildWeeklySchedule,
+  getCardioFinisher,
+  shouldDeload,
+  applyDeload,
+  buildWarmUpSet,
+  evaluateProgressionV2,
+  handleInjuryFlag,
+  REP_SCHEMES,
+} from './programBuilderV2'
 import { dateKeyLocal } from './foodLog.js'
 import { getNutritionCycleSelections } from './nutritionCycling.js'
 
@@ -290,6 +302,74 @@ export function normalizeStyle(styleRaw) {
   return 'gym'
 }
 
+/**
+ * Auto-detects coarse training style from free-text equipment (onboarding).
+ * User never selects gym vs home — equipment drives this.
+ */
+export function detectTrainingStyle(equipment) {
+  const e = (equipment || '').toLowerCase()
+
+  if (
+    e.includes('full gym') ||
+    e.includes('barbell') ||
+    e.includes('squat rack') ||
+    e.includes('cables') ||
+    e.includes('machines')
+  ) {
+    return 'gym'
+  }
+
+  if (
+    e.includes('dumbbells') ||
+    e.includes('dumbbell') ||
+    e.includes('kettlebell') ||
+    e.includes('bench') ||
+    e.includes('pull-up bar') ||
+    e.includes('pull up bar') ||
+    e.includes('chin-up bar')
+  ) {
+    return 'home_equipped'
+  }
+
+  if (e.includes('resistance bands') || /\bbands\b/.test(e)) {
+    return 'bands'
+  }
+
+  return 'bodyweight'
+}
+
+/** Maps detected style → values stored on the user profile / Train tabs. */
+export function profileTrainingFieldsFromEquipment(equipment) {
+  const d = detectTrainingStyle(equipment || '')
+  if (d === 'gym') {
+    return { training_style: 'gym', training_styles: ['gym'], trainingStyle: 'gym' }
+  }
+  if (d === 'bodyweight') {
+    return { training_style: 'calisthenics', training_styles: ['calisthenics'], trainingStyle: 'calisthenics' }
+  }
+  return { training_style: 'home workout', training_styles: ['home workout'], trainingStyle: 'home workout' }
+}
+
+/** Home workout catalog tier from onboarding equipment text. */
+export function inferHomeEquipmentIdsFromEquipmentText(equipment) {
+  const d = detectTrainingStyle(equipment || '')
+  const e = (equipment || '').toLowerCase()
+  if (d === 'bodyweight') return ['none']
+  if (d === 'bands') return ['bands']
+  if (d === 'gym') return ['full']
+  if (e.includes('barbell') || e.includes('full gym')) return ['full']
+  return ['basics']
+}
+
+function equipmentTextFromProfile(profile) {
+  const parts = []
+  if (profile?.equipment != null) parts.push(String(profile.equipment))
+  if (Array.isArray(profile?.equipment_list)) {
+    profile.equipment_list.forEach((x) => parts.push(String(x)))
+  }
+  return parts.filter(Boolean).join(', ')
+}
+
 function parseEquipmentProfile(profile) {
   const raw = []
   const add = (x) => {
@@ -321,10 +401,19 @@ function parseEquipmentProfile(profile) {
   if (has(/sled|prowler/)) set.add('sled')
   if (has(/foam roll/)) set.add('foamRoller')
   if (has(/ring|trx/)) set.add('rings')
-  if (set.size === 0 && normalizeStyle(profile?.trainingStyle ?? profile?.training_style) === 'gym') {
+  const blobHasEquipmentHints = blob.trim().length > 0
+  if (
+    set.size === 0 &&
+    !blobHasEquipmentHints &&
+    normalizeStyle(profile?.trainingStyle ?? profile?.training_style) === 'gym'
+  ) {
     ;['barbell', 'dumbbells', 'kettlebell', 'cable', 'bench', 'box', 'pullUpBar', 'bands', 'medicineBall'].forEach((x) => set.add(x))
   }
-  if (normalizeStyle(profile?.trainingStyle ?? profile?.training_style) === 'home' && set.size === 0) {
+  if (
+    set.size === 0 &&
+    !blobHasEquipmentHints &&
+    normalizeStyle(profile?.trainingStyle ?? profile?.training_style) === 'home'
+  ) {
     set.add('bodyweight')
   }
   return set
@@ -436,56 +525,8 @@ function injurySubstituteId(ex, flags, userRank) {
 
 // ——— rep / rest schemes ———
 
-export function repSchemeForGoal(goal) {
-  switch (goal) {
-    case 'fatLoss':
-      return {
-        id: 'fatLoss',
-        sets: 4,
-        repsPerSet: [20, 18, 15, 12],
-        restSeconds: 45,
-        withinSessionNote: 'Increase load each set; reps descend 20→12.',
-      }
-    case 'muscleBuilding':
-      return {
-        id: 'muscleBuilding',
-        sets: 4,
-        repsPerSet: [15, 12, 10, 8],
-        restSeconds: 105,
-        restRange: [90, 120],
-        withinSessionNote: 'Classic pyramid; last two sets are growth sets.',
-      }
-    case 'strength':
-      return {
-        id: 'strength',
-        sets: 4,
-        repsPerSet: [5, 5, 3, 3],
-        restSeconds: 240,
-        restRange: [180, 300],
-        withinSessionNote: 'Reverse pyramid; heaviest efforts early; set 4 matches or exceeds set 3.',
-      }
-    case 'endurance':
-      return {
-        id: 'endurance',
-        sets: 4,
-        repsPerSet: [20, 20, 20, 20],
-        restSeconds: 37,
-        restRange: [30, 45],
-        withinSessionNote: 'Same weight all sets; add load next session only if all sets completed cleanly.',
-      }
-    case 'athletic':
-    case 'hyrox':
-      return {
-        id: 'wave',
-        sets: 4,
-        repsPerSet: [8, 6, 10, 6],
-        restSeconds: 75,
-        restRange: [60, 90],
-        withinSessionNote: 'Wave loading: power, heavier power, conditioning density, power finish.',
-      }
-    default:
-      return repSchemeForGoal('muscleBuilding')
-  }
+function repSchemeForGoal(goal) {
+  return getRepSchemeForGoal(goal)
 }
 
 function applyDeloadToScheme(scheme, deload) {
@@ -864,6 +905,7 @@ function withinSessionLoadCue(goalNorm) {
 }
 
 function buildMovementRow(order, ex, scheme, profile, injuryFlags, opts) {
+  const warmUp = buildWarmUpSet(ex, opts?.goalNormalized || normalizeGoal(profile?.goal))
   const deload = opts?.deloadActive
   const goalNorm = opts?.goalNormalized || normalizeGoal(profile?.goal)
   const sets = scheme.sets
@@ -894,6 +936,7 @@ function buildMovementRow(order, ex, scheme, profile, injuryFlags, opts) {
     sharesEquipmentWith: null,
     substitutionNote: sub ? `Adjusted from library for your profile — regression: ${e.regression}` : null,
     deloadWeightMultiplier: deload ? DELOAD_WEIGHT_MULT : 1,
+    warmUpSet: warmUp,
   }
 }
 
@@ -1052,24 +1095,19 @@ export function assessExperience({ monthsTraining: months, description, gobletCo
 
 export function checkDeload(profile = {}, sessionHistory = []) {
   const weeks = Number(profile.weeksCompleted ?? profile.weeks_completed) || 0
-  const poor = Number(profile.consecutivePoorSessions ?? profile.consecutive_poor_sessions) || 0
-  const primary = weeks >= 4 && weeks % 4 === 0
-  const early = poor >= 3
+  const checkInHistory = Array.isArray(profile.checkInHistory) ? profile.checkInHistory : []
+  const result = shouldDeload(weeks, checkInHistory)
   return {
-    recommendDeload: primary || early,
+    recommendDeload: result.recommended,
+    reason: result.reason || 'none',
     framing: 'Recovery Week / Performance Reset',
-    message:
-      weeks >= 6
-        ? 'You have trained consistently for 6+ weeks — your body is ready for a Performance Reset. Choose a recovery week when it fits your schedule.'
-        : 'You have trained consistently for 4 weeks — your body is ready for a recovery-focused week. Do you want a Performance Reset this week?',
-    earlyTrigger: early,
+    message: result.message || 'Training consistently — keep it up.',
     protocol: {
       volumeReductionPercent: 40,
       weightPercent: 60,
-      restAddSeconds: DELOAD_REST_ADD_SEC,
+      restAddSeconds: 30,
       noHyroxFinisher: true,
       noSupersets: true,
-      endWithFullStretchProtocol2: true,
     },
   }
 }
@@ -1251,35 +1289,11 @@ export function handleSkip(reason, exercise, sessionContext) {
 
 // ——— Progressive overload evaluation ———
 
-export function evaluateProgressionForExercise({ exerciseId, region = 'upper', repRange = [8, 12], sessionHistory = [], tooEasy }) {
+export function evaluateProgressionForExercise({ exerciseId, region = 'upper', repRange = [8, 12], sessionHistory = [], tooEasy, failStreak = 0 }) {
   if (tooEasy) {
     return { action: 'increase', increaseKg: region === 'lower' ? LOWER_INCREMENT_KG : UPPER_INCREMENT_KG, reason: 'reported_too_easy' }
   }
-  const relevant = sessionHistory
-    .filter((s) => Array.isArray(s?.exercises))
-    .map((s) => s.exercises.find((ex) => ex.exerciseId === exerciseId))
-    .filter(Boolean)
-    .slice(-2)
-  if (relevant.length < 2) return { action: 'hold', reason: 'need_two_sessions' }
-
-  const min = Number(repRange[0]) || 0
-  const top = Number(repRange[1]) || min
-  const heaviestSetTop = relevant.every((ex) => {
-    const sts = (ex.sets || []).filter((st) => st.completed)
-    if (!sts.length) return false
-    const last = sts[sts.length - 1]
-    return Number(last.reps) >= top
-  })
-  if (heaviestSetTop) {
-    return {
-      action: 'increase',
-      increaseKg: region === 'lower' ? LOWER_INCREMENT_KG : UPPER_INCREMENT_KG,
-      reason: 'two_sessions_at_top_on_heaviest_set',
-    }
-  }
-  const failedMin = relevant[relevant.length - 1] && (relevant[relevant.length - 1].sets || []).some((st) => st.completed && Number(st.reps) < min)
-  if (failedMin) return { action: 'hold', reason: 'below_min_reps_flag', flagSessionNotes: true }
-  return { action: 'hold', reason: 'stay_same_weight' }
+  return evaluateProgressionV2({ exerciseId, region, sessionHistory, failStreak })
 }
 
 // ——— Shared loaders: all UI reads forma_user_program (build if missing) ———
@@ -1409,7 +1423,10 @@ export function buildProgram(profile = {}, opts = {}) {
 
   const userId = String(profile?.id ?? profile?.userId ?? 'forma_local_user')
   const goal = normalizeGoal(profile?.goal)
-  const trainingStyle = normalizeStyle(profile?.trainingStyle ?? profile?.training_style)
+  const equipmentText = equipmentTextFromProfile(profile)
+  const trainingStyle = String(equipmentText).trim()
+    ? normalizeStyle(detectTrainingStyle(equipmentText) === 'gym' ? 'gym' : 'home')
+    : normalizeStyle(profile?.trainingStyle ?? profile?.training_style)
   const experienceLevel = mapExperienceToTrainLevel(profile?.experienceLevel ?? profile?.experience_level)
   const daysPerWeek = Math.max(2, Math.min(6, Number(profile?.daysPerWeek ?? profile?.days_per_week) || 3))
   const sessionMinutes = clampSessionDuration(profile?.sessionDuration ?? profile?.session_minutes ?? 60)

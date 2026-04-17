@@ -61,7 +61,7 @@
   height: 40px;
   border: none;
   background: transparent;
-  color: #c8a040;
+  color: #FF3C78;
   font-size: 1.75rem;
   line-height: 1;
   cursor: pointer;
@@ -130,7 +130,7 @@
   padding: 6px 10px;
   border-radius: 8px;
   background: rgba(14, 14, 10, 0.7);
-  color: #c8a040;
+  color: #FF3C78;
 }
 
 .recipe-serves {
@@ -143,9 +143,9 @@
   width: 36px;
   height: 36px;
   border-radius: 8px;
-  border: 1px solid rgba(200, 160, 64, 0.45);
-  background: rgba(200, 160, 64, 0.12);
-  color: #c8a040;
+  border: 1px solid rgba(255, 60, 120, 0.45);
+  background: rgba(255, 60, 120, 0.12);
+  color: #FF3C78;
   font-size: 1.25rem;
   line-height: 1;
   cursor: pointer;
@@ -181,7 +181,7 @@
   font-family: var(--font-heading);
   font-size: 20px;
   font-weight: 800;
-  color: #c8a040;
+  color: #FF3C78;
   line-height: 1.2;
 }
 
@@ -199,7 +199,7 @@
   margin: 16px var(--padding-screen-x) 0;
   padding: 16px;
   background: #1c1c16;
-  border: 1px solid rgba(200, 160, 64, 0.2);
+  border: 1px solid rgba(255, 60, 120, 0.2);
   border-radius: 12px;
 }
 
@@ -209,7 +209,7 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #c8a040;
+  color: #FF3C78;
   margin: 0 0 12px;
 }
 
@@ -219,7 +219,7 @@
   align-items: flex-start;
   gap: 12px;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(200, 160, 64, 0.06);
+  border-bottom: 1px solid rgba(255, 60, 120, 0.06);
 }
 
 .recipe-pair-row:last-child {
@@ -260,7 +260,7 @@
   font-family: var(--font-body);
   font-size: 11px;
   font-weight: 300;
-  color: #c8a040;
+  color: #FF3C78;
 }
 
 /* Ingredients */
@@ -283,7 +283,7 @@
 }
 
 .recipe-ing-li {
-  border-bottom: 1px solid rgba(200, 160, 64, 0.06);
+  border-bottom: 1px solid rgba(255, 60, 120, 0.06);
 }
 
 .recipe-ing-li:last-child {
@@ -304,7 +304,7 @@
   height: 18px;
   flex-shrink: 0;
   margin-top: 2px;
-  border: 1px solid rgba(200, 160, 64, 0.3);
+  border: 1px solid rgba(255, 60, 120, 0.3);
   border-radius: 4px;
   background: transparent;
   cursor: pointer;
@@ -312,8 +312,8 @@
 }
 
 .recipe-ing-check:checked {
-  background: #c8a040;
-  border-color: #c8a040;
+  background: linear-gradient(135deg, #FF3C78, #FF8C00);
+  border-color: #FF3C78;
 }
 
 .recipe-ing-check:checked::after {
@@ -336,7 +336,7 @@
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 500;
-  color: #c8a040;
+  color: #FF3C78;
   flex-shrink: 0;
   min-width: 72px;
 }
@@ -375,9 +375,9 @@
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: rgba(200, 160, 64, 0.2);
-  border: 1px solid rgba(200, 160, 64, 0.45);
-  color: #c8a040;
+  background: rgba(255, 60, 120, 0.2);
+  border: 1px solid rgba(255, 60, 120, 0.45);
+  color: #FF3C78;
   font-family: var(--font-heading);
   font-size: 13px;
   font-weight: 700;
@@ -403,9 +403,9 @@
   gap: 6px;
   padding: 6px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(200, 160, 64, 0.35);
-  background: rgba(200, 160, 64, 0.1);
-  color: #c8a040;
+  border: 1px solid rgba(255, 60, 120, 0.35);
+  background: rgba(255, 60, 120, 0.1);
+  color: #FF3C78;
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 300;
@@ -424,14 +424,14 @@
 .recipe-daily-bar-track {
   height: 3px;
   width: 100%;
-  background: rgba(200, 160, 64, 0.15);
+  background: rgba(255, 60, 120, 0.15);
   border-radius: 2px;
   overflow: hidden;
 }
 
 .recipe-daily-bar-fill {
   height: 100%;
-  background: #c8a040;
+  background: linear-gradient(135deg, #FF3C78, #FF8C00);
   border-radius: 2px;
   transition: width 300ms ease;
 }
@@ -454,7 +454,7 @@
   padding: 12px var(--padding-screen-x);
   padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   background: rgba(14, 14, 10, 0.96);
-  border-top: 1px solid rgba(200, 160, 64, 0.2);
+  border-top: 1px solid rgba(255, 60, 120, 0.2);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -482,7 +482,7 @@
   font-family: var(--font-heading);
   font-size: 22px;
   font-weight: 700;
-  color: #c8a040;
+  color: #FF3C78;
   font-variant-numeric: tabular-nums;
 }
 
@@ -498,12 +498,12 @@
   font-weight: 500;
   padding: 8px 14px;
   border-radius: 8px;
-  border: 1px solid rgba(200, 160, 64, 0.4);
+  border: 1px solid rgba(255, 60, 120, 0.4);
   background: transparent;
-  color: #c8a040;
+  color: #FF3C78;
   cursor: pointer;
 }
 
 .recipe-timer-act--done {
-  background: rgba(200, 160, 64, 0.15);
+  background: rgba(255, 60, 120, 0.15);
 }

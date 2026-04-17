@@ -239,6 +239,7 @@ export async function completeOnboarding(name, profile = {}) {
     parq_responses: profile.parq_responses,
     parq_consent: profile.parq_consent,
     dietary_approaches: profile.dietary_approaches,
+    equipment: profile.equipment,
     home_equipment_ids: profile.home_equipment_ids ?? (profile.home_equipment_id ? [profile.home_equipment_id] : ['none']),
     home_equipment_id: primaryEquipmentId(profile.home_equipment_ids ?? (profile.home_equipment_id ? [profile.home_equipment_id] : ['none'])),
     sport_or_activity: profile.sport_or_activity,
@@ -259,6 +260,9 @@ export async function completeOnboarding(name, profile = {}) {
     days_per_week: updated.days_per_week,
     session_minutes: updated.session_minutes,
     sessionDuration: updated.sessionDuration ?? updated.session_minutes,
+    equipment: updated.equipment,
+    home_equipment_ids: updated.home_equipment_ids,
+    home_equipment_id: updated.home_equipment_id,
     trainingStyle: updated.training_style,
     experienceLevel: updated.experience_level,
     daysPerWeek: updated.days_per_week,
@@ -275,7 +279,7 @@ export async function updateUserProfile(updates) {
   if (!user || !isLoggedIn()) return
 
   const allowed = [
-    'bodyweight', 'body_weight_unit', 'name', 'goal', 'goals', 'training_style', 'training_styles',
+    'bodyweight', 'body_weight_unit', 'name', 'goal', 'goals', 'equipment', 'training_style', 'training_styles',
     'experience_level', 'experience_levels', 'days_per_week', 'session_minutes', 'sessionDuration', 'injuries', 'injuries_details',
     'home_equipment_id', 'home_equipment_ids', 'sport_or_activity', 'sports_or_activities',
     'mom_status', 'pregnancy_weeks', 'postnatal_weeks', 'breastfeeding', 'doctor_cleared', 'notifications_enabled',
