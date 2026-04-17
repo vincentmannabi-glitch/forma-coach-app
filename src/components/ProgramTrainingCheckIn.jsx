@@ -156,7 +156,7 @@ export default function ProgramTrainingCheckIn({ onSubmit, onSkip, disabled }) {
       </div>
 
       <div className="program-training-checkin__actions">
-        <button type="button" className="program-training-checkin__primary" disabled={!canSubmit || disabled} onClick={submit}>
+        <button type="button" className="home-hero-cta" disabled={!canSubmit || disabled} onClick={submit}>
           Apply to today&apos;s session
         </button>
         {onSkip ? (

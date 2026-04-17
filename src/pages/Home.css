@@ -203,7 +203,7 @@
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 13px;
-  color: var(--color-accent);
+  color: #ff3d6b;
   margin: 0;
 }
 
@@ -211,6 +211,10 @@
   font-weight: 600;
   color: #ffffff;
   font-size: 15px;
+}
+
+.home-hero-meta.home-nutrition-line {
+  color: var(--color-muted);
 }
 
 .home-nutrition-line {
@@ -244,13 +248,14 @@
 }
 
 .home-hero-cta {
+  position: relative;
   width: calc(100% - 0px);
   max-width: 100%;
   height: 56px;
   margin: 0;
   border: none;
   border-radius: 12px;
-  background: linear-gradient(to right, #FF3D6B, #FF8C00);
+  background: linear-gradient(to right, #ff3d6b, #ff8c00);
   color: #0e0e0a;
   font-family: var(--font-heading);
   font-weight: 600;
@@ -260,12 +265,25 @@
   transition: filter 0.3s ease, transform 0.3s ease;
 }
 
-.home-hero-cta:hover {
+.home-hero-cta:hover:not(:disabled) {
   filter: brightness(1.05);
 }
 
-.home-hero-cta:active {
+.home-hero-cta:active:not(:disabled) {
   transform: scale(0.99);
+}
+
+.home-hero-cta:disabled {
+  cursor: not-allowed;
+}
+
+.home-hero-cta:disabled::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(14, 14, 10, 0.22);
+  pointer-events: none;
 }
 
 /* Zone 2 — strip + stats */

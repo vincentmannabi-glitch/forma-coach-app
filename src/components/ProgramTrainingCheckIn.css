@@ -73,20 +73,7 @@
   margin-top: 8px;
 }
 
-.program-training-checkin__primary {
-  padding: 12px 16px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(to right, #FF3D6B, #FF8C00);
-  color: #0e0e0a;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.program-training-checkin__primary:disabled {
-  cursor: not-allowed;
-  filter: brightness(0.68) saturate(0.92);
-}
+/* Primary CTA uses same class as Home “Start session”: .home-hero-cta (see Home.css) */
 
 .program-training-checkin__secondary {
   padding: 10px;
