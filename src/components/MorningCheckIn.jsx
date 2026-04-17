@@ -251,7 +251,7 @@ export default function MorningCheckIn({
 
           {step === 'sore-detail' && body === 'sore' && (
             <div className="morning-checkin__sub">
-              <p className="morning-checkin__hint">Tap where it bothers you — gold marks your spot.</p>
+              <p className="morning-checkin__hint">Tap where it bothers you — the mark shows your spot.</p>
               <BodyFaceToggle face={face} onFace={setFace} />
               <BodyDiagram face={face} selectedId={region} onSelect={setRegion} />
 

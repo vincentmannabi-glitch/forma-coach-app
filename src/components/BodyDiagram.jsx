@@ -71,8 +71,8 @@ export default function BodyDiagram({ face, selectedId, onSelect }) {
             .filter((z) => z.id === selectedId)
             .map((z, i) => (
               <circle
-                key={`gold-${face}-${i}`}
-                className="body-diagram__gold-dot"
+                key={`accent-${face}-${i}`}
+                className="body-diagram__accent-dot"
                 cx={z.x + z.w / 2}
                 cy={z.y + z.h / 2}
                 r={3}

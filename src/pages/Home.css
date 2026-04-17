@@ -117,7 +117,7 @@
   font-size: clamp(4rem, 22vw, 7.5rem);
   line-height: 0.9;
   letter-spacing: -0.06em;
-  color: #FF3D6B;
+  color: var(--color-accent);
   margin: 0;
   text-align: center;
 }
@@ -137,7 +137,7 @@
 .home-checkin-card {
   padding: var(--padding-card);
   border-radius: 20px;
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid rgba(255, 61, 107, 0.15);
 }
 
@@ -153,7 +153,7 @@
   max-width: calc(100vw - 48px);
   padding: var(--padding-card);
   border-radius: 24px;
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid rgba(255, 61, 107, 0.3);
   display: flex;
   flex-direction: column;
@@ -198,7 +198,7 @@
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 13px;
-  color: #FF3D6B;
+  color: var(--color-accent);
   margin: 0;
 }
 
@@ -211,7 +211,7 @@
 .home-nutrition-line {
   font-size: 12px;
   line-height: 1.45;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--color-muted);
 }
 
 .home-snack-block {
@@ -245,7 +245,7 @@
   margin: 0;
   border: none;
   border-radius: 12px;
-  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  background: var(--gradient-button);
   color: #0e0e0a;
   font-family: var(--font-heading);
   font-weight: 600;
@@ -301,7 +301,7 @@
   padding: 6px 4px;
   border: none;
   border-radius: 12px;
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid rgba(255, 61, 107, 0.15);
   cursor: pointer;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -341,8 +341,8 @@
 }
 
 .home-week-pill-dot.is-on {
-  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
-  border-color: #FF3D6B;
+  background: var(--gradient-button);
+  border-color: var(--color-accent);
 }
 
 .home-week-pill-dot.is-pulse {
@@ -374,7 +374,7 @@
 }
 
 .home-week-dot.is-on {
-  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  background: var(--gradient-button);
 }
 
 .home-stats-row {
@@ -384,7 +384,7 @@
 }
 
 .home-stat-pill {
-  background: #141410;
+  background: var(--color-surface);
   border-radius: 12px;
   padding: 12px 8px;
   text-align: center;
@@ -403,7 +403,7 @@
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 20px;
-  color: #FF3D6B;
+  color: var(--color-accent);
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
 }
@@ -412,14 +412,14 @@
   font-family: var(--font-body);
   font-weight: 300;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-muted);
 }
 
 /* Zone 3 */
 .home-zone3-card {
   padding: var(--padding-card);
   border-radius: 20px;
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid rgba(255, 61, 107, 0.15);
 }
 

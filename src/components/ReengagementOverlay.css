@@ -83,7 +83,7 @@
   padding: var(--space-md) var(--space-xl);
   border-radius: var(--radius-md);
   border: 1px solid rgba(255, 61, 107, 0.55);
-  background: linear-gradient(145deg, #FF3D6B, #FF8C00);
+  background: var(--gradient-button);
   color: #0e0e0a;
   cursor: pointer;
   margin-bottom: var(--space-md);

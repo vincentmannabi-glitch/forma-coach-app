@@ -161,7 +161,7 @@ export default function Onboarding() {
       )}
       <div className="onboarding-viewport">
         <div className="onboarding-screen onboarding-scroll">
-          <h2 className="section-header gold">Setup your training profile</h2>
+          <h2 className="section-header accent">Setup your training profile</h2>
           <p className="screen-subtitle">Step {step} of 6</p>
 
           {step === 1 && (
@@ -244,11 +244,11 @@ export default function Onboarding() {
           )}
 
           {step < 6 ? (
-            <button type="button" className="btn-gold" onClick={nextStep} disabled={!canContinue}>
+            <button type="button" className="btn-primary" onClick={nextStep} disabled={!canContinue}>
               Continue
             </button>
           ) : (
-            <button type="button" className="btn-gold" onClick={complete} disabled={!canContinue}>
+            <button type="button" className="btn-primary" onClick={complete} disabled={!canContinue}>
               Finish onboarding
             </button>
           )}

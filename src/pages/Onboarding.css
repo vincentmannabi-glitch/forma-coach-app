@@ -24,7 +24,7 @@
 }
 
 .btn-back-fixed:hover {
-  border-color: #FF3D6B;
+  border-color: var(--color-accent);
   background: rgba(255, 61, 107, 0.08);
 }
 
@@ -53,8 +53,8 @@
   margin-bottom: var(--space-md);
 }
 
-.section-header.gold {
-  color: #FF3D6B;
+.section-header.accent {
+  color: var(--color-accent);
 }
 
 .section-subheader {
@@ -132,7 +132,7 @@
 }
 
 .expandable-icon {
-  color: #FF3D6B;
+  color: var(--color-accent);
   font-size: 1.25rem;
   font-weight: 300;
 }
@@ -168,7 +168,7 @@
   margin-top: 0.25rem;
 }
 
-.progress-bar-gold .progress-fill {
+.progress-bar-accent .progress-fill {
   background: var(--gradient-button);
 }
 
@@ -218,7 +218,7 @@
   font-family: var(--font-heading);
   font-size: clamp(2rem, 5vw, 2.75rem);
   font-weight: 800;
-  color: #FF3D6B;
+  color: var(--color-accent);
   letter-spacing: -0.02em;
   margin-bottom: var(--space-xl);
 }
@@ -231,8 +231,8 @@
   line-height: 1.5;
 }
 
-/* Gold button */
-.btn-gold {
+/* Primary CTA — brand gradient */
+.btn-primary {
   font-family: var(--font-heading);
   font-size: 1rem;
   font-weight: 600;
@@ -245,16 +245,16 @@
   transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
 }
 
-.btn-gold:hover:not(:disabled) {
-  background: #ff5a82;
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(1.08);
   box-shadow: 0 0 24px rgba(255, 61, 107, 0.3);
 }
 
-.btn-gold:active:not(:disabled) {
+.btn-primary:active:not(:disabled) {
   transform: scale(0.98);
 }
 
-.btn-gold:disabled {
+.btn-primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -282,7 +282,7 @@
   font-family: var(--font-body);
   font-size: 1.25rem;
   padding: var(--space-lg) var(--space-xl);
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid var(--color-border-card);
   border-radius: var(--radius-md);
   color: #ffffff;
@@ -296,8 +296,8 @@
 
 .input-name:focus {
   outline: none;
-  border-color: #FF3D6B;
-  box-shadow: 0 0 0 1px #FF3D6B;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
 }
 
 /* Screens 3, 4, 5 - Cards */
@@ -341,7 +341,7 @@
   font-size: 0.9375rem;
   font-weight: 500;
   padding: var(--space-lg);
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid var(--color-border-card);
   border-radius: var(--radius-md);
   color: #ffffff;
@@ -355,29 +355,29 @@
 }
 
 .card-select.selected {
-  border-color: #FF3D6B;
+  border-color: var(--color-accent);
   background: rgba(255, 61, 107, 0.12);
   box-shadow: 0 0 20px rgba(255, 61, 107, 0.25);
 }
 
-/* Multi-select cards: gold glow, border, checkmark in corner */
+/* Multi-select cards: accent glow */
 .card-select-multi {
   position: relative;
 }
 .card-select-multi.selected {
-  border-color: #FF3D6B;
+  border-color: var(--color-accent);
   background: rgba(255, 61, 107, 0.12);
   box-shadow: 0 0 20px rgba(255, 61, 107, 0.25);
 }
 .card-select-multi:not(.selected) {
   border-color: var(--color-border-card);
-  background: #1a1a1a;
+  background: #1c1c1a;
 }
 .card-select-check {
   position: absolute;
   top: var(--space-sm);
   right: var(--space-sm);
-  color: #FF3D6B;
+  color: var(--color-accent);
   font-size: 0.875rem;
   font-weight: 700;
   line-height: 1;
@@ -387,7 +387,7 @@
   right: 8px;
 }
 
-/* Mom screen - warm, welcoming, large gold cards */
+/* Mom screen - large accent cards */
 .onboarding-mom .screen-title {
   font-size: clamp(1.25rem, 3.5vw, 1.5rem);
   line-height: 1.35;
@@ -424,7 +424,7 @@
 }
 
 .card-select-mom.selected {
-  border-color: #FF3D6B;
+  border-color: var(--color-accent);
   background: rgba(255, 61, 107, 0.15);
   box-shadow: 0 0 24px rgba(255, 61, 107, 0.3);
 }
@@ -492,7 +492,7 @@
 
 .eating-window-select {
   padding: var(--space-sm) var(--space-md);
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid var(--color-border-card);
   border-radius: var(--radius-md);
   color: #ffffff;
@@ -510,7 +510,7 @@
   font-family: var(--font-body);
   font-size: 1rem;
   padding: var(--space-lg);
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid var(--color-border-card);
   border-radius: var(--radius-md);
   color: #ffffff;
@@ -544,7 +544,7 @@
   width: 56px;
   height: 56px;
   border-radius: var(--radius-full);
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid var(--color-border-card);
   color: #ffffff;
   cursor: pointer;
@@ -556,7 +556,7 @@
 }
 
 .pill-select.selected {
-  border-color: #FF3D6B;
+  border-color: var(--color-accent);
   background: var(--gradient-button);
   color: #0e0e0a;
   box-shadow: 0 0 20px rgba(255, 61, 107, 0.35);
@@ -569,7 +569,7 @@
   margin-top: var(--space-md);
 }
 
-.pill-gold {
+.pill-accent {
   width: auto;
   min-width: auto;
   height: auto;
@@ -578,7 +578,7 @@
   border-radius: var(--radius-full);
 }
 
-.pill-gold.selected {
+.pill-accent.selected {
   box-shadow: 0 0 16px rgba(255, 61, 107, 0.4);
 }
 
@@ -589,16 +589,16 @@
   margin-top: var(--space-md);
 }
 
-.card-select-gold {
+.card-select-accent {
   border-color: rgba(255, 61, 107, 0.25);
 }
 
-.card-select-gold:hover {
+.card-select-accent:hover {
   border-color: rgba(255, 61, 107, 0.45);
 }
 
-.card-select-gold.selected {
-  border-color: #FF3D6B;
+.card-select-accent.selected {
+  border-color: var(--color-accent);
   background: rgba(255, 61, 107, 0.12);
   box-shadow: 0 0 20px rgba(255, 61, 107, 0.3);
 }
@@ -621,7 +621,7 @@
   font-family: var(--font-body);
   font-size: 1rem;
   padding: var(--space-lg);
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid var(--color-border-card);
   border-radius: var(--radius-md);
   color: #ffffff;
@@ -635,7 +635,7 @@
 
 .injuries-detail textarea:focus {
   outline: none;
-  border-color: #FF3D6B;
+  border-color: var(--color-accent);
 }
 
 /* Screen 8 - PAR-Q */
@@ -660,7 +660,7 @@
 
 .parq-question {
   padding: var(--space-lg);
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid var(--color-border-card);
   border-radius: var(--radius-md);
 }
@@ -696,7 +696,7 @@
 }
 
 .parq-btn.selected {
-  border-color: #FF3D6B;
+  border-color: var(--color-accent);
   background: rgba(255, 61, 107, 0.15);
 }
 
@@ -710,7 +710,7 @@
 .parq-warning p {
   font-family: var(--font-body);
   font-size: 0.9375rem;
-  color: #FF3D6B;
+  color: var(--color-accent);
   margin-bottom: var(--space-md);
 }
 
@@ -726,7 +726,7 @@
 
 .parq-consent input {
   margin-top: 0.2rem;
-  accent-color: #FF3D6B;
+  accent-color: var(--color-accent);
 }
 
 .screen-actions {
@@ -749,7 +749,7 @@
 }
 
 .btn-back:hover {
-  border-color: #FF3D6B;
+  border-color: var(--color-accent);
   background: rgba(255, 61, 107, 0.08);
 }
 
@@ -768,7 +768,7 @@
 .building-step {
   font-family: var(--font-body);
   font-size: 1.125rem;
-  color: #FF3D6B;
+  color: var(--color-accent);
   min-height: 1.5em;
   animation: fadeStep 0.4s ease-out;
 }
@@ -782,7 +782,7 @@
   width: 100%;
   max-width: 280px;
   height: 6px;
-  background: #1a1a1a;
+  background: #1c1c1a;
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -837,7 +837,7 @@
 
 .bodyweight-input:focus {
   outline: none;
-  border-color: #FF3D6B;
+  border-color: var(--color-accent);
 }
 
 .bodyweight-units {
@@ -859,9 +859,9 @@
 }
 
 .bodyweight-units .unit-toggle.selected {
-  border-color: #FF3D6B;
+  border-color: var(--color-accent);
   background: rgba(255, 61, 107, 0.12);
-  color: #FF3D6B;
+  color: var(--color-accent);
 }
 
 .food-approach-grid {
@@ -901,7 +901,7 @@
   padding: var(--space-md) var(--space-sm);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border-card);
-  background: #1a1a1a;
+  background: #1c1c1a;
   color: #ffffff;
   font-size: 0.7rem;
   text-align: center;
@@ -915,7 +915,7 @@
 }
 
 .exclusion-tile.selected {
-  border-color: #FF3D6B;
+  border-color: var(--color-accent);
   background: rgba(255, 61, 107, 0.12);
 }
 
@@ -949,7 +949,7 @@
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border-card);
-  background: #1a1a1a;
+  background: #1c1c1a;
   color: #ffffff;
   font-size: 0.875rem;
   text-align: left;
@@ -962,6 +962,6 @@
 }
 
 .snack-pill.selected {
-  border-color: #FF3D6B;
+  border-color: var(--color-accent);
   background: rgba(255, 61, 107, 0.12);
 }

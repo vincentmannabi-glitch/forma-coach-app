@@ -69,7 +69,7 @@
 }
 
 .bottom-nav-item.active {
-  color: #FF3D6B;
+  color: var(--color-accent);
   text-shadow: 0 0 20px rgba(255, 61, 107, 0.2);
 }
 
@@ -83,7 +83,7 @@
   max-width: 56px;
   height: 3px;
   border-radius: 0 0 20px 20px;
-  background: linear-gradient(90deg, transparent, rgba(255, 61, 107, 0.5), #FF3D6B, rgba(255, 61, 107, 0.5), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 61, 107, 0.5), var(--color-accent), rgba(255, 61, 107, 0.5), transparent);
   box-shadow: 0 0 24px rgba(255, 61, 107, 0.35);
 }
 
@@ -96,7 +96,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  background: var(--color-accent);
   box-shadow: 0 0 12px rgba(255, 61, 107, 0.5);
   animation: forma-nav-dot-pulse 2.2s ease-in-out infinite;
 }

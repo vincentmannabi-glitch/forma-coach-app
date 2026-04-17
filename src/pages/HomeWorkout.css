@@ -29,7 +29,7 @@
   display: inline-block;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #FF3D6B;
+  color: var(--color-accent);
   text-decoration: none;
   margin-bottom: var(--space-md);
   background: none;
@@ -42,7 +42,7 @@
 
 .home-workout-back:hover,
 .home-workout-back-btn:hover {
-  color: #ff8c00;
+  color: var(--color-accent);
   border-bottom-color: rgba(255, 61, 107, 0.55);
 }
 
@@ -119,7 +119,7 @@
 }
 
 .home-equip-card:hover {
-  border-color: rgba(232, 200, 106, 0.55);
+  border-color: rgba(255, 61, 107, 0.55);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   transform: translateY(-2px);
 }
@@ -128,7 +128,7 @@
   font-family: var(--font-heading);
   font-size: 1.2rem;
   font-weight: 800;
-  color: #ff8c00;
+  color: var(--color-accent);
 }
 
 .home-equip-card-sub {
@@ -176,7 +176,7 @@
   font-family: var(--font-heading);
   font-size: 1.05rem;
   font-weight: 800;
-  color: #ff8c00;
+  color: var(--color-accent);
 }
 
 .home-program-blurb {
@@ -203,7 +203,7 @@
 
 .home-band-anchor strong {
   display: block;
-  color: #ff8c00;
+  color: var(--color-accent);
   margin-bottom: var(--space-xs);
   font-size: 0.8125rem;
   letter-spacing: 0.04em;

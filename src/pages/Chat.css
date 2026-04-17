@@ -17,7 +17,7 @@
   width: 28px;
   height: 28px;
   border: 2px solid rgba(255, 61, 107, 0.2);
-  border-top-color: #FF3D6B;
+  border-top-color: var(--color-accent);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -57,7 +57,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  background: var(--gradient-button);
   box-shadow: 0 0 0 3px rgba(255, 61, 107, 0.25);
   animation: chatPulse 2s ease-in-out infinite;
 }
@@ -146,9 +146,9 @@
 }
 
 .chat-bubble--coach {
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid rgba(255, 61, 107, 0.2);
-  border-left: 2px solid #FF3D6B;
+  border-left: 2px solid var(--color-accent);
   border-radius: 4px 16px 16px 16px;
   transition: border-color 300ms ease;
 }
@@ -219,7 +219,7 @@
   padding: 12px 16px;
   border-radius: 12px;
   border: 1px solid rgba(255, 61, 107, 0.2);
-  background: #1a1a1a;
+  background: #1c1c1a;
   color: var(--color-text);
   line-height: var(--body-line-height);
   transition: border-color 300ms ease;
@@ -243,7 +243,7 @@
   padding: 12px 20px;
   border-radius: 12px;
   border: none;
-  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  background: var(--gradient-button);
   color: #0e0e0a;
   cursor: pointer;
   min-height: 44px;
@@ -275,7 +275,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  background: var(--gradient-button);
   flex-shrink: 0;
   animation: chatThinkingPulse 1.4s ease-in-out infinite;
 }

@@ -35,7 +35,7 @@
 
 .progress-trend {
   font-size: 28px;
-  color: #FF3D6B;
+  color: var(--color-accent);
   line-height: 1;
 }
 
@@ -47,7 +47,7 @@
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 64px;
-  color: #FF3D6B;
+  color: var(--color-accent);
   line-height: 1;
   margin: 0;
 }
@@ -219,11 +219,11 @@
   width: 10px;
   height: 10px;
   border-radius: 2px;
-  background: #1a1a1a;
+  background: #1c1c1a;
 }
 
 .progress-grid-square.is-on {
-  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  background: var(--gradient-button);
 }
 
 .progress-grid-square.is-today {

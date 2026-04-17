@@ -12,7 +12,7 @@
 .workout-hub-start-link {
   display: inline-block;
   margin-top: 12px;
-  color: #FF3D6B;
+  color: var(--color-accent);
   font-weight: 600;
   text-decoration: none;
 }
@@ -73,7 +73,7 @@
   justify-content: center;
   padding: 10px 16px;
   border-radius: 12px;
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid rgba(255, 61, 107, 0.3);
   color: #ffffff;
   text-decoration: none;
@@ -86,8 +86,8 @@
 }
 
 .workout-hub-style-pill.is-selected {
-  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
-  border-color: #FF3D6B;
+  background: var(--gradient-button);
+  border-color: var(--color-accent);
   color: #0e0e0a;
 }
 
@@ -190,7 +190,7 @@
 .workout-hub-week-tab.is-active {
   background: transparent;
   border: none;
-  border-bottom: 2px solid #FF3D6B;
+  border-bottom: 2px solid var(--color-accent);
   border-radius: 0;
   color: #ffffff;
   padding-bottom: 6px;
@@ -236,7 +236,7 @@
 }
 
 .workout-hub-default-note strong {
-  color: rgba(232, 200, 106, 0.95);
+  color: rgba(255, 61, 107, 0.95);
   font-weight: 700;
 }
 
@@ -256,7 +256,7 @@
   user-select: none;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #FF3D6B;
+  color: var(--color-accent);
 }
 
 .workout-hub-switch input {
@@ -284,13 +284,13 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #ff8c00;
+  background: var(--color-accent);
   transition: transform 0.2s;
 }
 
 .workout-hub-switch input:checked + .workout-hub-switch-track {
   background: rgba(255, 61, 107, 0.35);
-  border-color: rgba(232, 200, 106, 0.65);
+  border-color: rgba(255, 61, 107, 0.65);
 }
 
 .workout-hub-switch input:checked + .workout-hub-switch-track::after {
@@ -309,7 +309,7 @@
   border-radius: var(--radius-sm);
   border: 1px solid rgba(255, 61, 107, 0.45);
   background: rgba(18, 18, 14, 0.95);
-  color: #ff8c00;
+  color: var(--color-accent);
   cursor: pointer;
   min-width: 9rem;
 }
@@ -358,8 +358,8 @@
 
 .workout-hub-card--preferred {
   border-width: 2px;
-  border-color: rgba(232, 200, 106, 0.88);
-  box-shadow: 0 0 0 1px rgba(232, 200, 106, 0.2), inset 0 0 24px rgba(255, 61, 107, 0.06);
+  border-color: rgba(255, 61, 107, 0.88);
+  box-shadow: 0 0 0 1px rgba(255, 61, 107, 0.2), inset 0 0 24px rgba(255, 61, 107, 0.06);
 }
 
 .workout-hub-card--today:not(.workout-hub-card--preferred) {
@@ -374,7 +374,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #0e0e0a;
-  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  background: var(--gradient-button);
   padding: 4px 8px;
   border-radius: 6px;
   font-weight: 800;
@@ -452,14 +452,14 @@
   padding: 8px 4px;
   border-radius: 12px;
   border: 1px solid rgba(255, 61, 107, 0.15);
-  background: #1a1a1a;
+  background: #1c1c1a;
   color: #ffffff;
   cursor: pointer;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .train-hub-day.is-today {
-  border: 1.5px solid #FF3D6B;
+  border: 1.5px solid var(--color-accent);
 }
 
 .train-hub-day-check {
@@ -467,7 +467,7 @@
   top: 4px;
   right: 4px;
   font-size: 9px;
-  color: #FF3D6B;
+  color: var(--color-accent);
   line-height: 1;
 }
 
@@ -504,7 +504,7 @@
 }
 
 .train-hub-section-card {
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid rgba(255, 61, 107, 0.15);
   border-radius: 20px;
   padding: var(--padding-card);
@@ -516,7 +516,7 @@
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #FF3D6B;
+  color: var(--color-accent);
   margin: 0 0 12px;
 }
 
@@ -557,7 +557,7 @@
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 13px;
-  color: #FF3D6B;
+  color: var(--color-accent);
   flex-shrink: 0;
 }
 
@@ -577,7 +577,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 500;
-  color: #FF3D6B;
+  color: var(--color-accent);
   margin: 0 0 8px;
   line-height: 1.4;
 }
@@ -605,7 +605,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 500;
-  color: #FF3D6B;
+  color: var(--color-accent);
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -681,7 +681,7 @@
 
 .routine-compact-dur {
   font-weight: 500;
-  color: #FF3D6B;
+  color: var(--color-accent);
   flex-shrink: 0;
 }
 

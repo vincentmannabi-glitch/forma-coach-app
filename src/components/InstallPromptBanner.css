@@ -40,7 +40,7 @@
 
 .install-pwa-banner__arrow {
   font-size: 1.25rem;
-  color: #FF3D6B;
+  color: var(--color-accent);
   line-height: 1;
   animation: installArrowNudge 1.2s ease-in-out infinite;
 }
@@ -71,7 +71,7 @@
 }
 
 .install-pwa-banner__dismiss:hover {
-  color: #ff8c00;
+  color: var(--color-accent);
   background: rgba(255, 61, 107, 0.1);
 }
 

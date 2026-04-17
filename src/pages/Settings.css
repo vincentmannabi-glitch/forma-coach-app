@@ -162,7 +162,7 @@
 
 .settings-switch input:checked + .settings-switch-ui::after {
   transform: translateX(20px);
-  background: #ff8c00;
+  background: var(--color-accent);
 }
 
 .settings-connected-devices-intro {
@@ -184,7 +184,7 @@
   padding: var(--space-xl);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-card);
-  background: #1a1a1a;
+  background: #1c1c1a;
   position: relative;
 }
 

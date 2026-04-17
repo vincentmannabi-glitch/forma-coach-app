@@ -61,7 +61,7 @@
   height: 40px;
   border: none;
   background: transparent;
-  color: #FF3D6B;
+  color: var(--color-accent);
   font-size: 1.75rem;
   line-height: 1;
   cursor: pointer;
@@ -130,7 +130,7 @@
   padding: 6px 10px;
   border-radius: 8px;
   background: rgba(14, 14, 10, 0.7);
-  color: #FF3D6B;
+  color: var(--color-accent);
 }
 
 .recipe-serves {
@@ -145,7 +145,7 @@
   border-radius: 8px;
   border: 1px solid rgba(255, 61, 107, 0.45);
   background: rgba(255, 61, 107, 0.12);
-  color: #FF3D6B;
+  color: var(--color-accent);
   font-size: 1.25rem;
   line-height: 1;
   cursor: pointer;
@@ -170,7 +170,7 @@
 .recipe-stat-box {
   flex: 1;
   min-width: 0;
-  background: #1a1a1a;
+  background: #1c1c1a;
   border-radius: 12px;
   padding: 10px 6px;
   text-align: center;
@@ -181,7 +181,7 @@
   font-family: var(--font-heading);
   font-size: 20px;
   font-weight: 800;
-  color: #FF3D6B;
+  color: var(--color-accent);
   line-height: 1.2;
 }
 
@@ -198,7 +198,7 @@
 .recipe-pair-card {
   margin: 16px var(--padding-screen-x) 0;
   padding: 16px;
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid rgba(255, 61, 107, 0.2);
   border-radius: 12px;
 }
@@ -209,7 +209,7 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #FF3D6B;
+  color: var(--color-accent);
   margin: 0 0 12px;
 }
 
@@ -260,7 +260,7 @@
   font-family: var(--font-body);
   font-size: 11px;
   font-weight: 300;
-  color: #FF3D6B;
+  color: var(--color-accent);
 }
 
 /* Ingredients */
@@ -312,8 +312,8 @@
 }
 
 .recipe-ing-check:checked {
-  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
-  border-color: #FF3D6B;
+  background: var(--gradient-button);
+  border-color: var(--color-accent);
 }
 
 .recipe-ing-check:checked::after {
@@ -336,7 +336,7 @@
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 500;
-  color: #FF3D6B;
+  color: var(--color-accent);
   flex-shrink: 0;
   min-width: 72px;
 }
@@ -377,7 +377,7 @@
   border-radius: 50%;
   background: rgba(255, 61, 107, 0.2);
   border: 1px solid rgba(255, 61, 107, 0.45);
-  color: #FF3D6B;
+  color: var(--color-accent);
   font-family: var(--font-heading);
   font-size: 13px;
   font-weight: 700;
@@ -405,7 +405,7 @@
   border-radius: 999px;
   border: 1px solid rgba(255, 61, 107, 0.35);
   background: rgba(255, 61, 107, 0.1);
-  color: #FF3D6B;
+  color: var(--color-accent);
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 300;
@@ -431,7 +431,7 @@
 
 .recipe-daily-bar-fill {
   height: 100%;
-  background: linear-gradient(135deg, #FF3D6B, #FF8C00);
+  background: var(--gradient-button);
   border-radius: 2px;
   transition: width 300ms ease;
 }
@@ -482,7 +482,7 @@
   font-family: var(--font-heading);
   font-size: 22px;
   font-weight: 700;
-  color: #FF3D6B;
+  color: var(--color-accent);
   font-variant-numeric: tabular-nums;
 }
 
@@ -500,7 +500,7 @@
   border-radius: 8px;
   border: 1px solid rgba(255, 61, 107, 0.4);
   background: transparent;
-  color: #FF3D6B;
+  color: var(--color-accent);
   cursor: pointer;
 }
 

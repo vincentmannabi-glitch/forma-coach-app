@@ -3,7 +3,7 @@
   padding: 16px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(212, 175, 55, 0.25);
+  border: 1px solid rgba(255, 61, 107, 0.25);
 }
 
 .program-training-checkin__title {
@@ -46,8 +46,8 @@
 }
 
 .program-training-checkin__pill.is-on {
-  border-color: #ff3d6b;
-  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--color-accent);
+  background: rgba(255, 61, 107, 0.12);
 }
 
 .program-training-checkin__field {
@@ -77,7 +77,7 @@
   padding: 12px 16px;
   border-radius: 10px;
   border: none;
-  background: linear-gradient(135deg, #c9a227, #8b6914);
+  background: var(--gradient-button);
   color: var(--color-bg);
   font-weight: 600;
   cursor: pointer;
@@ -92,7 +92,7 @@
   padding: 10px;
   border: none;
   background: transparent;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-muted);
   text-decoration: underline;
   cursor: pointer;
   font-size: 0.9rem;

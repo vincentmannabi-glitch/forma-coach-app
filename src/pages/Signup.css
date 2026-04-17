@@ -30,7 +30,7 @@
   font-family: var(--font-heading);
   font-size: clamp(2rem, 5vw, 2.5rem);
   font-weight: 800;
-  color: #FF3D6B;
+  color: var(--color-accent);
   letter-spacing: -0.02em;
   margin-bottom: var(--space-sm);
 }
@@ -81,7 +81,7 @@
   font-family: var(--font-body);
   font-size: 1rem;
   padding: var(--space-md) var(--space-lg);
-  background: #1a1a1a;
+  background: #1c1c1a;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-md);
   color: var(--color-text);
@@ -94,8 +94,8 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #FF3D6B;
-  box-shadow: 0 0 0 1px #FF3D6B;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
 }
 
 .form-message {
@@ -130,7 +130,7 @@
 }
 
 .btn-continue:hover:not(:disabled) {
-  background: #ff5a82;
+  filter: brightness(1.08);
   box-shadow: 0 0 20px rgba(255, 61, 107, 0.25);
 }
 
