@@ -14,7 +14,8 @@
   --color-border-card: rgba(255, 61, 107, 0.2);
   --color-border-card-hover: rgba(255, 61, 107, 0.45);
   --color-border-input: rgba(255, 61, 107, 0.2);
-  --gradient-button: linear-gradient(to right, #ff3d6b, #ff8c00);
+  /* Canonical primary CTA fill — use this literal on `<button>` primary styles */
+  --gradient-button: linear-gradient(to right, #FF3D6B, #FF8C00);
   --forma-glow-accent: rgba(255, 61, 107, 0.22);
   --forma-glow-accent-soft: rgba(255, 61, 107, 0.12);
 

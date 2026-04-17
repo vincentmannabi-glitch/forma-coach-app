@@ -77,15 +77,15 @@
   padding: 12px 16px;
   border-radius: 10px;
   border: none;
-  background: var(--gradient-button);
-  color: var(--color-bg);
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
+  color: #0e0e0a;
   font-weight: 600;
   cursor: pointer;
 }
 
 .program-training-checkin__primary:disabled {
-  opacity: 0.45;
   cursor: not-allowed;
+  filter: brightness(0.68) saturate(0.92);
 }
 
 .program-training-checkin__secondary {

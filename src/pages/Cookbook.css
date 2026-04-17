@@ -125,7 +125,7 @@
 }
 
 .cookbook-filter-pill.is-active {
-  background: var(--gradient-button);
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
   border-color: var(--color-accent);
   color: #0e0e0a;
 }

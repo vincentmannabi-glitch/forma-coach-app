@@ -86,7 +86,7 @@
 }
 
 .workout-hub-style-pill.is-selected {
-  background: var(--gradient-button);
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
   border-color: var(--color-accent);
   color: #0e0e0a;
 }
@@ -374,7 +374,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #0e0e0a;
-  background: var(--gradient-button);
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
   padding: 4px 8px;
   border-radius: 6px;
   font-weight: 800;

@@ -109,6 +109,17 @@
   background: rgba(255, 61, 107, 0.15);
 }
 
+.coach-ex-card__btn--learn {
+  border: none;
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
+  color: #0e0e0a;
+  transition: filter 0.2s ease;
+}
+
+.coach-ex-card__btn--learn:hover {
+  filter: brightness(1.06);
+}
+
 .coach-ex-card__more {
   margin-top: 0.65rem;
   padding-top: 0.65rem;

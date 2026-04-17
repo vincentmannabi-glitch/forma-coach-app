@@ -169,7 +169,7 @@
 }
 
 .progress-bar-accent .progress-fill {
-  background: var(--gradient-button);
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
 }
 
 /* Slide animations */
@@ -237,7 +237,7 @@
   font-size: 1rem;
   font-weight: 600;
   padding: var(--space-md) var(--space-2xl);
-  background: var(--gradient-button);
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
   color: #0e0e0a;
   border: none;
   border-radius: var(--radius-md);
@@ -255,8 +255,8 @@
 }
 
 .btn-primary:disabled {
-  opacity: 0.5;
   cursor: not-allowed;
+  filter: brightness(0.68) saturate(0.92);
 }
 
 /* Screen 2 - Name */
@@ -557,7 +557,7 @@
 
 .pill-select.selected {
   border-color: var(--color-accent);
-  background: var(--gradient-button);
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
   color: #0e0e0a;
   box-shadow: 0 0 20px rgba(255, 61, 107, 0.35);
 }
@@ -789,7 +789,7 @@
 
 .progress-fill {
   height: 100%;
-  background: var(--gradient-button);
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
   border-radius: var(--radius-full);
   transition: width 0.5s ease-out;
 }

@@ -120,7 +120,7 @@
   font-size: 1rem;
   font-weight: 600;
   padding: var(--space-md) var(--space-xl);
-  background: var(--gradient-button);
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
   color: #0e0e0a;
   border: none;
   border-radius: var(--radius-md);
@@ -139,8 +139,8 @@
 }
 
 .btn-continue:disabled {
-  opacity: 0.7;
   cursor: not-allowed;
+  filter: brightness(0.68) saturate(0.92);
 }
 
 /* Divider */

@@ -57,7 +57,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--gradient-button);
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
   box-shadow: 0 0 0 3px rgba(255, 61, 107, 0.25);
   animation: chatPulse 2s ease-in-out infinite;
 }
@@ -243,7 +243,7 @@
   padding: 12px 20px;
   border-radius: 12px;
   border: none;
-  background: var(--gradient-button);
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
   color: #0e0e0a;
   cursor: pointer;
   min-height: 44px;
@@ -275,7 +275,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--gradient-button);
+  background: linear-gradient(to right, #FF3D6B, #FF8C00);
   flex-shrink: 0;
   animation: chatThinkingPulse 1.4s ease-in-out infinite;
 }
