@@ -15,10 +15,48 @@ import {
 } from '../utils/programBuilder'
 import './Home.css'
 
+const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
 function pickSnacks(program, n = 3) {
   const list = Array.isArray(program?.snackRecommendations) ? program.snackRecommendations.filter(Boolean) : []
   if (!list.length) return []
   return list.slice(0, n)
+}
+
+/** Find the next scheduled training session from today */
+function getNextTrainingSession(program) {
+  if (!program?.weeklySchedule || !program?.sessions) return null
+  const today = new Date()
+  const todayIndex = today.getDay()
+
+  // Search up to 7 days forward for the next training day
+  for (let i = 1; i <= 7; i++) {
+    const nextDayIndex = (todayIndex + i) % 7
+    const nextDayName = DAY_NAMES[nextDayIndex]
+    const entry = program.weeklySchedule.find((d) => d.day === nextDayName && d.sessionKey)
+    if (entry?.sessionKey && program.sessions[entry.sessionKey]) {
+      const raw = program.sessions[entry.sessionKey]
+      const exercises = (raw.movements || []).map((m, idx) => ({
+        id: m.exerciseId || m.id || `ex-${idx}`,
+        name: m.exerciseName || m.name || '',
+        displayName: m.exerciseName || m.name || '',
+        sets: m.sets,
+        repRange: m.repRange,
+        restSeconds: m.restSeconds,
+      }))
+      return {
+        name: entry.sessionName || raw.name || `${nextDayName} session`,
+        day: nextDayName,
+        daysFromNow: i,
+        environment: raw.environment || 'gym',
+        exercises,
+        estimatedDuration: raw.estimatedDuration,
+        warmUp: raw.warmUp,
+        coolDown: raw.coolDown,
+      }
+    }
+  }
+  return null
 }
 
 export default function Home() {
@@ -79,15 +117,30 @@ export default function Home() {
     }
   }, [program])
 
+  const isRestDay = todaySession?.environment === 'rest' || (Array.isArray(todaySession?.exercises) && todaySession.exercises.length === 0 && todaySession?.environment !== 'gym' && todaySession?.environment !== 'home')
+
+  const nextSession = useMemo(() => {
+    if (!isRestDay) return null
+    return getNextTrainingSession(program)
+  }, [isRestDay, program])
+
+  const displaySession = isRestDay && nextSession ? nextSession : todaySession
+
   const snacks = useMemo(() => pickSnacks(program, 3), [program])
 
-  const exCount = Array.isArray(todaySession?.exercises) ? todaySession.exercises.length : 0
+  const exCount = Array.isArray(displaySession?.exercises) ? displaySession.exercises.length : 0
   const duration =
-    todaySession?.estimatedDuration != null && Number.isFinite(Number(todaySession.estimatedDuration))
-      ? `${todaySession.estimatedDuration} min`
+    displaySession?.estimatedDuration != null && Number.isFinite(Number(displaySession.estimatedDuration))
+      ? `${displaySession.estimatedDuration} min`
       : '—'
 
-  const sessionTitle = todaySession?.name && String(todaySession.name).trim() ? todaySession.name : 'Today’s session'
+  const sessionTitle = useMemo(() => {
+    if (isRestDay && nextSession) {
+      const label = nextSession.daysFromNow === 1 ? 'Tomorrow' : `${nextSession.day}`
+      return `Next session — ${label}`
+    }
+    return displaySession?.name && String(displaySession.name).trim() ? displaySession.name : 'Today\'s session'
+  }, [isRestDay, nextSession, displaySession])
 
   const handleCheckIn = useCallback(
     (answers) => {
@@ -124,11 +177,13 @@ export default function Home() {
     if (g && map[g]) return map[g]
     return user?.goal && String(user.goal).trim() ? user.goal : g || '—'
   }, [program?.profileSnapshot?.goal, user?.goal])
+
   const levelLabel = useMemo(() => {
     const lv = program?.profileSnapshot?.level ?? user?.experienceLevel ?? ''
     const pretty = { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced' }
     return pretty[lv] || lv || '—'
   }, [program?.profileSnapshot?.level, user?.experienceLevel])
+
   const splitLabel = program?.formulas?.frequencySplit ?? program?.weeklyVolume?.splitId ?? '—'
 
   return (
@@ -136,7 +191,9 @@ export default function Home() {
       <p className="home-greeting">{greeting}</p>
       <section className="home-zone1" style={{ marginTop: 28 }}>
         <div className="home-hero-card">
-          <h2 className="home-hero-title">Today&apos;s training</h2>
+          <h2 className="home-hero-title">
+            {isRestDay ? 'Recovery day' : 'Today\'s training'}
+          </h2>
           <p className="home-hero-meta home-hero-session-title">{sessionTitle}</p>
           <p className="home-hero-meta">
             {duration} · {exCount} exercise{exCount === 1 ? '' : 's'}
@@ -144,6 +201,11 @@ export default function Home() {
           <p className="home-hero-meta">
             Goal: {goalLabel} · Level: {levelLabel} · Split: {splitLabel}
           </p>
+          {isRestDay && (
+            <p className="home-hero-meta" style={{ opacity: 0.6, fontSize: '0.85rem' }}>
+              Rest and recover today — your next session is previewed above.
+            </p>
+          )}
           {program?.nutritionPhilosophy ? (
             <p className="home-hero-meta home-nutrition-line">{program.nutritionPhilosophy}</p>
           ) : null}
@@ -159,10 +221,12 @@ export default function Home() {
           ) : null}
           <div className="home-hero-actions">
             <button type="button" className="home-hero-cta" onClick={() => navigate('/train/session')}>
-              Start session
+              {isRestDay ? 'View next session' : 'Start session'}
             </button>
           </div>
-          <ProgramTrainingCheckIn onSubmit={handleCheckIn} onSkip={handleSkipCheckIn} disabled={checkInBusy} />
+          {!isRestDay && (
+            <ProgramTrainingCheckIn onSubmit={handleCheckIn} onSkip={handleSkipCheckIn} disabled={checkInBusy} />
+          )}
         </div>
       </section>
     </div>
