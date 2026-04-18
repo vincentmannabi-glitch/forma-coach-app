@@ -4,12 +4,19 @@ import { useAuth } from '../contexts/AuthContext'
 
 export default function ProtectedRoute() {
   const navigate = useNavigate()
-  const { user, loading } = useAuth()
+  const { user, profile, loading } = useAuth()
 
   useEffect(() => {
     if (loading) return
-    if (!user) navigate('/', { replace: true })
-  }, [loading, user, navigate])
+    if (!user) {
+      navigate('/', { replace: true })
+      return
+    }
+    // If onboarding not complete, send them there
+    if (profile && !profile.onboarding_complete) {
+      navigate('/onboarding', { replace: true })
+    }
+  }, [loading, user, profile, navigate])
 
   if (loading || !user) {
     return (
