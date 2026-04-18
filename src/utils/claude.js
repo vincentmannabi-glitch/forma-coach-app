@@ -9,6 +9,11 @@ import {
 import { loadCheckIns } from './checkinsService'
 import { getExerciseById } from '../data/exercises'
 import { HOME_EQUIPMENT_OPTIONS } from '../data/homeWorkoutCatalog'
+import {
+  loadProgramFromStorage,
+  hasProgramSessions,
+  getTodaySessionWithOverride,
+} from './programBuilder'
 
 const ANTHROPIC_MODEL = 'claude-sonnet-4-20250514'
 const ANTHROPIC_MAX_TOKENS = 1000
@@ -85,6 +90,56 @@ function formatPersonalRecords() {
     .join('; ')
 }
 
+/** Build a readable summary of the client's full weekly program */
+function buildProgramSummary() {
+  try {
+    const program = loadProgramFromStorage()
+    if (!program || !hasProgramSessions(program)) return 'No program generated yet.'
+
+    const schedule = program.weeklySchedule || []
+    const sessions = program.sessions || {}
+    const lines = []
+
+    schedule.forEach((entry) => {
+      if (!entry.sessionKey || !sessions[entry.sessionKey]) {
+        lines.push(`${entry.day}: Rest`)
+        return
+      }
+      const session = sessions[entry.sessionKey]
+      const movements = session.movements || []
+      const exerciseNames = movements
+        .map((m) => m.exerciseName || m.name || '')
+        .filter(Boolean)
+        .join(', ')
+      lines.push(`${entry.day} (${entry.sessionType || 'session'}): ${exerciseNames || 'No exercises'}`)
+    })
+
+    return lines.join('\n')
+  } catch {
+    return 'Program data unavailable.'
+  }
+}
+
+/** Get today's specific session exercises */
+function buildTodaySessionSummary() {
+  try {
+    const program = loadProgramFromStorage()
+    if (!program) return 'No program loaded.'
+    const today = getTodaySessionWithOverride(program, new Date())
+    if (!today || today.environment === 'rest') return 'Today is a rest day.'
+    const exercises = (today.exercises || [])
+      .map((ex, i) => {
+        const sets = ex.sets || 4
+        const reps = ex.repRange ? `${ex.repRange[0]}–${ex.repRange[1]} reps` : 'as programmed'
+        return `${i + 1}. ${ex.displayName || ex.name} — ${sets} sets x ${reps}`
+      })
+      .join('\n')
+    return `Today's session: ${today.name || 'Training'}\n${exercises}`
+  } catch {
+    return 'Today\'s session data unavailable.'
+  }
+}
+
 function buildSystemPrompt(profile, extras) {
   const name = (profile?.name || '').trim() || 'Not provided'
   const goal = (profile?.goal || '').trim() || 'Not specified'
@@ -112,11 +167,16 @@ Recent personal records — ${extras.personalRecords}.
 Sport if applicable — ${sportLine(profile)}.
 Cardio or sport-specific training — ${cardioLine(profile)}.
 
+Their full weekly program is as follows. These are the exact exercises programmed for them based on their goal, equipment, and experience level:
+${extras.programSummary}
+
+${extras.todaySessionSummary}
+
 Your personality. You are direct, warm, and honest. You speak like a great trainer who genuinely cares about this person. Not corporate. Not clinical. Not generic motivational language. Real. Human. Specific to this person.
 
-Your rules. Never give supplement dosages. Always present supplement risks alongside benefits. Always refer to a doctor for medical conditions, chest pain, dizziness, sharp pain, or any serious symptom. Never make up information. If you are not certain say so. Never use the users name in more than one out of every five messages. Never ask the same clarifying question twice. Give a direct answer first then offer to go deeper. Maximum one follow up question per response. Never recommend exercises that conflict with their stated injuries or conditions. Never recommend foods that conflict with their dietary approach or foods to avoid list.
+Your rules. Never give supplement dosages. Always present supplement risks alongside benefits. Always refer to a doctor for medical conditions, chest pain, dizziness, sharp pain, or any serious symptom. Never make up information. If you are not certain say so. Never use the users name in more than one out of every five messages. Never ask the same clarifying question twice. Give a direct answer first then offer to go deeper. Maximum one follow up question per response. Never recommend exercises that conflict with their stated injuries or conditions. Never recommend foods that conflict with their dietary approach or foods to avoid list. When asked about their program, reference the exact exercises listed above — do not invent new ones.
 
-Your knowledge base. You know every exercise in the 166 movement library in complete detail. You know every muscle in the human body. You know every movement pattern. You know the nutritional profile of every common food. You know every major dietary approach and how to make it nutritionally complete. You know sport specific training for running, swimming, cycling, rowing, track and field, CrossFit, Hyrox, martial arts, and every other major discipline. You know Hyrox training in complete detail including the 8 stations, race strategy, hybrid programming, and how to blend strength and cardio for Hyrox performance. You know pre and postnatal fitness completely. You know how to handle medical conditions including diabetes, hypertension, osteoporosis, scoliosis, cancer recovery, and eating disorder history with appropriate care and referrals.
+Your knowledge base. You know every exercise in the 166 movement library in complete detail. You know every muscle in the human body. You know every movement pattern. You know the nutritional profile of every common food. You know every major dietary approach and how to make it nutritionally complete. You know sport specific training for running, swimming, cycling, rowing, track and field, CrossFit, Hyrox, martial arts, and every other major discipline. You know Hyrox training in complete detail including the 8 stations (SkiErg, Sled Push, Sled Pull, Burpees Broad Jump, Rowing, Farmers Carry, Sandbag Lunges, Wall Balls), race strategy, hybrid programming, and how to blend strength and cardio for Hyrox performance. You know pre and postnatal fitness completely. You know how to handle medical conditions including diabetes, hypertension, osteoporosis, scoliosis, cancer recovery, and eating disorder history with appropriate care and referrals.
 
 Now answer this message from the user. Be specific. Be accurate. Be helpful. Be human.`
 }
@@ -194,6 +254,8 @@ export async function sendMessageToCoach(userMessage, fullUserProfile, conversat
     : 'No check-in logged yet'
 
   const dailyProteinTargetGrams = getDailyProteinTargetGrams(profile)
+  const programSummary = buildProgramSummary()
+  const todaySessionSummary = buildTodaySessionSummary()
 
   const systemPrompt = buildSystemPrompt(profile, {
     programWeek,
@@ -201,6 +263,8 @@ export async function sendMessageToCoach(userMessage, fullUserProfile, conversat
     personalRecords,
     lastCheckIn,
     dailyProteinTargetGrams,
+    programSummary,
+    todaySessionSummary,
   })
 
   const recent = conversationHistory.slice(-10)
