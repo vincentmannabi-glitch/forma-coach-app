@@ -74,9 +74,11 @@ export default function WorkoutHub() {
         <ul className="workout-hub-week-list">
           {weekRows.map((entry) => (
             <li key={entry.sessionKey} className="workout-hub-week-item">
-              <span className="workout-hub-week-day">{entry.day}</span>
-              <span className="workout-hub-week-name">{entry.sessionName || 'Session'}</span>
-              <span className="workout-hub-week-preview">{sessionExercisePreview(program, entry)}</span>
+              <Link to="/train/session" className="workout-hub-week-row-link">
+                <span className="workout-hub-week-day">{entry.day}</span>
+                <span className="workout-hub-week-name">{entry.sessionName || 'Session'}</span>
+                <span className="workout-hub-week-preview">{sessionExercisePreview(program, entry)}</span>
+              </Link>
             </li>
           ))}
         </ul>

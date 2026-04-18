@@ -94,13 +94,14 @@ export default function Home() {
       setCheckInBusy(true)
       try {
         buildAndSaveTodaySessionFromCheckIn(program, answers, new Date())
+        navigate('/train/session')
       } catch (e) {
         console.error(e)
       } finally {
         setCheckInBusy(false)
       }
     },
-    [program],
+    [program, navigate],
   )
 
   const handleSkipCheckIn = useCallback(() => {

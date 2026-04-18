@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import '../pages/Train.css'
 import { useAuth } from '../contexts/AuthContext'
 import { saveSession } from '../utils/workouts'
@@ -71,6 +71,7 @@ function FinisherBlock({ label, finisher }) {
  * Full program-driven train session: warm-up, exercises, optional conditioning finisher, cool-down, rest timer, history append.
  */
 export default function ProgramTrainRunner({ styleId = 'program', title = 'Training session', showBackLink = true }) {
+  const navigate = useNavigate()
   const { profile: authProfile } = useAuth()
   const safeUser = useMemo(() => buildSafeHomeUser(authProfile), [authProfile])
 
@@ -100,6 +101,8 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
   const [restRemaining, setRestRemaining] = useState(null)
   const [skipMap, setSkipMap] = useState({})
   const [painNote, setPainNote] = useState('')
+  const [skipTarget, setSkipTarget] = useState(null)
+  const [skipReason, setSkipReason] = useState('')
 
   useEffect(() => {
     setLogs(initLogs(exercises))
@@ -143,9 +146,8 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
   )
 
   const flagSkip = useCallback((ex) => {
-    const reason = window.prompt(`Skip "${ex.displayName || ex.name}" — reason (equipment, pain, time, etc.)?`, '')
-    if (reason == null) return
-    setSkipMap((m) => ({ ...m, [ex.id]: reason.trim() || 'unspecified' }))
+    setSkipTarget(ex)
+    setSkipReason('')
   }, [])
 
   const handleFinishSession = async () => {
@@ -198,6 +200,7 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
     setExpandedId(null)
     setSkipMap({})
     setPainNote('')
+    navigate('/progress')
   }
 
   if (session?.environment === 'rest') {
@@ -269,9 +272,28 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
                   />
                 )}
                 {!skipped ? (
-                  <button type="button" className="train-skip-ex-btn" onClick={() => flagSkip(ex)}>
-                    Skip exercise…
-                  </button>
+                  <>
+                    <button type="button" className="train-skip-ex-btn" onClick={() => flagSkip(ex)}>
+                      Skip exercise…
+                    </button>
+                    {skipTarget?.id === ex.id && (
+                      <div className="train-skip-inline">
+                        <input
+                          type="text"
+                          placeholder="Reason (equipment, pain, time…)"
+                          value={skipReason}
+                          onChange={(e) => setSkipReason(e.target.value)}
+                          autoFocus
+                        />
+                        <button type="button" onClick={() => {
+                          setSkipMap((m) => ({ ...m, [ex.id]: skipReason.trim() || 'unspecified' }))
+                          setSkipTarget(null)
+                          setSkipReason('')
+                        }}>Confirm</button>
+                        <button type="button" onClick={() => setSkipTarget(null)}>Cancel</button>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <button type="button" className="train-skip-ex-btn" onClick={() => setSkipMap((m) => { const n = { ...m }; delete n[ex.id]; return n })}>
                     Undo skip

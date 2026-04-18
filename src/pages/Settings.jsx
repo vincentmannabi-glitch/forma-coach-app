@@ -13,7 +13,7 @@ export default function Settings() {
   const [notificationsOn, setNotificationsOn] = useState(true)
   const [calorieTrackerOn, setCalorieTrackerOn] = useState(true)
   const [unit, setUnit] = useState('lb')
-  const [deviceConnectNotice, setDeviceConnectNotice] = useState('')
+  const [deviceNotices, setDeviceNotices] = useState({})
 
   useEffect(() => {
     if (!user) return
@@ -176,22 +176,16 @@ export default function Settings() {
               <button
                 type="button"
                 className="settings-device-connect-btn"
-                onClick={() => {
-                  setDeviceConnectNotice(
-                    `${device.label} integration is coming soon. Device sync for heart rate, sleep, and activity lands in version 2.`,
-                  )
-                }}
+                onClick={() => setDeviceNotices((prev) => ({ ...prev, [device.id]: `${device.label} integration is coming soon. Device sync lands in version 2.` }))}
               >
                 Connect
               </button>
+              {deviceNotices[device.id] && (
+                <p className="settings-connected-notice" role="status">{deviceNotices[device.id]}</p>
+              )}
             </div>
           ))}
         </div>
-        {deviceConnectNotice && (
-          <p className="settings-connected-notice" role="status">
-            {deviceConnectNotice}
-          </p>
-        )}
       </section>
 
       <section className="settings-section settings-card">
