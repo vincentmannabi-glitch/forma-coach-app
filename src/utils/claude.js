@@ -16,8 +16,10 @@ import {
 } from './programBuilder'
 
 const ANTHROPIC_MODEL = 'claude-sonnet-4-20250514'
-const ANTHROPIC_MAX_TOKENS = 1000
+const ANTHROPIC_MAX_TOKENS = 1500
 const USER_FACING_ERROR = 'Something went wrong on our end. Please try again in a moment.'
+
+// ─── Profile helpers ──────────────────────────────────────────────────────────
 
 function equipmentLabel(profile) {
   const ids = profile?.home_equipment_ids?.length
@@ -27,9 +29,7 @@ function equipmentLabel(profile) {
     const single = HOME_EQUIPMENT_OPTIONS.find((o) => o.id === profile?.home_equipment_id)
     return single?.title || profile?.home_equipment_id || 'Not specified'
   }
-  return ids
-    .map((id) => HOME_EQUIPMENT_OPTIONS.find((o) => o.id === id)?.title || id)
-    .join(', ')
+  return ids.map((id) => HOME_EQUIPMENT_OPTIONS.find((o) => o.id === id)?.title || id).join(', ')
 }
 
 function equipmentSummaryLine(profile) {
@@ -45,12 +45,8 @@ function dietaryLine(profile) {
 
 function foodsToAvoidLine(profile) {
   const parts = []
-  if (Array.isArray(profile?.food_exclusions) && profile.food_exclusions.length) {
-    parts.push(...profile.food_exclusions)
-  }
-  if (profile?.food_exclusions_other?.trim()) {
-    parts.push(profile.food_exclusions_other.trim())
-  }
+  if (Array.isArray(profile?.food_exclusions) && profile.food_exclusions.length) parts.push(...profile.food_exclusions)
+  if (profile?.food_exclusions_other?.trim()) parts.push(profile.food_exclusions_other.trim())
   return parts.length ? parts.join('; ') : 'None specified'
 }
 
@@ -63,137 +59,142 @@ function injuriesLine(profile) {
 }
 
 function sportLine(profile) {
+  const cardio = (profile?.cardio_type || '').trim()
   const s = profile?.sports_or_activities?.length
     ? profile.sports_or_activities.join(', ')
     : profile?.sport_or_activity
-  return (s || '').trim() || 'Not specified'
-}
-
-function cardioLine(profile) {
-  const c = profile?.cardio_type
-  return (c || '').trim() || 'Not specified'
+  return [cardio, s].filter(Boolean).join(', ') || 'None'
 }
 
 function formatPersonalRecords() {
   const prMap = computePersonalRecordsFromSessions(getSessionsSync())
   const entries = Object.entries(prMap)
   if (entries.length === 0) return 'None logged yet'
-  return entries
-    .slice(0, 12)
-    .map(([id, v]) => {
-      const ex = getExerciseById(id)
-      const name = ex?.name || id
-      const w = v.bestWeight > 0 ? `${v.bestWeight} (weight)` : ''
-      const r = v.bestReps > 0 ? `${v.bestReps} reps` : ''
-      return [w, r].filter(Boolean).length ? `${name}: ${[w, r].filter(Boolean).join(', ')}` : `${name}`
-    })
-    .join('; ')
+  return entries.slice(0, 12).map(([id, v]) => {
+    const ex = getExerciseById(id)
+    const name = ex?.name || id
+    const w = v.bestWeight > 0 ? `${v.bestWeight} kg` : ''
+    const r = v.bestReps > 0 ? `${v.bestReps} reps` : ''
+    return [w, r].filter(Boolean).length ? `${name}: ${[w, r].filter(Boolean).join(', ')}` : name
+  }).join('; ')
 }
 
-/** Build a readable summary of the client's full weekly program */
 function buildProgramSummary() {
   try {
     const program = loadProgramFromStorage()
-    if (!program || !hasProgramSessions(program)) return 'No program generated yet.'
-
+    if (!program || !hasProgramSessions(program)) return 'No program built yet.'
     const schedule = program.weeklySchedule || []
     const sessions = program.sessions || {}
-    const lines = []
-
-    schedule.forEach((entry) => {
-      if (!entry.sessionKey || !sessions[entry.sessionKey]) {
-        lines.push(`${entry.day}: Rest`)
-        return
-      }
-      const session = sessions[entry.sessionKey]
-      const movements = session.movements || []
-      const exerciseNames = movements
-        .map((m) => m.exerciseName || m.name || '')
-        .filter(Boolean)
-        .join(', ')
-      lines.push(`${entry.day} (${entry.sessionType || 'session'}): ${exerciseNames || 'No exercises'}`)
-    })
-
-    return lines.join('\n')
-  } catch {
-    return 'Program data unavailable.'
-  }
+    return schedule.map((entry) => {
+      if (!entry.sessionKey || !sessions[entry.sessionKey]) return `${entry.day}: Rest`
+      const s = sessions[entry.sessionKey]
+      const names = (s.movements || []).map((m) => m.exerciseName || m.name || '').filter(Boolean).join(', ')
+      return `${entry.day} (${entry.sessionType || 'training'}): ${names || 'No exercises listed'}`
+    }).join('\n')
+  } catch { return 'Program unavailable.' }
 }
 
-/** Get today's specific session exercises */
 function buildTodaySessionSummary() {
   try {
     const program = loadProgramFromStorage()
     if (!program) return 'No program loaded.'
     const today = getTodaySessionWithOverride(program, new Date())
     if (!today || today.environment === 'rest') return 'Today is a rest day.'
-    const exercises = (today.exercises || [])
-      .map((ex, i) => {
-        const sets = ex.sets || 4
-        const reps = ex.repRange ? `${ex.repRange[0]}–${ex.repRange[1]} reps` : 'as programmed'
-        return `${i + 1}. ${ex.displayName || ex.name} — ${sets} sets x ${reps}`
-      })
-      .join('\n')
-    return `Today's session: ${today.name || 'Training'}\n${exercises}`
-  } catch {
-    return 'Today\'s session data unavailable.'
-  }
+    const exercises = (today.exercises || []).map((ex, i) => {
+      const sets = ex.sets || 4
+      const reps = ex.repRange ? `${ex.repRange[0]}–${ex.repRange[1]} reps` : 'as programmed'
+      const cues = ex.coachingCues || ex.description || ''
+      return `${i + 1}. ${ex.displayName || ex.name} — ${sets}×${reps}${cues ? ` | ${cues}` : ''}`
+    }).join('\n')
+    return `${today.name || 'Training'}:\n${exercises}`
+  } catch { return "Today's session unavailable." }
 }
 
+// ─── System prompt ────────────────────────────────────────────────────────────
+
 function buildSystemPrompt(profile, extras) {
-  const name = (profile?.name || '').trim() || 'Not provided'
-  const goal = (profile?.goal || '').trim() || 'Not specified'
+  const name = (profile?.name || '').trim() || 'this client'
+  const goal = (profile?.goal || '').trim() || 'general fitness'
   const protein = extras.dailyProteinTargetGrams
-  const proteinLine =
-    protein != null ? `${protein} g/day (from body weight and goal)` : 'Not calculable (set body weight in the app)'
+  const proteinLine = protein != null
+    ? `${protein}g/day`
+    : 'Not calculated — needs body weight added'
 
-  return `You are FORMA Coach. A world class personal trainer and nutrition coach built into an app. You have the knowledge of an elite certified personal trainer, sports nutritionist, and exercise scientist combined. Every piece of advice you give is 100 percent accurate, evidence based, and specific to this exact person.
+  return `You are FORMA Coach. An elite personal trainer and nutrition coach with the knowledge of a certified strength and conditioning specialist, sports nutritionist, and exercise scientist. You think like a real coach — not a chatbot that reads lists.
 
-Here is everything you know about the person you are talking to.
+When a client talks to you, you look at everything you know about them and use your coaching expertise to give them something specific and genuinely useful. You do not give generic answers. You do not say "it depends." You give real coaching based on their actual situation.
 
-Name — ${name}.
-Goal — ${goal}.
-Experience level — ${(profile?.experience_level || '').trim() || 'Not specified'}.
-Current program week — week ${extras.programWeek} (derived from completed sessions and days per week).
-Days per week — ${profile?.days_per_week ?? 'Not specified'}.
-Equipment — ${equipmentSummaryLine(profile)}.
-Injuries and conditions — ${injuriesLine(profile)}.
-Dietary approach — ${dietaryLine(profile)}.
-Foods to avoid — ${foodsToAvoidLine(profile)}.
-Daily protein target — ${proteinLine}.
-Last check in — ${extras.lastCheckIn}.
-Current streak — ${extras.streak} consecutive training days (from completed sessions).
-Recent personal records — ${extras.personalRecords}.
-Sport if applicable — ${sportLine(profile)}.
-Cardio or sport-specific training — ${cardioLine(profile)}.
+━━━ WHO YOU ARE COACHING RIGHT NOW ━━━
 
-Their full weekly program is as follows. These are the exact exercises programmed for them based on their goal, equipment, and experience level:
+Name: ${name}
+Goal: ${goal}
+Experience level: ${(profile?.experience_level || 'Not specified')}
+Body weight: ${profile?.body_weight ? `${profile.body_weight} lbs` : 'Not set — ask them to add it for better load suggestions'}
+Equipment: ${equipmentSummaryLine(profile)}
+Days per week: ${profile?.days_per_week ?? 'Not specified'}
+Session length: ${profile?.session_minutes || 60} minutes
+Injuries / limitations: ${injuriesLine(profile)}
+Sport or cardio training: ${sportLine(profile)}
+Dietary approach: ${dietaryLine(profile)}
+Foods to avoid: ${foodsToAvoidLine(profile)}
+Daily protein target: ${proteinLine}
+Current training streak: ${extras.streak} days
+Last check-in: ${extras.lastCheckIn}
+Program week: ${extras.programWeek}
+Personal records: ${extras.personalRecords}
+
+━━━ THEIR CURRENT PROGRAM ━━━
+
 ${extras.programSummary}
+
+━━━ TODAY'S SESSION ━━━
 
 ${extras.todaySessionSummary}
 
-Your personality. You are direct, warm, and honest. You speak like a great trainer who genuinely cares about this person. Not corporate. Not clinical. Not generic motivational language. Real. Human. Specific to this person.
+━━━ HOW YOU THINK AS A COACH ━━━
 
-Your rules. Never give supplement dosages. Always present supplement risks alongside benefits. Always refer to a doctor for medical conditions, chest pain, dizziness, sharp pain, or any serious symptom. Never make up information. If you are not certain say so. Never use the users name in more than one out of every five messages. Never ask the same clarifying question twice. Give a direct answer first then offer to go deeper. Maximum one follow up question per response. Never recommend exercises that conflict with their stated injuries or conditions. Never recommend foods that conflict with their dietary approach or foods to avoid list. When asked about their program, reference the exact exercises listed above — do not invent new ones.
+When a client asks you anything, you run through this mental process before answering:
 
-Your knowledge base. You know every exercise in the 166 movement library in complete detail. You know every muscle in the human body. You know every movement pattern. You know the nutritional profile of every common food. You know every major dietary approach and how to make it nutritionally complete. You know sport specific training for running, swimming, cycling, rowing, track and field, CrossFit, Hyrox, martial arts, and every other major discipline. You know Hyrox training in complete detail including the 8 stations (SkiErg, Sled Push, Sled Pull, Burpees Broad Jump, Rowing, Farmers Carry, Sandbag Lunges, Wall Balls), race strategy, hybrid programming, and how to blend strength and cardio for Hyrox performance. You know pre and postnatal fitness completely. You know how to handle medical conditions including diabetes, hypertension, osteoporosis, scoliosis, cancer recovery, and eating disorder history with appropriate care and referrals.
+1. LOOK AT THE FULL PICTURE. Who is this person? What is their goal, their equipment, their level, their injuries, their sport? Every answer should be filtered through all of that.
 
-Now answer this message from the user. Be specific. Be accurate. Be helpful. Be human.`
+2. THINK LIKE A TRAINER. If you were standing in the gym with this client right now, what would you actually say? Not what a textbook says — what would a great coach with 10 years of experience say to THIS person.
+
+3. BE SPECIFIC TO THEM. If they ask about exercise selection, pick movements that match their equipment, their level, their injuries, and their goal. If they are a runner building strength, you think about single-leg stability, hip drive, and injury prevention — not just generic "do squats." If they are doing Race Fit training, you think about the demands of sled pushes, farmers carries, and functional conditioning. If they lift at home with dumbbells, you never suggest a barbell movement.
+
+4. USE YOUR FULL KNOWLEDGE. You know every major movement pattern — squat, hinge, push, pull, carry, rotate, brace. You know how to sequence them, how to progress them, how to regress them. You know how rep ranges, rest periods, and load interact with different goals. You know sport-specific demands — running economy, race conditioning, rowing mechanics, CrossFit energy systems. You know nutrition at a clinical level. USE ALL OF IT.
+
+5. ADAPT TO THEIR SITUATION. Injured? You work around it and tell them exactly how. Low energy today? You scale it down and tell them what to do instead. Feeling strong? You push them. Not progressing? You diagnose why and fix it.
+
+6. GIVE THEM WHAT THEY ACTUALLY NEED. Sometimes that is a straight answer. Sometimes it is a modified workout. Sometimes it is a reality check. Always give them something they can act on immediately.
+
+━━━ YOUR RULES ━━━
+
+- Never give generic advice. Always filter through this specific client's profile.
+- Never recommend an exercise they cannot do with their equipment or given their injuries.
+- Never recommend food that conflicts with their dietary approach or exclusions.
+- Never give supplement dosages. Always include risks alongside any supplement benefit.
+- Always refer to a doctor for chest pain, dizziness, sharp pain, or any medical concern.
+- Never make up data or claim certainty where you have none — say so and give your best coaching judgment.
+- Use their name at most once every five messages.
+- Give a direct answer first, then offer to go deeper.
+- One follow-up question maximum per response.
+- Be direct, warm, and real. Not corporate. Not generic. Not a robot reading a manual.
+
+Now read this client's message and respond as their coach.`
 }
+
+// ─── Anthropic API ────────────────────────────────────────────────────────────
 
 function toAnthropicMessages(history) {
   const mapped = history
     .map((m) => {
       const content = (m.text || '').trim()
       if (!content) return null
-      const role = m.role === 'user' ? 'user' : 'assistant'
-      return { role, content }
+      return { role: m.role === 'user' ? 'user' : 'assistant', content }
     })
     .filter(Boolean)
 
-  while (mapped.length > 0 && mapped[0].role === 'assistant') {
-    mapped.shift()
-  }
+  while (mapped.length > 0 && mapped[0].role === 'assistant') mapped.shift()
 
   const out = []
   for (const m of mapped) {
@@ -237,6 +238,8 @@ async function callAnthropicViaServerless({ systemPrompt, messages }) {
   return text || null
 }
 
+// ─── Main export ──────────────────────────────────────────────────────────────
+
 export async function sendMessageToCoach(userMessage, fullUserProfile, conversationHistory = []) {
   const profile = fullUserProfile && typeof fullUserProfile === 'object' ? fullUserProfile : {}
 
@@ -250,7 +253,7 @@ export async function sendMessageToCoach(userMessage, fullUserProfile, conversat
   const checkins = await loadCheckIns()
   const latest = checkins[0]
   const lastCheckIn = latest
-    ? `${latest.dateKey} (sleep: ${latest.sleep || '—'}, body: ${latest.body || '—'})`
+    ? `${latest.dateKey} (sleep: ${latest.sleep || '—'}, energy: ${latest.energy || '—'})`
     : 'No check-in logged yet'
 
   const dailyProteinTargetGrams = getDailyProteinTargetGrams(profile)
@@ -280,9 +283,7 @@ export async function sendMessageToCoach(userMessage, fullUserProfile, conversat
 
   try {
     const text = await callAnthropicViaServerless({ systemPrompt, messages })
-    if (!text) {
-      return { ok: false, errorMessage: USER_FACING_ERROR }
-    }
+    if (!text) return { ok: false, errorMessage: USER_FACING_ERROR }
     return { ok: true, text }
   } catch (err) {
     console.error(err)

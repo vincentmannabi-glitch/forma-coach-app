@@ -7,7 +7,7 @@ import {
   profileTrainingFieldsFromEquipment,
   inferHomeEquipmentIdsFromEquipmentText,
 } from '../utils/programBuilder'
-import { buildProgramForProfile } from '../utils/programBuilderRouter'
+import { generateAIProgram } from '../utils/aiProgramGenerator'
 import './Onboarding.css'
 
 const PROFILE_KEY = 'forma_user_profile'
@@ -50,6 +50,8 @@ export default function Onboarding() {
   const [hasInjuries, setHasInjuries] = useState(false)
   const [injuryDetails, setInjuryDetails] = useState('')
   const [bodyWeight, setBodyWeight] = useState('')
+  const [building, setBuilding] = useState(false)
+  const [buildingMessage, setBuildingMessage] = useState('')
 
   const equipmentString = useMemo(() => buildEquipmentString(equipmentIds), [equipmentIds])
 
@@ -104,9 +106,13 @@ export default function Onboarding() {
   const prevStep = () => setStep((s) => Math.max(1, s - 1))
 
   const complete = async () => {
+    setBuilding(true)
+    setBuildingMessage(`Building your program, ${name.trim()}...`)
+
     const tf = profileTrainingFieldsFromEquipment(equipmentString)
     const homeEquipmentIds = inferHomeEquipmentIdsFromEquipmentText(equipmentString)
     const sportsOrActivities = cardioType && cardioType !== 'none' ? [cardioType] : []
+
     const fullProfile = {
       id: user?.id ?? profile?.id,
       userId: user?.id ?? profile?.id,
@@ -131,10 +137,48 @@ export default function Onboarding() {
       goals: [goal],
       experienceLevel,
     }
-    await completeOnboarding(name.trim(), fullProfile)
-    const built = buildProgramForProfile(fullProfile)
-    saveProgramToStorage(built)
-    navigate('/home', { replace: true })
+
+    try {
+      await completeOnboarding(name.trim(), fullProfile)
+
+      // Let the user know the AI is working
+      setTimeout(() => setBuildingMessage('Analyzing your goals and experience...'), 1000)
+      setTimeout(() => setBuildingMessage('Selecting the right movements for you...'), 2500)
+      setTimeout(() => setBuildingMessage('Finalizing your personalized program...'), 4000)
+
+      const { program, aiGenerated } = await generateAIProgram(fullProfile)
+      saveProgramToStorage(program)
+
+      navigate('/home', { replace: true })
+    } catch (err) {
+      console.error('Onboarding completion error:', err)
+      setBuilding(false)
+      navigate('/home', { replace: true })
+    }
+  }
+
+  // Loading screen while building program
+  if (building) {
+    return (
+      <div className="onboarding-page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+        <div style={{ textAlign: 'center', padding: '40px 24px' }}>
+          <div style={{ marginBottom: 32 }}>
+            <div style={{
+              width: 64, height: 64, borderRadius: '50%',
+              border: '3px solid #C8A040', borderTopColor: 'transparent',
+              animation: 'spin 1s linear infinite', margin: '0 auto',
+            }} />
+          </div>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.6rem', color: '#C8A040', marginBottom: 12 }}>
+            Building your program
+          </h2>
+          <p style={{ color: '#aaa', fontSize: '1rem', maxWidth: 280, margin: '0 auto', lineHeight: 1.6 }}>
+            {buildingMessage}
+          </p>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -168,7 +212,7 @@ export default function Onboarding() {
           {step === 3 && (
             <div className="screen-section">
               <label className="screen-field-label">What equipment do you have?</label>
-              <p className="screen-hint">Select all that apply — we'll match your program automatically.</p>
+              <p className="screen-hint">Select all that apply.</p>
               <div className="cards-grid three-cols">
                 {EQUIPMENT_OPTIONS.map((o) => (
                   <button key={o.id} type="button" className={`card-select ${equipmentIds.has(o.id) ? 'selected' : ''}`} onClick={() => toggleEquipment(o.id)}>
@@ -215,8 +259,8 @@ export default function Onboarding() {
 
           {step === 7 && (
             <div className="screen-section">
-              <label className="screen-field-label">Do you do any cardio or sport training?</label>
-              <p className="screen-hint">We'll build the right conditioning into your program.</p>
+              <label className="screen-field-label">Cardio or sport training?</label>
+              <p className="screen-hint">We'll integrate it into your program.</p>
               <div className="cards-grid three-cols">
                 {CARDIO_OPTIONS.map((o) => (
                   <button key={o.id} type="button" className={`card-select ${cardioType === o.id ? 'selected' : ''}`} onClick={() => setCardioType(o.id)}>
@@ -230,8 +274,8 @@ export default function Onboarding() {
 
           {step === 8 && (
             <div className="screen-section">
-              <label className="screen-field-label">Any injuries or physical limitations?</label>
-              <p className="screen-hint">We'll modify your program to work around them safely.</p>
+              <label className="screen-field-label">Any injuries or limitations?</label>
+              <p className="screen-hint">We'll modify your program to work around them.</p>
               <div className="cards-grid three-cols">
                 {[
                   { id: false, label: 'No injuries', blurb: 'Training pain free' },
@@ -263,7 +307,7 @@ export default function Onboarding() {
               <label className="screen-field-label">
                 Body weight <span style={{ opacity: 0.5, fontWeight: 400 }}>(optional)</span>
               </label>
-              <p className="screen-hint">Used to calculate your protein target and suggest starting loads.</p>
+              <p className="screen-hint">Used for your protein target and load suggestions.</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <input
                   className="input-name"
@@ -285,7 +329,7 @@ export default function Onboarding() {
               Continue
             </button>
           ) : (
-            <button type="button" className="btn-primary" onClick={complete}>
+            <button type="button" className="btn-primary" onClick={complete} disabled={building}>
               Build my program
             </button>
           )}
