@@ -11,8 +11,8 @@ import {
 import './Onboarding.css'
 
 const PROFILE_KEY = 'forma_user_profile'
+const TOTAL_STEPS = 7
 
-/** Multi-select → comma-separated string for programBuilder.detectTrainingStyle + parseEquipmentProfile */
 const EQUIPMENT_OPTIONS = [
   {
     id: 'full_gym',
@@ -28,6 +28,15 @@ const EQUIPMENT_OPTIONS = [
   },
   { id: 'bands', label: 'Resistance bands', snippet: 'resistance bands' },
   { id: 'bodyweight', label: 'Bodyweight only', snippet: 'bodyweight only' },
+]
+
+const CARDIO_OPTIONS = [
+  { id: 'none', label: 'None', blurb: 'Strength only' },
+  { id: 'running', label: 'Running', blurb: 'Road or treadmill' },
+  { id: 'hyrox', label: 'Hyrox', blurb: 'Race & hybrid training' },
+  { id: 'crossfit', label: 'CrossFit', blurb: 'WODs & metcons' },
+  { id: 'cycling', label: 'Cycling', blurb: 'Road or indoor' },
+  { id: 'rowing', label: 'Rowing', blurb: 'Erg or on-water' },
 ]
 
 function buildEquipmentString(selectedIds) {
@@ -46,6 +55,7 @@ export default function Onboarding() {
   const [experienceLevel, setExperienceLevel] = useState('Complete beginner')
   const [daysPerWeek, setDaysPerWeek] = useState(3)
   const [sessionDuration, setSessionDuration] = useState(60)
+  const [cardioType, setCardioType] = useState('none')
 
   const equipmentString = useMemo(() => buildEquipmentString(equipmentIds), [equipmentIds])
 
@@ -65,8 +75,9 @@ export default function Onboarding() {
     if (step === 4) return !!experienceLevel
     if (step === 5) return Number(daysPerWeek) > 0
     if (step === 6) return [30, 45, 60, 75, 90].includes(Number(sessionDuration))
+    if (step === 7) return !!cardioType
     return true
-  }, [step, name, goal, equipmentIds, experienceLevel, daysPerWeek, sessionDuration])
+  }, [step, name, goal, equipmentIds, experienceLevel, daysPerWeek, sessionDuration, cardioType])
 
   useEffect(() => {
     if (!user) {
@@ -81,20 +92,10 @@ export default function Onboarding() {
   useEffect(() => {
     try {
       const tf = profileTrainingFieldsFromEquipment(equipmentString)
-      const canonical = {
-        name,
-        goal,
-        equipment: equipmentString,
-        experienceLevel,
-        daysPerWeek: Number(daysPerWeek) || 3,
-        sessionDuration: Number(sessionDuration) || 60,
-        ...tf,
-      }
       localStorage.setItem(
         PROFILE_KEY,
         JSON.stringify({
           ...(profile && typeof profile === 'object' ? profile : {}),
-          ...canonical,
           name,
           goal,
           equipment: equipmentString,
@@ -103,20 +104,22 @@ export default function Onboarding() {
           days_per_week: Number(daysPerWeek) || 3,
           session_minutes: Number(sessionDuration) || 60,
           sessionDuration: Number(sessionDuration) || 60,
+          cardio_type: cardioType,
           onboarding_complete: false,
         }),
       )
     } catch {
       /* noop */
     }
-  }, [name, goal, equipmentString, experienceLevel, daysPerWeek, sessionDuration, profile])
+  }, [name, goal, equipmentString, experienceLevel, daysPerWeek, sessionDuration, cardioType, profile])
 
-  const nextStep = () => setStep((s) => Math.min(6, s + 1))
+  const nextStep = () => setStep((s) => Math.min(TOTAL_STEPS, s + 1))
   const prevStep = () => setStep((s) => Math.max(1, s - 1))
 
   const complete = async () => {
     const tf = profileTrainingFieldsFromEquipment(equipmentString)
     const homeEquipmentIds = inferHomeEquipmentIdsFromEquipmentText(equipmentString)
+    const sportsOrActivities = cardioType && cardioType !== 'none' ? [cardioType] : []
     const profilePayload = {
       goal,
       experienceLevel,
@@ -131,6 +134,9 @@ export default function Onboarding() {
       session_minutes: Number(sessionDuration) || 60,
       home_equipment_ids: homeEquipmentIds,
       home_equipment_id: homeEquipmentIds[0],
+      cardio_type: cardioType,
+      sports_or_activities: sportsOrActivities,
+      sport_or_activity: sportsOrActivities[0] || null,
     }
     await completeOnboarding(name.trim(), profilePayload)
     const built = buildProgram({
@@ -147,6 +153,9 @@ export default function Onboarding() {
       sessionDuration: Number(sessionDuration) || 60,
       home_equipment_ids: homeEquipmentIds,
       home_equipment_id: homeEquipmentIds[0],
+      cardio_type: cardioType,
+      sports_or_activities: sportsOrActivities,
+      sport_or_activity: sportsOrActivities[0] || null,
     })
     saveProgramToStorage(built)
     navigate('/home', { replace: true })
@@ -162,7 +171,7 @@ export default function Onboarding() {
       <div className="onboarding-viewport">
         <div className="onboarding-screen onboarding-scroll">
           <h2 className="section-header accent">Setup your training profile</h2>
-          <p className="screen-subtitle">Step {step} of 6</p>
+          <p className="screen-subtitle">Step {step} of {TOTAL_STEPS}</p>
 
           {step === 1 && (
             <div className="screen-section">
@@ -243,7 +252,27 @@ export default function Onboarding() {
             </div>
           )}
 
-          {step < 6 ? (
+          {step === 7 && (
+            <div className="screen-section">
+              <label className="screen-field-label">Do you do any cardio or sport-specific training?</label>
+              <p className="screen-hint">We&apos;ll add the right conditioning work to your program.</p>
+              <div className="cards-grid three-cols">
+                {CARDIO_OPTIONS.map((o) => (
+                  <button
+                    key={o.id}
+                    type="button"
+                    className={`card-select ${cardioType === o.id ? 'selected' : ''}`}
+                    onClick={() => setCardioType(o.id)}
+                  >
+                    <span className="card-select-title">{o.label}</span>
+                    {o.blurb ? <span className="card-select-blurb">{o.blurb}</span> : null}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step < TOTAL_STEPS ? (
             <button type="button" className="btn-primary" onClick={nextStep} disabled={!canContinue}>
               Continue
             </button>

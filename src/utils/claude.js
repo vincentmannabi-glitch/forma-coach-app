@@ -10,12 +10,8 @@ import { loadCheckIns } from './checkinsService'
 import { getExerciseById } from '../data/exercises'
 import { HOME_EQUIPMENT_OPTIONS } from '../data/homeWorkoutCatalog'
 
-const ANTHROPIC_MESSAGES_URL = 'https://api.anthropic.com/v1/messages'
-/** corsproxy.io forwards the request to Anthropic so the browser is not blocked by CORS. */
-const CHAT_FETCH_URL = 'https://corsproxy.io/?url=https://api.anthropic.com/v1/messages'
 const ANTHROPIC_MODEL = 'claude-sonnet-4-20250514'
 const ANTHROPIC_MAX_TOKENS = 1000
-
 const USER_FACING_ERROR = 'Something went wrong on our end. Please try again in a moment.'
 
 function equipmentLabel(profile) {
@@ -68,11 +64,15 @@ function sportLine(profile) {
   return (s || '').trim() || 'Not specified'
 }
 
+function cardioLine(profile) {
+  const c = profile?.cardio_type
+  return (c || '').trim() || 'Not specified'
+}
+
 function formatPersonalRecords() {
   const prMap = computePersonalRecordsFromSessions(getSessionsSync())
   const entries = Object.entries(prMap)
   if (entries.length === 0) return 'None logged yet'
-
   return entries
     .slice(0, 12)
     .map(([id, v]) => {
@@ -110,21 +110,17 @@ Last check in — ${extras.lastCheckIn}.
 Current streak — ${extras.streak} consecutive training days (from completed sessions).
 Recent personal records — ${extras.personalRecords}.
 Sport if applicable — ${sportLine(profile)}.
+Cardio or sport-specific training — ${cardioLine(profile)}.
 
 Your personality. You are direct, warm, and honest. You speak like a great trainer who genuinely cares about this person. Not corporate. Not clinical. Not generic motivational language. Real. Human. Specific to this person.
 
 Your rules. Never give supplement dosages. Always present supplement risks alongside benefits. Always refer to a doctor for medical conditions, chest pain, dizziness, sharp pain, or any serious symptom. Never make up information. If you are not certain say so. Never use the users name in more than one out of every five messages. Never ask the same clarifying question twice. Give a direct answer first then offer to go deeper. Maximum one follow up question per response. Never recommend exercises that conflict with their stated injuries or conditions. Never recommend foods that conflict with their dietary approach or foods to avoid list.
 
-Your knowledge base. You know every exercise in the 166 movement library in complete detail. You know every muscle in the human body. You know every movement pattern. You know the nutritional profile of every common food. You know every major dietary approach and how to make it nutritionally complete. You know sport specific training for running, swimming, cycling, rowing, track and field, CrossFit, martial arts, and every other major discipline. You know pre and postnatal fitness completely. You know how to handle medical conditions including diabetes, hypertension, osteoporosis, scoliosis, cancer recovery, and eating disorder history with appropriate care and referrals.
+Your knowledge base. You know every exercise in the 166 movement library in complete detail. You know every muscle in the human body. You know every movement pattern. You know the nutritional profile of every common food. You know every major dietary approach and how to make it nutritionally complete. You know sport specific training for running, swimming, cycling, rowing, track and field, CrossFit, Hyrox, martial arts, and every other major discipline. You know Hyrox training in complete detail including the 8 stations, race strategy, hybrid programming, and how to blend strength and cardio for Hyrox performance. You know pre and postnatal fitness completely. You know how to handle medical conditions including diabetes, hypertension, osteoporosis, scoliosis, cancer recovery, and eating disorder history with appropriate care and referrals.
 
 Now answer this message from the user. Be specific. Be accurate. Be helpful. Be human.`
 }
 
-/**
- * Turn app message history into Anthropic messages: must start with `user` and alternate roles.
- * @param {Array<{ role: string; text?: string }>} history
- * @returns {Array<{ role: 'user' | 'assistant'; content: string }>}
- */
 function toAnthropicMessages(history) {
   const mapped = history
     .map((m) => {
@@ -151,24 +147,10 @@ function toAnthropicMessages(history) {
   return out
 }
 
-/**
- * Anthropic Messages API via corsproxy.io (same headers/body as direct; proxy handles CORS).
- */
-async function callAnthropicMessagesViaProxy({ systemPrompt, messages }) {
-  const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY
-  if (!apiKey || !String(apiKey).trim()) {
-    console.error('Chat: missing VITE_ANTHROPIC_API_KEY')
-    return null
-  }
-
-  const res = await fetch(CHAT_FETCH_URL, {
+async function callAnthropicViaServerless({ systemPrompt, messages }) {
+  const res = await fetch('/api/chat', {
     method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-api-key': String(apiKey).trim(),
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       model: ANTHROPIC_MODEL,
       max_tokens: ANTHROPIC_MAX_TOKENS,
@@ -195,12 +177,6 @@ async function callAnthropicMessagesViaProxy({ systemPrompt, messages }) {
   return text || null
 }
 
-/**
- * @param {string} userMessage Latest user text (must match the last turn; used if history text is empty).
- * @param {object | null} fullUserProfile
- * @param {Array<{ id?: string; role: string; text?: string }>} conversationHistory Last messages (e.g. last 10); must include the new user message at the end.
- * @returns {Promise<{ ok: true; text: string } | { ok: false; errorMessage: string }>}
- */
 export async function sendMessageToCoach(userMessage, fullUserProfile, conversationHistory = []) {
   const profile = fullUserProfile && typeof fullUserProfile === 'object' ? fullUserProfile : {}
 
@@ -239,7 +215,7 @@ export async function sendMessageToCoach(userMessage, fullUserProfile, conversat
   }
 
   try {
-    const text = await callAnthropicMessagesViaProxy({ systemPrompt, messages })
+    const text = await callAnthropicViaServerless({ systemPrompt, messages })
     if (!text) {
       return { ok: false, errorMessage: USER_FACING_ERROR }
     }

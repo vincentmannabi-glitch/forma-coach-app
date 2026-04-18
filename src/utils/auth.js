@@ -165,30 +165,6 @@ export async function login(email, password) {
   return { ok: true, onboarding_complete: !!user.onboarding_complete }
 }
 
-/**
- * Persist onboarding data. Each field flows into app behaviour:
- * name → chatCoach, Home, userContext.firstName
- * goal → trainingStyles, fullSessionEngine, nutrition, snackEngine, weeklyProgramPlan, homeWorkoutEngine
- * training_style → trainingStyles, userContext.getAvailableEquipmentIds
- * experience_level → fullSessionEngine, nutrition, trainSessionPreview, Gym/Calisthenics/Hybrid/ReconnectTrain
- * bodyweight, body_weight_unit → userContext.getBodyWeightPounds, getCalorieTargetWithBreastfeeding, Settings
- * days_per_week → chatCoach, trainSessionPreview, Home, morningCheckIn, GymTrain, Progress, weeklyProgramPlan
- * session_minutes, mom_session_minutes → fullSessionEngine, userContext.getSessionMinutes
- * injuries, injuries_details → userContext.getExcludedExerciseIdsFromInjuries → fullSessionEngine, morningCheckIn
- * mom_status, pregnancy_*, postnatal_*, birth_type, breastfeeding, doctor_cleared → userContext, momExperience
- * cooking_for_family → momExperience.isCookingForFamily
- * household_size → momExperience.getHouseholdSize → GroceryList, RecipeDetail
- * nutrition_tracker_enabled → Home, Settings, FoodLogger, Progress
- * eating_window, dietary_approaches → dietConfig, snackEngine, Cookbook, dailyNutritionCoach
- * food_exclusions, food_exclusions_other → userContext, snackEngine, recipeExclusions, brandedSnackCoach
- * foods_you_love, favourite_snack_ids, habits_to_move_away → userContext, snackEngine
- * parq_responses, parq_consent → userContext.needsDoctorClearanceFromParq (audit)
- * home_equipment_id → trainSessionPreview, homeWorkoutEngine, HomeWorkoutSession
- * supplement_preferences → userContext.getSupplementPreferences → snackEngine (filter supplements)
- *
- * @param {string} name
- * @param {object} profile
- */
 export async function completeOnboarding(name, profile = {}) {
   const user = loadUser()
   if (!user || !isLoggedIn()) return
@@ -242,8 +218,8 @@ export async function completeOnboarding(name, profile = {}) {
     equipment: profile.equipment,
     home_equipment_ids: profile.home_equipment_ids ?? (profile.home_equipment_id ? [profile.home_equipment_id] : ['none']),
     home_equipment_id: primaryEquipmentId(profile.home_equipment_ids ?? (profile.home_equipment_id ? [profile.home_equipment_id] : ['none'])),
-    sport_or_activity: profile.sport_or_activity,
     supplement_preferences: profile.supplement_preferences,
+    cardio_type: profile.cardio_type,
   }
 
   saveUser(updated)
@@ -266,6 +242,9 @@ export async function completeOnboarding(name, profile = {}) {
     trainingStyle: updated.training_style,
     experienceLevel: updated.experience_level,
     daysPerWeek: updated.days_per_week,
+    cardio_type: updated.cardio_type,
+    sports_or_activities: updated.sports_or_activities,
+    sport_or_activity: updated.sport_or_activity,
     onboarding_complete: true,
   })
   if (typeof window !== 'undefined') {
@@ -285,7 +264,7 @@ export async function updateUserProfile(updates) {
     'mom_status', 'pregnancy_weeks', 'postnatal_weeks', 'breastfeeding', 'doctor_cleared', 'notifications_enabled',
     'knee_rehab_program', 'coach_rehab_only', 'coach_rehab_since', 'coach_recommended_light_training',
     'coach_injury_note', 'sore_rehab_auto', 'sore_rehab_region',
-    'parent_snacking', 'nutrition_tracker_enabled',
+    'parent_snacking', 'nutrition_tracker_enabled', 'cardio_type',
   ]
   const filtered = {}
   for (const k of allowed) {
@@ -313,6 +292,13 @@ export async function logout() {
   setLoggedIn(false)
   saveUser(null)
   saveProfile(null)
+  try {
+    localStorage.clear()
+    sessionStorage.clear()
+  } catch {}
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('forma-auth-changed'))
+  }
 }
 
 /** Subscribe to auth changes (login/logout). */
