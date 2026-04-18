@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { buildSafeHomeUser } from '../utils/homeSafeUser'
 import {
-  buildProgram,
   getDefaultProgramProfile,
   getTodaySessionWithOverride,
   hasProgramSessions,
   loadProgramFromStorage,
   saveProgramToStorage,
 } from '../utils/programBuilder'
+import { buildProgramForProfile } from '../utils/programBuilderRouter'
 import './WorkoutHub.css'
 
 function sessionExercisePreview(program, entry) {
@@ -18,7 +18,7 @@ function sessionExercisePreview(program, entry) {
   if (!moves.length) return '—'
   return moves
     .slice(0, 5)
-    .map((m) => m.exerciseName)
+    .map((m) => m.exerciseName || m.name)
     .filter(Boolean)
     .join(' · ')
 }
@@ -31,13 +31,17 @@ export default function WorkoutHub() {
     try {
       const stored = loadProgramFromStorage()
       if (hasProgramSessions(stored)) return stored
-      const built = buildProgram(getDefaultProgramProfile({ id: user.id, name: user.name }))
+      const fallbackProfile = {
+        ...getDefaultProgramProfile({ id: user.id, name: user.name }),
+        ...authProfile,
+      }
+      const built = buildProgramForProfile(fallbackProfile)
       saveProgramToStorage(built)
       return built
     } catch {
-      return buildProgram(getDefaultProgramProfile())
+      return buildProgramForProfile(getDefaultProgramProfile())
     }
-  }, [user.id, user.name])
+  }, [user.id, user.name, authProfile])
 
   const today = useMemo(() => getTodaySessionWithOverride(program, new Date()), [program])
 
@@ -51,7 +55,6 @@ export default function WorkoutHub() {
       <header className="workout-hub-header">
         <h1 className="workout-hub-title">Train</h1>
       </header>
-
       <section className="workout-hub-block" aria-label="Today">
         <h2 className="workout-hub-section-label">Today</h2>
         <div className="workout-hub-today-card">
@@ -68,7 +71,6 @@ export default function WorkoutHub() {
           </Link>
         </div>
       </section>
-
       <section className="workout-hub-block" aria-label="This week">
         <h2 className="workout-hub-section-label">This week</h2>
         <ul className="workout-hub-week-list">

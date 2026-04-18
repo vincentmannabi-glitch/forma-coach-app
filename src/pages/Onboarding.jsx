@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { completeOnboarding } from '../utils/auth'
 import {
-  buildProgram,
   saveProgramToStorage,
   profileTrainingFieldsFromEquipment,
   inferHomeEquipmentIdsFromEquipmentText,
 } from '../utils/programBuilder'
+import { buildProgramForProfile } from '../utils/programBuilderRouter'
 import './Onboarding.css'
 
 const PROFILE_KEY = 'forma_user_profile'
@@ -70,8 +70,8 @@ export default function Onboarding() {
     if (step === 5) return Number(daysPerWeek) > 0
     if (step === 6) return [30, 45, 60, 75, 90].includes(Number(sessionDuration))
     if (step === 7) return !!cardioType
-    if (step === 8) return true // injuries optional
-    if (step === 9) return true // body weight optional
+    if (step === 8) return true
+    if (step === 9) return true
     return true
   }, [step, name, goal, equipmentIds, experienceLevel, daysPerWeek, sessionDuration, cardioType])
 
@@ -107,13 +107,20 @@ export default function Onboarding() {
     const tf = profileTrainingFieldsFromEquipment(equipmentString)
     const homeEquipmentIds = inferHomeEquipmentIdsFromEquipmentText(equipmentString)
     const sportsOrActivities = cardioType && cardioType !== 'none' ? [cardioType] : []
-    const profilePayload = {
-      goal, experienceLevel, daysPerWeek: Number(daysPerWeek) || 3,
-      sessionDuration: Number(sessionDuration) || 60, goals: [goal],
-      equipment: equipmentString, ...tf,
-      experience_level: experienceLevel, experience_levels: [experienceLevel],
-      days_per_week: Number(daysPerWeek) || 3, session_minutes: Number(sessionDuration) || 60,
-      home_equipment_ids: homeEquipmentIds, home_equipment_id: homeEquipmentIds[0],
+    const fullProfile = {
+      id: user?.id ?? profile?.id,
+      userId: user?.id ?? profile?.id,
+      name: name.trim(),
+      goal,
+      equipment: equipmentString,
+      ...tf,
+      experience_level: experienceLevel,
+      experience_levels: [experienceLevel],
+      days_per_week: Number(daysPerWeek) || 3,
+      session_minutes: Number(sessionDuration) || 60,
+      sessionDuration: Number(sessionDuration) || 60,
+      home_equipment_ids: homeEquipmentIds,
+      home_equipment_id: homeEquipmentIds[0],
       cardio_type: cardioType,
       sports_or_activities: sportsOrActivities,
       sport_or_activity: sportsOrActivities[0] || null,
@@ -121,21 +128,11 @@ export default function Onboarding() {
       injuries_details: hasInjuries ? injuryDetails.trim() || null : null,
       body_weight: bodyWeight ? Number(bodyWeight) : null,
       body_weight_unit: 'lb',
+      goals: [goal],
+      experienceLevel,
     }
-    await completeOnboarding(name.trim(), profilePayload)
-    const built = buildProgram({
-      ...(profile && typeof profile === 'object' ? profile : {}),
-      id: user?.id ?? profile?.id, userId: user?.id ?? profile?.id,
-      name: name.trim(), goal, equipment: equipmentString, ...tf,
-      experience_level: experienceLevel, days_per_week: Number(daysPerWeek) || 3,
-      session_minutes: Number(sessionDuration) || 60, sessionDuration: Number(sessionDuration) || 60,
-      home_equipment_ids: homeEquipmentIds, home_equipment_id: homeEquipmentIds[0],
-      cardio_type: cardioType, sports_or_activities: sportsOrActivities,
-      sport_or_activity: sportsOrActivities[0] || null,
-      injuries: hasInjuries,
-      injuries_details: hasInjuries ? injuryDetails.trim() || null : null,
-      body_weight: bodyWeight ? Number(bodyWeight) : null,
-    })
+    await completeOnboarding(name.trim(), fullProfile)
+    const built = buildProgramForProfile(fullProfile)
     saveProgramToStorage(built)
     navigate('/home', { replace: true })
   }
@@ -236,7 +233,10 @@ export default function Onboarding() {
               <label className="screen-field-label">Any injuries or physical limitations?</label>
               <p className="screen-hint">We'll modify your program to work around them safely.</p>
               <div className="cards-grid three-cols">
-                {[{ id: false, label: 'No injuries', blurb: 'Training pain free' }, { id: true, label: 'Yes', blurb: 'I have something to flag' }].map((o) => (
+                {[
+                  { id: false, label: 'No injuries', blurb: 'Training pain free' },
+                  { id: true, label: 'Yes', blurb: 'I have something to flag' }
+                ].map((o) => (
                   <button key={String(o.id)} type="button" className={`card-select ${hasInjuries === o.id ? 'selected' : ''}`} onClick={() => setHasInjuries(o.id)}>
                     <span className="card-select-title">{o.label}</span>
                     <span className="card-select-blurb">{o.blurb}</span>
@@ -260,8 +260,10 @@ export default function Onboarding() {
 
           {step === 9 && (
             <div className="screen-section">
-              <label className="screen-field-label">What's your body weight? <span style={{ opacity: 0.5, fontWeight: 400 }}>(optional)</span></label>
-              <p className="screen-hint">Used to calculate your protein target and suggest starting loads. Skip if you prefer.</p>
+              <label className="screen-field-label">
+                Body weight <span style={{ opacity: 0.5, fontWeight: 400 }}>(optional)</span>
+              </label>
+              <p className="screen-hint">Used to calculate your protein target and suggest starting loads.</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <input
                   className="input-name"

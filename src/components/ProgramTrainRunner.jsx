@@ -9,13 +9,13 @@ import TrainExerciseCard from './TrainExerciseCard'
 import {
   appendCompletedSessionToProgram,
   appendSessionLog,
-  buildProgram,
   getDefaultProgramProfile,
   hasProgramSessions,
   loadProgramFromStorage,
   resolveTrainSession,
   saveProgramToStorage,
 } from '../utils/programBuilder'
+import { buildProgramForProfile } from '../utils/programBuilderRouter'
 
 function initLogs(exList) {
   const logs = {}
@@ -67,9 +67,6 @@ function FinisherBlock({ label, finisher }) {
   )
 }
 
-/**
- * Full program-driven train session: warm-up, exercises, optional conditioning finisher, cool-down, rest timer, history append.
- */
 export default function ProgramTrainRunner({ styleId = 'program', title = 'Training session', showBackLink = true }) {
   const navigate = useNavigate()
   const { profile: authProfile } = useAuth()
@@ -79,19 +76,22 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
     try {
       const stored = loadProgramFromStorage()
       if (hasProgramSessions(stored)) return stored
-      const built = buildProgram(getDefaultProgramProfile({ id: safeUser.id, name: safeUser.name }))
+      const fallbackProfile = {
+        ...getDefaultProgramProfile({ id: safeUser.id, name: safeUser.name }),
+        ...authProfile,
+      }
+      const built = buildProgramForProfile(fallbackProfile)
       saveProgramToStorage(built)
       return built
     } catch {
-      return buildProgram(getDefaultProgramProfile())
+      return buildProgramForProfile(getDefaultProgramProfile())
     }
-  }, [safeUser.id, safeUser.name])
+  }, [safeUser.id, safeUser.name, authProfile])
 
   const { session: resolvedSession, fromCheckIn } = useMemo(
     () => resolveTrainSession(program, styleId, new Date()),
     [program, styleId],
   )
-
   const session = resolvedSession
   const exercises = session?.exercises || []
   const level = program?.profileSnapshot?.level || 'beginner'
@@ -99,10 +99,10 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
   const [logs, setLogs] = useState(() => initLogs(exercises))
   const [expandedId, setExpandedId] = useState(null)
   const [restRemaining, setRestRemaining] = useState(null)
-  const [skipMap, setSkipMap] = useState({})
-  const [painNote, setPainNote] = useState('')
   const [skipTarget, setSkipTarget] = useState(null)
   const [skipReason, setSkipReason] = useState('')
+  const [skipMap, setSkipMap] = useState({})
+  const [painNote, setPainNote] = useState('')
 
   useEffect(() => {
     setLogs(initLogs(exercises))
@@ -207,9 +207,7 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
     return (
       <div className="train-page train-page-v2">
         {showBackLink ? (
-          <Link to="/train" className="train-back-hub">
-            ← All workouts
-          </Link>
+          <Link to="/train" className="train-back-hub">← All workouts</Link>
         ) : null}
         <header className="train-v2-header">
           <h1 className="train-v2-title">{title}</h1>
@@ -224,17 +222,13 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
       {restRemaining != null && restRemaining > 0 ? (
         <div className="train-rest-banner" role="status">
           Rest <strong>{restRemaining}</strong>s
-          <button type="button" className="train-rest-dismiss" onClick={() => setRestRemaining(null)}>
-            Skip
-          </button>
+          <button type="button" className="train-rest-dismiss" onClick={() => setRestRemaining(null)}>Skip</button>
         </div>
       ) : null}
 
       <header className="train-v2-header">
         {showBackLink ? (
-          <Link to="/train" className="train-back-hub">
-            ← All workouts
-          </Link>
+          <Link to="/train" className="train-back-hub">← All workouts</Link>
         ) : null}
         <h1 className="train-v2-title">{session?.name || title}</h1>
         <p className="train-v2-subtitle">
@@ -308,7 +302,6 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
       {session?.morningUnlock?.conditioningOptional && session?.conditioningFinisherOptional ? (
         <FinisherBlock label="Optional conditioning finisher (high energy day)" finisher={session.conditioningFinisherOptional} />
       ) : null}
-
       <FinisherBlock label="Conditioning finisher" finisher={session?.conditioningFinisher} />
 
       <label className="train-pain-field">
