@@ -112,7 +112,7 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
     const key = session?.sessionKey
     if (!key) return listed
     const raw = program?.sessions?.[key]
-    const moves = raw?.movements || []
+    const moves = Array.isArray(raw?.movements) ? raw.movements : Array.isArray(raw?.exercises) ? raw.exercises : []
     return moves.map((m, idx) => ({
       id: m.exerciseId || m.id || `ex-${idx}`,
       name: m.exerciseName || m.name || m.displayName || 'Exercise',

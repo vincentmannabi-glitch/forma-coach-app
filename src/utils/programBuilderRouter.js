@@ -23,6 +23,7 @@ function applyRequiredInjuryExclusionsToProgram(program, profile) {
   const blockedBack = [
     'banded good morning',
     'good morning',
+    'romanian deadlift',
     'barbell romanian deadlift',
     'conventional deadlift',
     'jefferson curl',

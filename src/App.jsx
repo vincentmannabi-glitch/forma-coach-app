@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Onboarding from './pages/Onboarding'
 import Home from './pages/Home'
 import HomeErrorBoundary from './components/HomeErrorBoundary'
+import CookbookErrorBoundary from './components/CookbookErrorBoundary'
 import TrainLayout from './components/TrainLayout'
 import WorkoutHub from './pages/WorkoutHub'
 import AuthGuard from './components/AuthGuard'
@@ -53,7 +54,14 @@ function App() {
               <Route path="reconnect" element={<ReconnectTrain />} />
               <Route path="*" element={<Navigate to="/train/session" replace />} />
             </Route>
-            <Route path="/cookbook" element={<Cookbook />} />
+            <Route
+              path="/cookbook"
+              element={
+                <CookbookErrorBoundary>
+                  <Cookbook />
+                </CookbookErrorBoundary>
+              }
+            />
             <Route path="/cookbook/:recipeId" element={<RecipeDetail />} />
             <Route path="/grocery" element={<GroceryList />} />
             <Route path="/progress" element={<Progress />} />
