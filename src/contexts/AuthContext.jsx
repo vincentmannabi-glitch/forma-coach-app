@@ -47,6 +47,17 @@ export function AuthProvider({ children }) {
   }, [])
 
   useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      const session = await getSession()
+      if (cancelled) return
+      setState({
+        user: session?.user ?? null,
+        profile: session ? normalizeProfile(session.profile, session.user?.email, session.user?.id) : null,
+        loading: false,
+      })
+    })()
+
     const unsubscribe = onAuthChanged(() => {
       const session = getSessionSync()
       setState({
@@ -55,7 +66,10 @@ export function AuthProvider({ children }) {
         loading: false,
       })
     })
-    return unsubscribe
+    return () => {
+      cancelled = true
+      unsubscribe()
+    }
   }, [])
 
   return (

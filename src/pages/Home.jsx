@@ -23,6 +23,19 @@ function pickSnacks(program, n = 3) {
   return list.slice(0, n)
 }
 
+function hasCompletedAtLeastOneWorkout(userId, program) {
+  try {
+    if (userId) {
+      const raw = localStorage.getItem(`forma_sessions_${userId}`)
+      const parsed = raw ? JSON.parse(raw) : []
+      if (Array.isArray(parsed) && parsed.length > 0) return true
+    }
+  } catch {
+    /* noop */
+  }
+  return Array.isArray(program?.sessionHistory) && program.sessionHistory.length > 0
+}
+
 /** Find the next scheduled training session from today */
 function getNextTrainingSession(program) {
   if (!program?.weeklySchedule || !program?.sessions) return null
@@ -118,6 +131,8 @@ export default function Home() {
   }, [program])
 
   const isRestDay = todaySession?.environment === 'rest' || (Array.isArray(todaySession?.exercises) && todaySession.exercises.length === 0 && todaySession?.environment !== 'gym' && todaySession?.environment !== 'home')
+  const hasCompletedWorkout = useMemo(() => hasCompletedAtLeastOneWorkout(user?.id, program), [user?.id, program])
+  const showWelcomeSchedule = isRestDay && !hasCompletedWorkout
 
   const nextSession = useMemo(() => {
     if (!isRestDay) return null
@@ -192,7 +207,7 @@ export default function Home() {
       <section className="home-zone1" style={{ marginTop: 28 }}>
         <div className="home-hero-card">
           <h2 className="home-hero-title">
-            {isRestDay ? 'Recovery day' : 'Today\'s training'}
+            {showWelcomeSchedule ? 'Welcome to your training week' : isRestDay ? 'Recovery day' : 'Today\'s training'}
           </h2>
           <p className="home-hero-meta home-hero-session-title">{sessionTitle}</p>
           <p className="home-hero-meta">
@@ -201,11 +216,28 @@ export default function Home() {
           <p className="home-hero-meta">
             Goal: {goalLabel} · Level: {levelLabel} · Split: {splitLabel}
           </p>
-          {isRestDay && (
+          {showWelcomeSchedule && (
+            <p className="home-hero-meta" style={{ opacity: 0.85 }}>
+              Today is a rest day, so here is your full weekly schedule to get started.
+            </p>
+          )}
+          {!showWelcomeSchedule && isRestDay && (
             <p className="home-hero-meta" style={{ opacity: 0.6, fontSize: '0.85rem' }}>
               Rest and recover today — your next session is previewed above.
             </p>
           )}
+          {showWelcomeSchedule ? (
+            <div className="home-snack-block">
+              <p className="home-snack-label">Your weekly schedule</p>
+              <ul className="home-snack-list">
+                {(program?.weeklySchedule || []).map((entry) => (
+                  <li key={`${entry.day}-${entry.sessionKey || 'rest'}`}>
+                    {entry.day}: {entry.sessionKey ? (entry.sessionName || 'Training session') : 'Recovery'}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           {program?.nutritionPhilosophy ? (
             <p className="home-hero-meta home-nutrition-line">{program.nutritionPhilosophy}</p>
           ) : null}
@@ -221,10 +253,10 @@ export default function Home() {
           ) : null}
           <div className="home-hero-actions">
             <button type="button" className="home-hero-cta" onClick={() => navigate('/train/session')}>
-              {isRestDay ? 'View next session' : 'Start session'}
+              {showWelcomeSchedule ? 'View session details' : isRestDay ? 'View next session' : 'Start session'}
             </button>
           </div>
-          {!isRestDay && (
+          {!showWelcomeSchedule && !isRestDay && (
             <ProgramTrainingCheckIn onSubmit={handleCheckIn} onSkip={handleSkipCheckIn} disabled={checkInBusy} />
           )}
         </div>

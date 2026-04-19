@@ -101,6 +101,13 @@ export function saveProgramToStorage(program) {
   }
 }
 
+export function resolveProgramWithFallback(programCandidate) {
+  if (hasProgramSessions(programCandidate)) return programCandidate
+  const stored = loadProgramFromStorage()
+  if (hasProgramSessions(stored)) return stored
+  return ensureProgramLoaded()
+}
+
 export function appendSessionLog(entry) {
   if (typeof localStorage === 'undefined' || !entry) return
   try {
@@ -1247,21 +1254,23 @@ export function buildAndSaveTodaySessionFromCheckIn(program, checkInUi, date = n
 }
 
 export function getTodaySessionWithOverride(program, date = new Date()) {
+  const resolvedProgram = resolveProgramWithFallback(program)
   const dk = localDateKey(date)
   const override = loadTodaySessionOverride()
   if (override?.dateKey === dk && Array.isArray(override.exercises)) {
     return override
   }
-  return getTodaySession(program, date)
+  return getTodaySession(resolvedProgram, date)
 }
 
 export function resolveTrainSession(program, styleId, date = new Date()) {
+  const resolvedProgram = resolveProgramWithFallback(program)
   const dk = localDateKey(date)
   const override = loadTodaySessionOverride()
   if (override?.dateKey === dk && Array.isArray(override.exercises) && override.exercises.length >= 0) {
     return { session: override, fromCheckIn: true }
   }
-  return { session: getTodaySessionForStyle(program, styleId, date), fromCheckIn: false }
+  return { session: getTodaySessionForStyle(resolvedProgram, styleId, date), fromCheckIn: false }
 }
 
 export function appendCompletedSessionToProgram(program, entry) {
@@ -1336,11 +1345,12 @@ export function getTodayTrainExercisesSync(styleId = 'gym', date = new Date()) {
 }
 
 export function getProgramContextForWorkouts(program, fallbackDaysPerWeek = 3) {
-  const sched = program?.weeklySchedule || []
+  const resolvedProgram = resolveProgramWithFallback(program)
+  const sched = resolvedProgram?.weeklySchedule || []
   const trainingEntries = sched.filter((w) => w.sessionKey)
   const dpw = Math.max(
     1,
-    Number(program?.weeklyVolume?.daysPerWeek) || trainingEntries.length || fallbackDaysPerWeek,
+    Number(resolvedProgram?.weeklyVolume?.daysPerWeek) || trainingEntries.length || fallbackDaysPerWeek,
   )
   const dayName = DAY_NAMES[new Date().getDay()]
   const todayEntry = sched.find((w) => w.day === dayName)
@@ -1352,7 +1362,7 @@ export function getProgramContextForWorkouts(program, fallbackDaysPerWeek = 3) {
   } else {
     dayInBlock = 0
   }
-  const cw = Number(program?.progressiveOverload?.currentWeek)
+  const cw = Number(resolvedProgram?.progressiveOverload?.currentWeek)
   const programWeek = Number.isFinite(cw) ? cw + 1 : 1
   return {
     programWeek,
@@ -1360,7 +1370,7 @@ export function getProgramContextForWorkouts(program, fallbackDaysPerWeek = 3) {
     daysPerWeek: dpw,
     weekday: dayName,
     todaySessionName: todayEntry?.sessionName || null,
-    splitId: program?.weeklyVolume?.splitId || null,
+    splitId: resolvedProgram?.weeklyVolume?.splitId || null,
   }
 }
 

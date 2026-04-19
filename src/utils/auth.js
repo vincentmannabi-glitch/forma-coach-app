@@ -1,8 +1,9 @@
 /**
- * Pure localStorage auth. No Supabase. No external API calls.
- * forma_user: { id, email, password, name, onboarding_complete, ...profile }
- * forma_logged_in: "true" when logged in
+ * Auth + profile layer.
+ * Keeps local profile/program data while using real Supabase sessions when available.
  */
+
+import { hasSupabaseAuthConfigured, supabase } from './supabaseClient'
 
 const USER_KEY = 'forma_user'
 const LOGGED_IN_KEY = 'forma_logged_in'
@@ -74,6 +75,10 @@ function saveProfile(profile) {
   }
 }
 
+function normalizeEmail(email) {
+  return String(email || '').trim().toLowerCase()
+}
+
 function isLoggedIn() {
   return localStorage.getItem(LOGGED_IN_KEY) === 'true'
 }
@@ -90,11 +95,25 @@ function setLoggedIn(value) {
 }
 
 /** Sync. Returns { user, profile } or null if not logged in. */
+function profileFromUser(user, profile) {
+  const email = normalizeEmail(user?.email)
+  return profile || {
+    id: user?.id || 'forma_local_user',
+    email,
+    name: '',
+    goal: 'muscle building',
+    training_style: 'gym',
+    experience_level: 'Complete beginner',
+    days_per_week: 3,
+    onboarding_complete: false,
+  }
+}
+
 export function getSessionSync() {
   if (!isLoggedIn()) return null
   const user = loadUser()
   if (!user) return null
-  const profile = loadProfile() || user
+  const profile = profileFromUser(user, loadProfile())
   return {
     user: { id: user.id, email: user.email },
     profile,
@@ -103,6 +122,26 @@ export function getSessionSync() {
 
 /** @returns {Promise<{ user: object; profile: object } | null>} */
 export async function getSession() {
+  if (hasSupabaseAuthConfigured && supabase) {
+    const { data, error } = await supabase.auth.getSession()
+    if (!error && data?.session?.user) {
+      const supaUser = data.session.user
+      const localUser = loadUser()
+      const mergedUser = {
+        ...(localUser || {}),
+        id: supaUser.id,
+        email: normalizeEmail(supaUser.email),
+        onboarding_complete: Boolean(localUser?.onboarding_complete ?? loadProfile()?.onboarding_complete),
+      }
+      saveUser(mergedUser)
+      setLoggedIn(true)
+      const profile = profileFromUser(mergedUser, loadProfile())
+      return {
+        user: { id: mergedUser.id, email: mergedUser.email },
+        profile,
+      }
+    }
+  }
   return getSessionSync()
 }
 
@@ -123,10 +162,45 @@ export async function getCurrentUser() {
  * @returns {Promise<{ ok: boolean; error?: string; onboarding_complete?: boolean }>}
  */
 export async function signUp(email, password) {
+  const normalizedEmail = normalizeEmail(email)
+  if (hasSupabaseAuthConfigured && supabase) {
+    const { data, error } = await supabase.auth.signUp({
+      email: normalizedEmail,
+      password,
+    })
+    if (error) return { ok: false, error: error.message || 'Unable to sign up' }
+
+    let activeSessionUser = data?.session?.user || data?.user || null
+    if (!data?.session) {
+      const signInResult = await supabase.auth.signInWithPassword({
+        email: normalizedEmail,
+        password,
+      })
+      if (!signInResult.error && signInResult.data?.user) {
+        activeSessionUser = signInResult.data.user
+      }
+    }
+    if (!activeSessionUser?.id) {
+      return { ok: false, error: 'Unable to create an active session. Please try signing in.' }
+    }
+
+    const newUser = {
+      ...(loadUser() || {}),
+      id: activeSessionUser.id,
+      email: normalizedEmail,
+      name: '',
+      onboarding_complete: false,
+    }
+    saveUser(newUser)
+    saveProfile(profileFromUser(newUser, loadProfile()))
+    setLoggedIn(true)
+    return { ok: true, onboarding_complete: false }
+  }
+
   const id = `user_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`
   const newUser = {
     id,
-    email: (email || '').trim().toLowerCase(),
+    email: normalizedEmail,
     password,
     name: '',
     onboarding_complete: false,
@@ -152,11 +226,33 @@ export async function signUp(email, password) {
  * @returns {Promise<{ ok: boolean; error?: string; onboarding_complete?: boolean }>}
  */
 export async function login(email, password) {
+  const normalizedEmail = normalizeEmail(email)
+  if (hasSupabaseAuthConfigured && supabase) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: normalizedEmail,
+      password,
+    })
+    if (error || !data?.user) {
+      return { ok: false, error: error?.message || 'Invalid email or password' }
+    }
+    const existing = loadUser()
+    const mergedUser = {
+      ...(existing || {}),
+      id: data.user.id,
+      email: normalizedEmail,
+      onboarding_complete: Boolean(existing?.onboarding_complete ?? loadProfile()?.onboarding_complete),
+    }
+    saveUser(mergedUser)
+    saveProfile(profileFromUser(mergedUser, loadProfile()))
+    setLoggedIn(true)
+    return { ok: true, onboarding_complete: !!mergedUser.onboarding_complete }
+  }
+
   const user = loadUser()
   if (!user) {
     return { ok: false, error: 'Invalid email or password' }
   }
-  const emailMatch = (user.email || '').toLowerCase() === (email || '').trim().toLowerCase()
+  const emailMatch = (user.email || '').toLowerCase() === normalizedEmail
   const passwordMatch = user.password === password
   if (!emailMatch || !passwordMatch) {
     return { ok: false, error: 'Invalid email or password' }
@@ -166,7 +262,13 @@ export async function login(email, password) {
 }
 
 export async function completeOnboarding(name, profile = {}) {
-  const user = loadUser()
+  let user = loadUser()
+  if (!user && hasSupabaseAuthConfigured && supabase) {
+    const { data } = await supabase.auth.getUser()
+    if (data?.user) {
+      user = { id: data.user.id, email: normalizeEmail(data.user.email), onboarding_complete: false }
+    }
+  }
   if (!user || !isLoggedIn()) return
 
   const goalsArr = profile.goals ?? [profile.goal].filter(Boolean)
@@ -289,6 +391,9 @@ export async function checkOnboardingComplete() {
 }
 
 export async function logout() {
+  if (hasSupabaseAuthConfigured && supabase) {
+    try { await supabase.auth.signOut() } catch { /* noop */ }
+  }
   setLoggedIn(false)
   saveUser(null)
   saveProfile(null)
@@ -306,7 +411,18 @@ export function onAuthChanged(callback) {
   if (typeof window === 'undefined') return () => {}
   const handler = () => callback()
   window.addEventListener('forma-auth-changed', handler)
-  return () => window.removeEventListener('forma-auth-changed', handler)
+  let unsub = () => {}
+  if (hasSupabaseAuthConfigured && supabase) {
+    const sub = supabase.auth.onAuthStateChange((_event, session) => {
+      setLoggedIn(Boolean(session?.user))
+      callback()
+    })
+    unsub = () => sub?.data?.subscription?.unsubscribe?.()
+  }
+  return () => {
+    window.removeEventListener('forma-auth-changed', handler)
+    unsub()
+  }
 }
 
 /** Clear all forma_* keys from localStorage. */
