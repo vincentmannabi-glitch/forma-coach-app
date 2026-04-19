@@ -476,6 +476,35 @@ function readInjuryFlags(profile) {
   }
 }
 
+function isExerciseBlockedByInjury(ex, flags) {
+  const n = String(ex?.name || '').toLowerCase()
+  if (!n) return false
+  if (flags.knee) {
+    if (
+      n.includes('jump squat') ||
+      n.includes('broad jump') ||
+      n.includes('box jump') ||
+      n.includes('walking lunge') ||
+      n.includes('burpee')
+    ) return true
+  }
+  if (flags.lowerBack) {
+    if (
+      n.includes('romanian deadlift') ||
+      n.includes('good morning') ||
+      (n.includes('deadlift') && !n.includes('single leg'))
+    ) return true
+  }
+  if (flags.shoulder) {
+    if (n.includes('overhead press standing') || n.includes('upright row')) return true
+  }
+  return false
+}
+
+function applyInjuryNameExclusions(list, flags) {
+  return (list || []).filter((ex) => !isExerciseBlockedByInjury(ex, flags))
+}
+
 const KNEE_SAFE_IDS = new Set([19, 16, 54, 56, 57, 17, 63, 39, 45, 46, 64, 41, 59, 51, 48, 68])
 const SHOULDER_SAFE_IDS = new Set([45, 61, 64, 40, 39, 63, 41, 59, 30, 26, 37])
 const BACK_SAFE_IDS = new Set([51, 68, 54, 48, 16, 66, 67, 69, 70])
@@ -645,7 +674,10 @@ function selectExercisesForFocus(focus, environment, equipSet, profile, weekInde
   }
 
   const levelR = userLevelRank(profile)
-  const list = libraryList().filter((ex) => exerciseLevelAllowed(ex, levelR) && exerciseAllowedForProfile(ex, environment, equipSet, profile))
+  const list = applyInjuryNameExclusions(
+    libraryList().filter((ex) => exerciseLevelAllowed(ex, levelR) && exerciseAllowedForProfile(ex, environment, equipSet, profile)),
+    injuryFlags,
+  )
 
   let filtered = list
   if (focus === 'lower') filtered = list.filter(FOCUS_LOWER)
@@ -704,7 +736,10 @@ function selectFullBody(environment, equipSet, profile, weekIndex, injuryFlags) 
     const s = injurySubstituteId(ex, injuryFlags, levelR)
     return s ? getLibraryExercise(s) : ex
   }
-  const clean = [...new Map(base.map((e) => [e.id, inj(e)])).values()]
+  const clean = applyInjuryNameExclusions(
+    [...new Map(base.map((e) => [e.id, inj(e)])).values()],
+    injuryFlags,
+  )
 
   const pick = (pred, n) => rotatePool(clean.filter(pred), weekIndex).slice(0, n)
   const lower1 = pick((e) => FOCUS_LOWER(e) && COMPOUNDISH(e) && e.movementPattern === 'squat', 5)[0]
@@ -982,14 +1017,18 @@ function splitMeta(daysPerWeek) {
 // ——— train UI shape ———
 
 export function sessionToTrainExercises(session) {
-  const moves = session?.movements || []
+  const moves = Array.isArray(session?.movements)
+    ? session.movements
+    : Array.isArray(session?.exercises)
+      ? session.exercises
+      : []
   return moves.map((m) => {
     const parts = (m.reps || '').split('/').map((x) => parseInt(x.trim(), 10)).filter((n) => Number.isFinite(n))
     const repRange = parts.length ? [Math.min(...parts), Math.max(...parts)] : [8, 12]
     return {
       id: `ex-${m.exerciseNumber}-${m.order}`,
-      name: m.exerciseName,
-      displayName: m.exerciseName,
+      name: m.exerciseName || m.name || m.displayName || 'Exercise',
+      displayName: m.exerciseName || m.displayName || m.name || 'Exercise',
       order: m.order,
       sets: m.sets,
       repsScheme: m.reps,
@@ -1050,7 +1089,16 @@ export function getTodaySession(program, date = new Date()) {
   }
   const sess = program.sessions?.[entry.sessionKey]
   if (!sess) return null
-  return legacyTrainSession(sess, entry)
+  const built = legacyTrainSession(sess, entry)
+  if (Array.isArray(built.exercises) && built.exercises.length > 0) return built
+  const fallbackMoves = Array.isArray(program.sessions?.[entry.sessionKey]?.movements)
+    ? program.sessions[entry.sessionKey].movements
+    : []
+  if (!fallbackMoves.length) return built
+  return {
+    ...built,
+    exercises: sessionToTrainExercises({ movements: fallbackMoves }),
+  }
 }
 
 const STYLE_IDS = ['gym', 'home', 'gymAndHome', 'calisthenics', 'both']

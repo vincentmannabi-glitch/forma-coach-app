@@ -1,4 +1,3 @@
-import { getDailyProteinTargetGrams } from './nutrition'
 import {
   getSessions,
   getProgramContextSync,
@@ -66,6 +65,24 @@ function sportLine(profile) {
   return [cardio, s].filter(Boolean).join(', ') || 'None'
 }
 
+function readStoredUser() {
+  try {
+    const raw = localStorage.getItem('forma_user')
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
+
+function getBodyweightLbs(profile) {
+  const fromProfile = Number(profile?.bodyweight ?? profile?.body_weight)
+  if (Number.isFinite(fromProfile) && fromProfile > 0) return fromProfile
+  const stored = readStoredUser()
+  const fromStored = Number(stored?.bodyweight ?? stored?.body_weight)
+  if (Number.isFinite(fromStored) && fromStored > 0) return fromStored
+  return 180
+}
+
 function formatPersonalRecords() {
   const prMap = computePersonalRecordsFromSessions(getSessionsSync())
   const entries = Object.entries(prMap)
@@ -115,10 +132,8 @@ function buildTodaySessionSummary() {
 function buildSystemPrompt(profile, extras) {
   const name = (profile?.name || '').trim() || 'this client'
   const goal = (profile?.goal || '').trim() || 'general fitness'
-  const protein = extras.dailyProteinTargetGrams
-  const proteinLine = protein != null
-    ? `${protein}g/day`
-    : 'Not calculated — needs body weight added'
+  const bodyweightLbs = getBodyweightLbs(profile)
+  const proteinLine = `${Math.round(bodyweightLbs * 0.8)}g/day (0.8g/lb)`
 
   return `You are FORMA Coach. An elite personal trainer and nutrition coach with the knowledge of a certified strength and conditioning specialist, sports nutritionist, and exercise scientist. You think like a real coach — not a chatbot that reads lists.
 
@@ -129,7 +144,12 @@ When a client talks to you, you look at everything you know about them and use y
 Name: ${name}
 Goal: ${goal}
 Experience level: ${(profile?.experience_level || 'Not specified')}
-Body weight: ${profile?.body_weight ? `${profile.body_weight} lbs` : 'Not set — ask them to add it for better load suggestions'}
+Body weight: ${bodyweightLbs} lbs
+User goal (raw): ${profile?.goal || 'general fitness'}
+User experience level (raw): ${profile?.experience_level || 'Complete beginner'}
+User days per week (raw): ${profile?.days_per_week ?? 3}
+User equipment (raw): ${profile?.equipment || equipmentSummaryLine(profile)}
+User injuries details (raw): ${(profile?.injuries_details || '').trim() || 'None reported'}
 Equipment: ${equipmentSummaryLine(profile)}
 Days per week: ${profile?.days_per_week ?? 'Not specified'}
 Session length: ${profile?.session_minutes || 60} minutes
@@ -175,6 +195,7 @@ When a client asks you anything, you run through this mental process before answ
 - Never give supplement dosages. Always include risks alongside any supplement benefit.
 - Always refer to a doctor for chest pain, dizziness, sharp pain, or any medical concern.
 - Never make up data or claim certainty where you have none — say so and give your best coaching judgment.
+- Never say you do not know the user's body weight. Use the provided body weight value in this prompt.
 - Use their name at most once every five messages.
 - Give a direct answer first, then offer to go deeper.
 - One follow-up question maximum per response.
@@ -256,7 +277,7 @@ export async function sendMessageToCoach(userMessage, fullUserProfile, conversat
     ? `${latest.dateKey} (sleep: ${latest.sleep || '—'}, energy: ${latest.energy || '—'})`
     : 'No check-in logged yet'
 
-  const dailyProteinTargetGrams = getDailyProteinTargetGrams(profile)
+  const dailyProteinTargetGrams = Math.round(getBodyweightLbs(profile) * 0.8)
   const programSummary = buildProgramSummary()
   const todaySessionSummary = buildTodaySessionSummary()
 

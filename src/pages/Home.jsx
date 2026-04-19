@@ -17,6 +17,32 @@ import './Home.css'
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
+function formatGoalLabel(rawGoal) {
+  const key = String(rawGoal || '').trim()
+  const map = {
+    fatLoss: 'Fat Loss',
+    muscleBuilding: 'Muscle Building',
+    strength: 'Strength',
+    endurance: 'Endurance',
+    athletic: 'Athletic',
+  }
+  if (map[key]) return map[key]
+  const lower = key.toLowerCase()
+  if (lower.includes('muscle')) return 'Muscle Building'
+  if (lower.includes('fat') || lower.includes('lose')) return 'Fat Loss'
+  return key || '—'
+}
+
+function formatSplitLabel(rawSplit) {
+  const key = String(rawSplit || '').trim()
+  const map = {
+    fullBody: 'Full Body',
+    upperLower: 'Upper / Lower',
+  }
+  if (map[key]) return map[key]
+  return key ? key.replace(/([A-Z])/g, ' $1').trim() : '—'
+}
+
 function pickSnacks(program, n = 3) {
   const list = Array.isArray(program?.snackRecommendations) ? program.snackRecommendations.filter(Boolean) : []
   if (!list.length) return []
@@ -181,16 +207,10 @@ export default function Home() {
   }, [])
 
   const goalLabel = useMemo(() => {
-    const g = program?.profileSnapshot?.goal
-    const map = {
-      fatLoss: 'Fat loss',
-      muscleBuilding: 'Muscle building',
-      strength: 'Strength',
-      endurance: 'Endurance',
-      athletic: 'Athletic',
-    }
-    if (g && map[g]) return map[g]
-    return user?.goal && String(user.goal).trim() ? user.goal : g || '—'
+    const programGoal = formatGoalLabel(program?.profileSnapshot?.goal)
+    const userGoal = formatGoalLabel(user?.goal)
+    if (userGoal !== '—') return userGoal
+    return programGoal
   }, [program?.profileSnapshot?.goal, user?.goal])
 
   const levelLabel = useMemo(() => {
@@ -199,7 +219,7 @@ export default function Home() {
     return pretty[lv] || lv || '—'
   }, [program?.profileSnapshot?.level, user?.experienceLevel])
 
-  const splitLabel = program?.formulas?.frequencySplit ?? program?.weeklyVolume?.splitId ?? '—'
+  const splitLabel = formatSplitLabel(program?.formulas?.frequencySplit ?? program?.weeklyVolume?.splitId ?? '')
 
   return (
     <div className="home-page">

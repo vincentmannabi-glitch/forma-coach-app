@@ -43,7 +43,24 @@ export default function WorkoutHub() {
     }
   }, [user.id, user.name, authProfile])
 
-  const today = useMemo(() => getTodaySessionWithOverride(program, new Date()), [program])
+  const today = useMemo(() => {
+    const resolved = getTodaySessionWithOverride(program, new Date())
+    if ((resolved?.exercises || []).length > 0) return resolved
+    const key = resolved?.sessionKey
+    if (!key) return resolved
+    const raw = program?.sessions?.[key]
+    const moves = raw?.movements || []
+    return {
+      ...resolved,
+      exercises: moves.map((m, i) => ({
+        id: m.exerciseId || m.id || `ex-${i}`,
+        name: m.exerciseName || m.name || '',
+        displayName: m.exerciseName || m.displayName || m.name || '',
+        sets: m.sets,
+        repRange: m.repRange,
+      })),
+    }
+  }, [program])
 
   const weekRows = useMemo(() => {
     const sched = program?.weeklySchedule || []

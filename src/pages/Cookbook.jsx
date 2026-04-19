@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { buildSafeHomeUser } from '../utils/homeSafeUser'
 import { getRecipePool } from '../utils/dailyNutritionCoach'
-import { RECIPES, FEATURED_RECIPE_ID } from '../data/recipes'
+import { RECIPES } from '../data/recipes'
 import { recipeMatchesCookbookFilter } from '../utils/recipeMealCategory'
 import { loadThemealdbWeekRecipes } from '../utils/themealdbRecipes'
 import './Cookbook.css'
@@ -17,6 +17,40 @@ const FILTERS = [
   { id: 'pre_workout', label: 'Pre Workout' },
   { id: 'post_workout', label: 'Post Workout' },
 ]
+
+function proteinGrams(recipe) {
+  const n = parseInt(String(recipe?.protein || '').replace(/\D/g, ''), 10)
+  return Number.isFinite(n) ? n : 0
+}
+
+function goalBucket(goalRaw) {
+  const g = String(goalRaw || '').toLowerCase()
+  if (g.includes('fat') || g.includes('lose') || g.includes('lean')) return 'fat_loss'
+  if (g.includes('muscle') || g.includes('build') || g.includes('hypertrophy')) return 'muscle_building'
+  return 'general'
+}
+
+function rankRecipesForGoal(recipes, goalRaw) {
+  const goal = goalBucket(goalRaw)
+  return [...(recipes || [])].sort((a, b) => {
+    const aProtein = proteinGrams(a)
+    const bProtein = proteinGrams(b)
+    const aCal = Number(a?.calories) || 0
+    const bCal = Number(b?.calories) || 0
+
+    if (goal === 'fat_loss') {
+      const aScore = aProtein * 2 - aCal / 120
+      const bScore = bProtein * 2 - bCal / 120
+      return bScore - aScore
+    }
+    if (goal === 'muscle_building') {
+      const aScore = aProtein * 2 + aCal / 150
+      const bScore = bProtein * 2 + bCal / 150
+      return bScore - aScore
+    }
+    return bProtein - aProtein
+  })
+}
 
 export default function Cookbook() {
   const navigate = useNavigate()
@@ -53,12 +87,11 @@ export default function Cookbook() {
       seen.add(r.id)
       out.push(r)
     }
-    return out
-  }, [eligiblePool, themealdbExtras])
+    return rankRecipesForGoal(out, user?.goal)
+  }, [eligiblePool, themealdbExtras, user?.goal])
 
   const featured = useMemo(() => {
-    const f = RECIPES.find((r) => r.id === FEATURED_RECIPE_ID)
-    return f && fullPool.some((r) => r.id === f.id) ? f : fullPool[0] || null
+    return fullPool[0] || null
   }, [fullPool])
 
   const filteredRows = useMemo(() => {

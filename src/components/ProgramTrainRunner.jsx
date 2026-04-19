@@ -93,7 +93,27 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
     [program, styleId],
   )
   const session = resolvedSession
-  const exercises = session?.exercises || []
+  const exercises = useMemo(() => {
+    const listed = session?.exercises || []
+    if (listed.length > 0) return listed
+    const key = session?.sessionKey
+    if (!key) return listed
+    const raw = program?.sessions?.[key]
+    const moves = raw?.movements || []
+    return moves.map((m, idx) => ({
+      id: m.exerciseId || m.id || `ex-${idx}`,
+      name: m.exerciseName || m.name || m.displayName || 'Exercise',
+      displayName: m.exerciseName || m.displayName || m.name || 'Exercise',
+      sets: m.sets,
+      repRange: m.repRange,
+      restSeconds: m.restSeconds,
+      description: m.coachingCues || m.description || '',
+      coachingCues: m.coachingCues || '',
+      progression: m.progression,
+      regression: m.regression,
+      order: m.order ?? idx + 1,
+    }))
+  }, [session, program])
   const level = program?.profileSnapshot?.level || 'beginner'
 
   const [logs, setLogs] = useState(() => initLogs(exercises))
