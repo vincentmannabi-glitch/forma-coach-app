@@ -38,6 +38,7 @@ function formatSplitLabel(rawSplit) {
   const map = {
     fullBody: 'Full Body',
     upperLower: 'Upper / Lower',
+    calisthenics: 'Calisthenics',
   }
   if (map[key]) return map[key]
   return key ? key.replace(/([A-Z])/g, ' $1').trim() : '—'

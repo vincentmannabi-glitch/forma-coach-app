@@ -290,6 +290,7 @@ function findExerciseIdByName(name) {
 
 export function normalizeGoal(goalRaw) {
   const g = String(goalRaw || '').toLowerCase()
+  if (g.includes('general health') || g.includes('general fitness') || g.includes('health')) return 'generalHealth'
   if (g.includes('fat')) return 'fatLoss'
   if (g.includes('muscle')) return 'muscleBuilding'
   if (g.includes('strength')) return 'strength'
@@ -472,7 +473,7 @@ function readInjuryFlags(profile) {
   return {
     knee: /knee/.test(s),
     shoulder: /shoulder/.test(s),
-    lowerBack: /lower back|lumbar|disc/.test(s),
+    lowerBack: /lower back|lumbar|disc|\bback\b/.test(s),
   }
 }
 
@@ -490,6 +491,11 @@ function isExerciseBlockedByInjury(ex, flags) {
   }
   if (flags.lowerBack) {
     if (
+      n.includes('banded good morning') ||
+      n.includes('good morning') ||
+      n.includes('barbell romanian deadlift') ||
+      n.includes('conventional deadlift') ||
+      n.includes('jefferson curl') ||
       n.includes('romanian deadlift') ||
       n.includes('good morning') ||
       (n.includes('deadlift') && !n.includes('single leg'))
@@ -503,6 +509,17 @@ function isExerciseBlockedByInjury(ex, flags) {
 
 function applyInjuryNameExclusions(list, flags) {
   return (list || []).filter((ex) => !isExerciseBlockedByInjury(ex, flags))
+}
+
+function applyGeneralHealthExerciseFilters(list, goalNormalized) {
+  if (goalNormalized !== 'generalHealth') return list || []
+  return (list || []).filter((ex) => {
+    const name = String(ex?.name || '').toLowerCase()
+    const pattern = String(ex?.movementPattern || '').toLowerCase()
+    if (pattern === 'power') return false
+    if (/jump|burpee|snatch|clean|jerk|plyo|sprint|max effort/.test(name)) return false
+    return true
+  })
 }
 
 const KNEE_SAFE_IDS = new Set([19, 16, 54, 56, 57, 17, 63, 39, 45, 46, 64, 41, 59, 51, 48, 68])
@@ -561,6 +578,18 @@ function injurySubstituteId(ex, flags, userRank) {
 // ——— rep / rest schemes ———
 
 function repSchemeForGoal(goal) {
+  if (goal === 'generalHealth') {
+    return {
+      id: 'generalHealth',
+      warmUpReps: 10,
+      warmUpPct: 0.5,
+      sets: 4,
+      repsPerSet: [12, 12, 10, 10],
+      restSeconds: 75,
+      loadProgression: 'steady',
+      notes: 'Moderate intensity with joint-friendly training; no max effort work.',
+    }
+  }
   return getRepSchemeForGoal(goal)
 }
 
@@ -955,7 +984,9 @@ function buildMovementRow(order, ex, scheme, profile, injuryFlags, opts) {
   const finalEx = sub ? getLibraryExercise(sub) : ex
   const e = finalEx || ex
 
-  const baseWeightText = buildWeightSuggestionText(e, profile.bodyweight ?? profile.body_weight, profile.experienceLevel ?? profile.experience_level)
+  const baseWeightText = goalNorm === 'generalHealth'
+    ? 'Use moderate loading (RPE 6-7), leave 2-3 reps in reserve, and keep every rep smooth and pain-free.'
+    : buildWeightSuggestionText(e, profile.bodyweight ?? profile.body_weight, profile.experienceLevel ?? profile.experience_level)
 
   return {
     order,
@@ -1486,7 +1517,8 @@ export function buildProgram(profile = {}, opts = {}) {
     ? normalizeStyle(detectTrainingStyle(equipmentText) === 'gym' ? 'gym' : 'home')
     : normalizeStyle(profile?.trainingStyle ?? profile?.training_style)
   const experienceLevel = mapExperienceToTrainLevel(profile?.experienceLevel ?? profile?.experience_level)
-  const daysPerWeek = Math.max(2, Math.min(6, Number(profile?.daysPerWeek ?? profile?.days_per_week) || 3))
+  const requestedDaysPerWeek = Math.max(2, Math.min(6, Number(profile?.daysPerWeek ?? profile?.days_per_week) || 3))
+  const daysPerWeek = goal === 'generalHealth' ? 3 : requestedDaysPerWeek
   const sessionMinutes = clampSessionDuration(profile?.sessionDuration ?? profile?.session_minutes ?? 60)
   const bodyweightKg = Number(profile?.bodyweight ?? profile?.body_weight) || 70
   const weekIndex = Number(opts.weekIndex ?? profile?.weeksCompleted ?? profile?.currentWeek ?? 0) || 0
@@ -1524,7 +1556,7 @@ export function buildProgram(profile = {}, opts = {}) {
         ? selectFullBody(environment, equipSet, { ...profile, bodyweight: bodyweightKg }, weekIndex + i, injuryFlags)
         : selectExercisesForFocus(focus, environment, equipSet, { ...profile, bodyweight: bodyweightKg }, weekIndex + i, injuryFlags, timePlan.movements)
 
-    picked = picked.slice(0, timePlan.movements)
+    picked = applyGeneralHealthExerciseFilters(picked, goal).slice(0, timePlan.movements)
 
     let movements = picked.map((ex, idx) =>
       buildMovementRow(idx + 1, ex, scheme, profile, injuryFlags, { deloadActive, goalNormalized: goal }),

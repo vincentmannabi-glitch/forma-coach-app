@@ -26,7 +26,7 @@ function proteinGrams(recipe) {
 function goalBucket(goalRaw) {
   const g = String(goalRaw || '').toLowerCase()
   if (g.includes('fat') || g.includes('lose') || g.includes('lean')) return 'fat_loss'
-  if (g.includes('muscle') || g.includes('build') || g.includes('hypertrophy')) return 'muscle_building'
+  if (g.includes('muscle') || g.includes('build') || g.includes('hypertrophy') || g.includes('strength') || g.includes('strong')) return 'muscle_building'
   return 'general'
 }
 
@@ -39,14 +39,18 @@ function rankRecipesForGoal(recipes, goalRaw) {
     const bCal = Number(b?.calories) || 0
 
     if (goal === 'fat_loss') {
-      const aScore = aProtein * 2 - aCal / 120
-      const bScore = bProtein * 2 - bCal / 120
-      return bScore - aScore
+      const aPreferred = aCal < 500 && aProtein >= 20
+      const bPreferred = bCal < 500 && bProtein >= 20
+      if (aPreferred !== bPreferred) return aPreferred ? -1 : 1
+      if (aProtein !== bProtein) return bProtein - aProtein
+      return aCal - bCal
     }
     if (goal === 'muscle_building') {
-      const aScore = aProtein * 2 + aCal / 150
-      const bScore = bProtein * 2 + bCal / 150
-      return bScore - aScore
+      const aPreferred = aCal >= 500 && aProtein >= 25
+      const bPreferred = bCal >= 500 && bProtein >= 25
+      if (aPreferred !== bPreferred) return aPreferred ? -1 : 1
+      if (aProtein !== bProtein) return bProtein - aProtein
+      return bCal - aCal
     }
     return bProtein - aProtein
   })

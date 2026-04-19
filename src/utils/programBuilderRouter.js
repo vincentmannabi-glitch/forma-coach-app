@@ -13,6 +13,52 @@ import { mapExperienceToTrainLevel } from './experienceLevel'
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
+function applyRequiredInjuryExclusionsToProgram(program, profile) {
+  if (!program?.sessions) return program
+  const injuryBlob = String(profile?.injuries_details || '').toLowerCase()
+  const hasBackIssue = /lower back|\bback\b/.test(injuryBlob)
+  const hasKneeIssue = /knee/.test(injuryBlob)
+  if (!hasBackIssue && !hasKneeIssue) return program
+
+  const blockedBack = [
+    'banded good morning',
+    'good morning',
+    'barbell romanian deadlift',
+    'conventional deadlift',
+    'jefferson curl',
+  ]
+  const blockedKnee = [
+    'jump squat',
+    'broad jump',
+    'box jump',
+    'walking lunge',
+    'burpee',
+  ]
+
+  const sessions = Object.fromEntries(
+    Object.entries(program.sessions).map(([key, sess]) => {
+      const moves = (sess?.movements || []).filter((m) => {
+        const name = String(m?.exerciseName || m?.name || '').toLowerCase()
+        if (!name) return true
+        if (hasBackIssue && blockedBack.some((b) => name.includes(b))) return false
+        if (hasKneeIssue && blockedKnee.some((b) => name.includes(b))) return false
+        return true
+      })
+      return [key, { ...sess, movements: moves }]
+    }),
+  )
+
+  const sessionsList = Array.isArray(program.sessionsList)
+    ? program.sessionsList.map((s) => {
+      const key = s.sessionKey || s.id
+      const nextMovements = sessions[key]?.movements || []
+      return { ...s, exercises: nextMovements }
+    })
+    : program.sessionsList
+
+  return { ...program, sessions, sessionsList }
+}
+
 function trainingDayNames(daysPerWeek) {
   const schedules = {
     2: ['Monday', 'Thursday'],
@@ -48,6 +94,7 @@ function sportExercisesToSessionExercises(exercises = []) {
 }
 
 function buildSportProgram(profile) {
+  const sessionMinutes = Number(profile?.session_minutes) || Number(profile?.sessionDuration) || 60
   const selector = selectProgramType(profile)
   const sportData = getSportProgram(selector.sport)
   if (!sportData) return null
@@ -98,7 +145,7 @@ function buildSportProgram(profile) {
         restSeconds: ex.restSeconds,
       })),
       coolDown,
-      estimatedDuration: Number(profile?.session_minutes) || 60,
+      estimatedDuration: sessionMinutes,
       sessionEquipmentList: [],
     }
 
@@ -107,7 +154,7 @@ function buildSportProgram(profile) {
       environment: 'gym',
       sessionType: 'sport',
       sessionName,
-      sessionDuration: Number(profile?.session_minutes) || 60,
+      sessionDuration: sessionMinutes,
       equipmentNeeded: [],
       sessionKey,
     })
@@ -116,7 +163,7 @@ function buildSportProgram(profile) {
   weeklySchedule.push(...makeRestDays(dayNames))
   weeklySchedule.sort((a, b) => DAY_NAMES.indexOf(a.day) - DAY_NAMES.indexOf(b.day))
 
-  return {
+  return applyRequiredInjuryExclusionsToProgram({
     userId: profile?.id || 'forma_local_user',
     goal: profile?.goal || 'athletic',
     trainingStyle: 'gym',
@@ -143,7 +190,7 @@ function buildSportProgram(profile) {
     }).filter(Boolean),
     snackRecommendations: [],
     nutritionPhilosophy: sportData.nutritionGuidance || '',
-    weeklyVolume: { daysPerWeek, splitId: `sport_${selector.sport}` },
+    weeklyVolume: { daysPerWeek, splitId: `sport_${selector.sport}`, sessionMinutes },
     profileSnapshot: {
       name: profile?.name || 'Friend',
       goal: profile?.goal || 'athletic',
@@ -151,10 +198,11 @@ function buildSportProgram(profile) {
       daysPerWeek,
     },
     createdAt: new Date().toISOString(),
-  }
+  }, profile)
 }
 
 function buildCalisthenicsProgram(profile) {
+  const sessionMinutes = Number(profile?.session_minutes) || Number(profile?.sessionDuration) || 60
   const level = mapExperienceToTrainLevel(profile?.experience_level || profile?.experienceLevel) || 'beginner'
   const daysPerWeek = Math.max(2, Math.min(6, Number(profile?.days_per_week) || 3))
   const dayNames = trainingDayNames(daysPerWeek)
@@ -198,13 +246,13 @@ function buildCalisthenicsProgram(profile) {
         title: 'Cool down',
         steps: ['Child\'s pose 60s', 'Hip flexor stretch 45s each side', 'Chest opener 30s', 'Hamstring stretch 45s each side'],
       },
-      estimatedDuration: Number(profile?.session_minutes) || 60,
+      estimatedDuration: sessionMinutes,
       sessionEquipmentList: ['Bodyweight', 'Pull-up bar (optional)'],
     }
 
     weeklySchedule.push({
       day, environment: 'home', sessionType: 'calisthenics',
-      sessionName, sessionDuration: Number(profile?.session_minutes) || 60,
+      sessionName, sessionDuration: sessionMinutes,
       equipmentNeeded: ['Bodyweight'], sessionKey,
     })
   })
@@ -212,7 +260,7 @@ function buildCalisthenicsProgram(profile) {
   weeklySchedule.push(...makeRestDays(dayNames))
   weeklySchedule.sort((a, b) => DAY_NAMES.indexOf(a.day) - DAY_NAMES.indexOf(b.day))
 
-  return {
+  return applyRequiredInjuryExclusionsToProgram({
     userId: profile?.id || 'forma_local_user',
     goal: profile?.goal || 'muscle building',
     trainingStyle: 'home',
@@ -232,13 +280,14 @@ function buildCalisthenicsProgram(profile) {
     }).filter(Boolean),
     snackRecommendations: [],
     nutritionPhilosophy: 'Fuel your bodyweight training with whole foods and adequate protein — 1.6–2g per kg bodyweight daily.',
-    weeklyVolume: { daysPerWeek, splitId: 'calisthenics' },
+    weeklyVolume: { daysPerWeek, splitId: 'calisthenics', sessionMinutes },
     profileSnapshot: { name: profile?.name || 'Friend', goal: profile?.goal, level, daysPerWeek },
     createdAt: new Date().toISOString(),
-  }
+  }, profile)
 }
 
 function buildHomeProgramFromCatalog(profile, selector) {
+  const sessionMinutes = Number(profile?.session_minutes) || Number(profile?.sessionDuration) || 60
   const { equipmentId, programId } = selector
   const homeProgram = getHomeProgram(equipmentId, programId)
   if (!homeProgram) return null
@@ -275,13 +324,13 @@ function buildHomeProgramFromCatalog(profile, selector) {
         order: idx + 1,
       })),
       coolDown: { title: 'Cool down', steps: ['Child\'s pose 60s', 'Hip flexor stretch 45s each', 'Hamstring stretch 45s each'] },
-      estimatedDuration: Number(profile?.session_minutes) || 60,
+      estimatedDuration: sessionMinutes,
       sessionEquipmentList: [equipmentId],
     }
 
     weeklySchedule.push({
       day, environment: 'home', sessionType: 'home',
-      sessionName, sessionDuration: Number(profile?.session_minutes) || 60,
+      sessionName, sessionDuration: sessionMinutes,
       equipmentNeeded: [equipmentId], sessionKey,
     })
   })
@@ -289,7 +338,7 @@ function buildHomeProgramFromCatalog(profile, selector) {
   weeklySchedule.push(...makeRestDays(dayNames))
   weeklySchedule.sort((a, b) => DAY_NAMES.indexOf(a.day) - DAY_NAMES.indexOf(b.day))
 
-  return {
+  return applyRequiredInjuryExclusionsToProgram({
     userId: profile?.id || 'forma_local_user',
     goal: profile?.goal || 'fat loss',
     trainingStyle: 'home',
@@ -309,13 +358,14 @@ function buildHomeProgramFromCatalog(profile, selector) {
     }).filter(Boolean),
     snackRecommendations: [],
     nutritionPhilosophy: homeProgram.intro || '',
-    weeklyVolume: { daysPerWeek, splitId: `home_${programId}` },
+    weeklyVolume: { daysPerWeek, splitId: `home_${programId}`, sessionMinutes },
     profileSnapshot: { name: profile?.name || 'Friend', goal: profile?.goal, level, daysPerWeek },
     createdAt: new Date().toISOString(),
-  }
+  }, profile)
 }
 
 function buildRaceFitSessionProgram(profile) {
+  const sessionMinutes = Number(profile?.session_minutes) || Number(profile?.sessionDuration) || 60
   const level = mapExperienceToTrainLevel(profile?.experience_level || profile?.experienceLevel) || 'beginner'
   const daysPerWeek = Math.max(2, Math.min(6, Number(profile?.days_per_week) || 4))
   const dayNames = trainingDayNames(daysPerWeek)
@@ -351,13 +401,13 @@ function buildRaceFitSessionProgram(profile) {
       warmUp: { title: 'Race Fit warm up', steps: ['5 min easy row or ski erg', 'Hip circles 10 each way', 'Shoulder mobility', 'Glute activation', 'Build-up sets on first exercise'] },
       movements: exercises,
       coolDown: { title: 'Cool down', steps: ['Lower leg elevation 5 min', 'Hip flexor stretch 60s each', 'Thoracic rotations', 'Quad stretch 45s each'] },
-      estimatedDuration: Number(profile?.session_minutes) || 60,
+      estimatedDuration: sessionMinutes,
       sessionEquipmentList: ['Barbell', 'Dumbbells', 'Kettlebell', 'Ski Erg or Rowing Machine'],
     }
 
     weeklySchedule.push({
       day, environment: 'gym', sessionType: sType,
-      sessionName, sessionDuration: Number(profile?.session_minutes) || 60,
+      sessionName, sessionDuration: sessionMinutes,
       equipmentNeeded: ['Full gym'], sessionKey,
     })
   })
@@ -365,7 +415,7 @@ function buildRaceFitSessionProgram(profile) {
   weeklySchedule.push(...makeRestDays(dayNames))
   weeklySchedule.sort((a, b) => DAY_NAMES.indexOf(a.day) - DAY_NAMES.indexOf(b.day))
 
-  return {
+  return applyRequiredInjuryExclusionsToProgram({
     userId: profile?.id || 'forma_local_user',
     goal: profile?.goal || 'athletic',
     trainingStyle: 'gym',
@@ -385,10 +435,10 @@ function buildRaceFitSessionProgram(profile) {
     }).filter(Boolean),
     snackRecommendations: [],
     nutritionPhilosophy: rfData.nutritionGuidance,
-    weeklyVolume: { daysPerWeek, splitId: 'race_fit' },
+    weeklyVolume: { daysPerWeek, splitId: 'race_fit', sessionMinutes },
     profileSnapshot: { name: profile?.name || 'Friend', goal: 'athletic', level, daysPerWeek },
     createdAt: new Date().toISOString(),
-  }
+  }, profile)
 }
 
 /**
@@ -428,5 +478,5 @@ export function buildProgramForProfile(profile = {}) {
   }
 
   // Default: full gym builder (unchanged, handles all gym goal types)
-  return buildProgram(profile)
+  return applyRequiredInjuryExclusionsToProgram(buildProgram(profile), profile)
 }

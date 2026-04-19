@@ -19,6 +19,7 @@ const EARLY_DELOAD_THRESHOLD = 3
 
 export function normalizeGoal(raw) {
   const g = (raw || '').toLowerCase()
+  if (g.includes('general health') || g.includes('general fitness') || g.includes('health')) return 'generalHealth'
   if (g.includes('fat') || g.includes('lose') || g.includes('weight')) return 'fatLoss'
   if (g.includes('muscle') || g.includes('build') || g.includes('hyper')) return 'muscleBuilding'
   if (g.includes('strength') || g.includes('strong') || g.includes('power')) return 'strength'
@@ -79,6 +80,16 @@ const REP_SCHEMES = {
     restSeconds: 35,
     loadProgression: 'flat',
     notes: 'Same load all sets. Progress weight only when all 4 sets completed cleanly.',
+  },
+  generalHealth: {
+    id: 'generalHealth',
+    warmUpReps: 10,
+    warmUpPct: 0.5,
+    sets: 4,
+    repsPerSet: [12, 12, 10, 10],
+    restSeconds: 75,
+    loadProgression: 'steady',
+    notes: 'Moderate joint-friendly training; no max effort lifting.',
   },
 }
 

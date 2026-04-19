@@ -202,7 +202,7 @@ export default function Onboarding() {
             <div className="screen-section">
               <label className="screen-field-label">Main goal</label>
               <div className="cards-grid three-cols">
-                {['fat loss', 'muscle building', 'strength'].map((g) => (
+                {['fat loss', 'muscle building', 'strength', 'General health & fitness'].map((g) => (
                   <button key={g} type="button" className={`card-select ${goal === g ? 'selected' : ''}`} onClick={() => setGoal(g)}>{g}</button>
                 ))}
               </div>

@@ -195,6 +195,21 @@ Generate the program now.`
 
 function mergeWithFallback(aiProgram, fallbackProgram, profile) {
   if (!fallbackProgram) return aiProgram
+  const targetDuration = Number(profile?.session_minutes || profile?.sessionDuration || fallbackProgram?.weeklyVolume?.sessionMinutes || 60)
+  const normalizedDuration = Number.isFinite(targetDuration) && targetDuration > 0 ? targetDuration : 60
+  const mergedSessions = Object.fromEntries(
+    Object.entries(aiProgram.sessions || fallbackProgram.sessions || {}).map(([key, s]) => [
+      key,
+      {
+        ...s,
+        estimatedDuration: normalizedDuration,
+      },
+    ]),
+  )
+  const mergedSchedule = (aiProgram.weeklySchedule || fallbackProgram.weeklySchedule || []).map((d) => ({
+    ...d,
+    sessionDuration: d?.sessionKey ? normalizedDuration : 0,
+  }))
 
   return {
     // Core identity from fallback
@@ -206,16 +221,19 @@ function mergeWithFallback(aiProgram, fallbackProgram, profile) {
     progressiveOverload: fallbackProgram.progressiveOverload,
     snackRecommendations: fallbackProgram.snackRecommendations || [],
     nutritionPhilosophy: fallbackProgram.nutritionPhilosophy || '',
-    weeklyVolume: fallbackProgram.weeklyVolume,
+    weeklyVolume: {
+      ...(fallbackProgram.weeklyVolume || {}),
+      sessionMinutes: normalizedDuration,
+    },
     profileSnapshot: fallbackProgram.profileSnapshot,
     formulas: fallbackProgram.formulas,
     createdAt: new Date().toISOString(),
     // AI generated content
     aiGenerated: true,
     coachNote: aiProgram.coachNote || '',
-    weeklySchedule: aiProgram.weeklySchedule || fallbackProgram.weeklySchedule,
-    sessions: aiProgram.sessions || fallbackProgram.sessions,
-    sessionsList: Object.entries(aiProgram.sessions || {}).map(([key, s]) => ({
+    weeklySchedule: mergedSchedule,
+    sessions: mergedSessions,
+    sessionsList: Object.entries(mergedSessions).map(([key, s]) => ({
       id: key,
       name: s.name,
       environment: s.environment || 'gym',
@@ -236,7 +254,7 @@ function mergeWithFallback(aiProgram, fallbackProgram, profile) {
       })),
       warmUp: s.warmUp,
       coolDown: s.coolDown,
-      estimatedDuration: s.estimatedDuration,
+      estimatedDuration: normalizedDuration,
       sessionKey: key,
     })),
   }

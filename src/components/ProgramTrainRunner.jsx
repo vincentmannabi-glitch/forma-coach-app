@@ -67,6 +67,19 @@ function FinisherBlock({ label, finisher }) {
   )
 }
 
+function prettyLabel(v) {
+  const key = String(v || '').trim()
+  const map = {
+    fullBody: 'Full Body',
+    calisthenics: 'Calisthenics',
+    muscleBuilding: 'Muscle Building',
+    fatLoss: 'Fat Loss',
+    upperLower: 'Upper / Lower',
+  }
+  if (map[key]) return map[key]
+  return key ? key.replace(/([A-Z])/g, ' $1').trim() : '—'
+}
+
 export default function ProgramTrainRunner({ styleId = 'program', title = 'Training session', showBackLink = true }) {
   const navigate = useNavigate()
   const { profile: authProfile } = useAuth()
@@ -252,7 +265,7 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
         ) : null}
         <h1 className="train-v2-title">{session?.name || title}</h1>
         <p className="train-v2-subtitle">
-          Goal {program?.profileSnapshot?.goal ?? '—'} · Level {level}
+          Goal {prettyLabel(program?.profileSnapshot?.goal)} · Level {prettyLabel(level)}
           {fromCheckIn ? <span className="train-checkin-badge"> · adjusted from check-in</span> : null}
         </p>
         {session?.estimatedDuration != null ? (

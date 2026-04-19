@@ -74,6 +74,20 @@ function readStoredUser() {
   }
 }
 
+function buildPromptProfile(profile) {
+  const stored = readStoredUser() || {}
+  return {
+    ...stored,
+    ...(profile && typeof profile === 'object' ? profile : {}),
+    body_weight: profile?.body_weight ?? profile?.bodyweight ?? stored.body_weight ?? stored.bodyweight ?? null,
+    goal: profile?.goal ?? stored.goal ?? 'general fitness',
+    experience_level: profile?.experience_level ?? stored.experience_level ?? 'Complete beginner',
+    days_per_week: profile?.days_per_week ?? stored.days_per_week ?? 3,
+    equipment: profile?.equipment ?? stored.equipment ?? '',
+    injuries_details: profile?.injuries_details ?? stored.injuries_details ?? '',
+  }
+}
+
 function getBodyweightLbs(profile) {
   const fromProfile = Number(profile?.bodyweight ?? profile?.body_weight)
   if (Number.isFinite(fromProfile) && fromProfile > 0) return fromProfile
@@ -262,7 +276,7 @@ async function callAnthropicViaServerless({ systemPrompt, messages }) {
 // ─── Main export ──────────────────────────────────────────────────────────────
 
 export async function sendMessageToCoach(userMessage, fullUserProfile, conversationHistory = []) {
-  const profile = fullUserProfile && typeof fullUserProfile === 'object' ? fullUserProfile : {}
+  const profile = buildPromptProfile(fullUserProfile)
 
   await getSessions()
 
