@@ -1036,11 +1036,14 @@ function trainingDayNames(daysPerWeek) {
   return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 }
 
-function splitMeta(daysPerWeek) {
+function splitMeta(daysPerWeek, goalNormalized) {
   const d = Math.max(2, Math.min(6, daysPerWeek))
   if (d === 2) return { id: 'fullBody', sessionTypes: ['fullBody', 'fullBody'] }
   if (d === 3) return { id: 'fullBody', sessionTypes: ['fullBody', 'fullBody', 'fullBody'] }
   if (d === 4) return { id: 'upperLower', sessionTypes: ['upper', 'lower', 'upper', 'lower'] }
+  if (d === 5 && goalNormalized === 'strength') {
+    return { id: 'strengthUpperLowerFull', sessionTypes: ['upper', 'lower', 'upper', 'lower', 'fullBody'] }
+  }
   if (d === 5) return { id: 'pushPullLegs', sessionTypes: ['push', 'pull', 'legs', 'upper', 'lower'] }
   return { id: 'pushPullLegsX2', sessionTypes: ['push', 'pull', 'legs', 'push', 'pull', 'legs'] }
 }
@@ -1535,7 +1538,7 @@ export function buildProgram(profile = {}, opts = {}) {
     : null
   const timePlan = sessionPlanForDuration(sessionMinutes, goal)
 
-  const split = splitMeta(daysPerWeek)
+  const split = splitMeta(daysPerWeek, goal)
   const dayNames = trainingDayNames(daysPerWeek)
   const gh = trainingStyle === 'gymAndHome' ? gymHomeCounts(daysPerWeek, hasGoodHomeEquipment(equipSet)) : null
 

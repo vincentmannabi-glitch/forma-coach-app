@@ -36,8 +36,10 @@ function derivePrimaryGoal(goals) {
 function deriveConservativeExperienceLevel(levels) {
   if (!levels?.length) return null
   const blob = levels.map((l) => String(l || '').toLowerCase()).join(' ')
-  if (blob.includes('beginner')) return 'Complete beginner'
+  // Order matters: "intermediate" contains the substring "beginner" — check longer labels first.
   if (blob.includes('intermediate')) return 'Intermediate'
+  if (blob.includes('advanced') || blob.includes('competitive')) return 'Advanced or competitive'
+  if (blob.includes('beginner')) return 'Complete beginner'
   return 'Advanced or competitive'
 }
 

@@ -183,7 +183,12 @@ CARDIO / SPORT TRAINING: ${cardio}${sport !== 'None' ? ` / ${sport}` : ''}
 Rest days: ${restDays.join(', ')} — include these in weeklySchedule with sessionKey: null
 
 IMPORTANT NOTES:
-- This person ${level.includes('beginner') ? 'is new to training — prioritize form, foundational movements, and building confidence' : level.includes('intermediate') ? 'has training experience — they can handle moderate complexity and progressive loading' : 'is advanced — they can handle complex movements, high intensity, and sport-specific demands'}
+- This person ${(() => {
+    const l = String(level || '').toLowerCase()
+    if (l.includes('intermediate')) return 'has training experience — they can handle moderate complexity and progressive loading'
+    if (l.includes('advanced') || l.includes('competitive')) return 'is advanced — they can handle complex movements, high intensity, and sport-specific demands'
+    return 'is new to training — prioritize form, foundational movements, and building confidence'
+  })()}
 - ${injuries !== 'None' ? `They have injuries: ${injuries}. Avoid any movements that could aggravate this. Substitute intelligently.` : 'No injuries — full movement selection available'}
 - ${cardio !== 'None' ? `They do ${cardio} training — program the strength sessions to COMPLEMENT not compete with their cardio. Consider fatigue management.` : 'Strength only — full recovery between sessions'}
 - Make the sessionKey format exactly: sess-[dayname lowercase]-[index starting at 0] (e.g., sess-monday-0, sess-wednesday-1)
@@ -193,30 +198,108 @@ IMPORTANT NOTES:
 Generate the program now.`
 }
 
+/** Mirrors client `normalizeGoal` in programBuilder.js — onboarding sends human labels (e.g. "strength"). */
+function normalizeGoalFromProfile(profile) {
+  const raw = profile?.goal ?? (Array.isArray(profile?.goals) && profile.goals.length ? profile.goals[0] : '') ?? ''
+  const g = String(raw).toLowerCase()
+  if (g.includes('general health') || g.includes('general fitness') || g.includes('health')) return 'generalHealth'
+  if (g.includes('fat')) return 'fatLoss'
+  if (g.includes('muscle')) return 'muscleBuilding'
+  if (g.includes('strength')) return 'strength'
+  if (g.includes('endur')) return 'endurance'
+  if (g.includes('athletic')) return 'athletic'
+  return 'muscleBuilding'
+}
+
+/** Mirrors client mapExperienceToTrainLevel — order matters (intermediate before beginner substring checks). */
+function mapExperienceToTrainLevelFromProfile(profile) {
+  const exp = profile?.experience_level ?? profile?.experienceLevel ?? ''
+  const s = Array.isArray(exp) ? exp.join(' ') : String(exp ?? '')
+  const lower = s.toLowerCase()
+  if (lower.includes('advanced') || lower.includes('competitive')) return 'advanced'
+  if (lower.includes('intermediate')) return 'intermediate'
+  return 'beginner'
+}
+
 function mergeWithFallback(aiProgram, fallbackProgram, profile) {
   if (!fallbackProgram) return aiProgram
   const targetDuration = Number(profile?.session_minutes || profile?.sessionDuration || fallbackProgram?.weeklyVolume?.sessionMinutes || 60)
   const normalizedDuration = Number.isFinite(targetDuration) && targetDuration > 0 ? targetDuration : 60
+
+  const canonicalGoal = normalizeGoalFromProfile(profile) || fallbackProgram.goal || aiProgram.goal
+  const canonicalExperience =
+    mapExperienceToTrainLevelFromProfile(profile) ||
+    fallbackProgram.experienceLevel ||
+    mapExperienceToTrainLevelFromProfile({ experience_level: aiProgram.experienceLevel })
+
+  const fbSessions = fallbackProgram.sessions || {}
+  const aiSessions = aiProgram.sessions || {}
   const mergedSessions = Object.fromEntries(
-    Object.entries(aiProgram.sessions || fallbackProgram.sessions || {}).map(([key, s]) => [
-      key,
-      {
-        ...s,
-        estimatedDuration: normalizedDuration,
-      },
-    ]),
+    Object.entries(fbSessions).map(([key, s]) => {
+      const ai = aiSessions[key]
+      if (!ai || !Array.isArray(ai.movements) || ai.movements.length === 0) {
+        return [key, { ...s, estimatedDuration: normalizedDuration }]
+      }
+      return [
+        key,
+        {
+          ...s,
+          ...ai,
+          movements: ai.movements,
+          estimatedDuration: normalizedDuration,
+          warmUp: ai.warmUp || s.warmUp,
+          coolDown: ai.coolDown || s.coolDown,
+        },
+      ]
+    }),
   )
-  const mergedSchedule = (aiProgram.weeklySchedule || fallbackProgram.weeklySchedule || []).map((d) => ({
+
+  const baseSchedule =
+    fallbackProgram.weeklySchedule?.length ? fallbackProgram.weeklySchedule : aiProgram.weeklySchedule || []
+
+  const mergedSchedule = baseSchedule.map((d) => ({
     ...d,
     sessionDuration: d?.sessionKey ? normalizedDuration : 0,
   }))
 
+  const sessionsList = mergedSchedule
+    .filter((d) => d.sessionKey)
+    .map((d) => {
+      const key = d.sessionKey
+      const s = mergedSessions[key]
+      if (!s) return null
+      return {
+        id: key,
+        name: s.name,
+        environment: s.environment || 'gym',
+        exercises: (s.movements || []).map((m, i) => ({
+          id: m.exerciseId || `ai-ex-${i}`,
+          name: m.exerciseName,
+          displayName: m.exerciseName,
+          sets: m.sets,
+          repRange: m.repRange,
+          restSeconds: m.restSeconds,
+          coachingCues: m.coachingCues,
+          description: m.coachingCues,
+          weightSuggestion: m.weightSuggestion,
+          progression: m.progression,
+          regression: m.regression,
+          order: m.order || i + 1,
+          musclesWorked: [],
+        })),
+        warmUp: s.warmUp,
+        coolDown: s.coolDown,
+        estimatedDuration: normalizedDuration,
+        sessionKey: key,
+      }
+    })
+    .filter(Boolean)
+
   return {
-    // Core identity from fallback
     userId: fallbackProgram.userId || profile?.id || 'forma_local_user',
-    goal: fallbackProgram.goal || aiProgram.goal || profile?.goal,
+    goal: canonicalGoal,
     trainingStyle: fallbackProgram.trainingStyle || 'gym',
-    experienceLevel: fallbackProgram.experienceLevel || profile?.experience_level,
+    experienceLevel: canonicalExperience,
     sessionHistory: fallbackProgram.sessionHistory || [],
     progressiveOverload: fallbackProgram.progressiveOverload,
     snackRecommendations: fallbackProgram.snackRecommendations || [],
@@ -225,37 +308,17 @@ function mergeWithFallback(aiProgram, fallbackProgram, profile) {
       ...(fallbackProgram.weeklyVolume || {}),
       sessionMinutes: normalizedDuration,
     },
-    profileSnapshot: fallbackProgram.profileSnapshot,
+    profileSnapshot: {
+      ...(fallbackProgram.profileSnapshot || {}),
+      goal: canonicalGoal,
+      level: canonicalExperience,
+    },
     formulas: fallbackProgram.formulas,
     createdAt: new Date().toISOString(),
-    // AI generated content
     aiGenerated: true,
     coachNote: aiProgram.coachNote || '',
     weeklySchedule: mergedSchedule,
     sessions: mergedSessions,
-    sessionsList: Object.entries(mergedSessions).map(([key, s]) => ({
-      id: key,
-      name: s.name,
-      environment: s.environment || 'gym',
-      exercises: (s.movements || []).map((m, i) => ({
-        id: m.exerciseId || `ai-ex-${i}`,
-        name: m.exerciseName,
-        displayName: m.exerciseName,
-        sets: m.sets,
-        repRange: m.repRange,
-        restSeconds: m.restSeconds,
-        coachingCues: m.coachingCues,
-        description: m.coachingCues,
-        weightSuggestion: m.weightSuggestion,
-        progression: m.progression,
-        regression: m.regression,
-        order: m.order || i + 1,
-        musclesWorked: [],
-      })),
-      warmUp: s.warmUp,
-      coolDown: s.coolDown,
-      estimatedDuration: normalizedDuration,
-      sessionKey: key,
-    })),
+    sessionsList,
   }
 }
