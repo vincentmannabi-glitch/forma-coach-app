@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { completeOnboarding } from '../utils/auth'
 import {
-  saveProgramToStorage,
+  buildProgram,
+  normalizeUserProfileForProgram,
+  PROGRAM_STORAGE_KEY,
   profileTrainingFieldsFromEquipment,
   inferHomeEquipmentIdsFromEquipmentText,
 } from '../utils/programBuilder'
-import { generateAIProgram } from '../utils/aiProgramGenerator'
 import './Onboarding.css'
 
 const PROFILE_KEY = 'forma_user_profile'
@@ -146,8 +147,9 @@ export default function Onboarding() {
       setTimeout(() => setBuildingMessage('Selecting the right movements for you...'), 2500)
       setTimeout(() => setBuildingMessage('Finalizing your personalized program...'), 4000)
 
-      const { program, aiGenerated } = await generateAIProgram(fullProfile)
-      saveProgramToStorage(program)
+      const userProfile = normalizeUserProfileForProgram(fullProfile)
+      const program = buildProgram(userProfile)
+      localStorage.setItem(PROGRAM_STORAGE_KEY, JSON.stringify(program))
 
       navigate('/home', { replace: true })
     } catch (err) {

@@ -163,7 +163,7 @@ export default function Chat() {
       const storedProfile = readUserProfileFromStorage()
       const fullUserProfile = normalizeUserProfileForProgram({ ...storedProfile, ...(user || {}) })
       const program = loadProgramFromStorage()
-      const systemPrompt = buildSystemPrompt(fullUserProfile, program)
+      const systemPrompt = buildSystemPrompt(user, program)
       const res = await sendMessageToCoachSafe(text, fullUserProfile, next.slice(-10), systemPrompt)
       const coachMsg = {
         id: newMessageId(),
