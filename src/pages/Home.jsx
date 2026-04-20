@@ -11,6 +11,7 @@ import {
   getTodaySessionWithOverride,
   hasProgramSessions,
   loadProgramFromStorage,
+  normalizeUserProfileForProgram,
   saveProgramToStorage,
 } from '../utils/programBuilder'
 import './Home.css'
@@ -126,23 +127,21 @@ export default function Home() {
       if (hasProgramSessions(stored)) return stored
       const storedProfileRaw = localStorage.getItem('forma_user_profile')
       const storedProfile = storedProfileRaw ? JSON.parse(storedProfileRaw) : {}
-      const fullUserProfile = {
+      const fullUserProfile = normalizeUserProfileForProgram({
         ...getDefaultProgramProfile({
           id: user?.id ?? 'forma_local_user',
           name: user?.name ?? 'Friend',
         }),
         ...storedProfile,
-      }
-      const built = buildProgram(
-        fullUserProfile,
-      )
+      })
+      const built = buildProgram(fullUserProfile)
       saveProgramToStorage(built)
       return built
     } catch {
       try {
         const storedProfileRaw = localStorage.getItem('forma_user_profile')
         const storedProfile = storedProfileRaw ? JSON.parse(storedProfileRaw) : {}
-        const fallback = buildProgram({ ...getDefaultProgramProfile(), ...storedProfile })
+        const fallback = buildProgram(normalizeUserProfileForProgram({ ...getDefaultProgramProfile(), ...storedProfile }))
         saveProgramToStorage(fallback)
         return fallback
       } catch {

@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { buildWelcomeMessage, newMessageId } from '../utils/chatCoach'
 import { sendMessageToCoachSafe } from '../utils/claudeSafe'
 import { loadChatMessages, saveChatMessages } from '../utils/chatService'
-import { applyProgramEdit, buildSystemPrompt, loadProgramFromStorage } from '../utils/programBuilder'
+import { applyProgramEdit, buildSystemPrompt, loadProgramFromStorage, normalizeUserProfileForProgram } from '../utils/programBuilder'
 import {
   markReengagementEngaged,
   getReengagementSessionPending,
@@ -26,6 +26,20 @@ function SportDetailMessage({ text, learnMore }) {
         : null}
     </div>
   )
+}
+
+function extractProgramEditInstruction(text) {
+  const source = String(text || '')
+  const patterns = [
+    /(?:^|[.!?\n])\s*(replace|swap|change|substitute)\s+.+?\s+(?:with|for)\s+.+?(?:[.!?\n]|$)/i,
+    /(?:^|[.!?\n])\s*(remove|take out|delete|skip|no more)\s+.+?(?:[.!?\n]|$)/i,
+    /(?:^|[.!?\n])\s*(add)\s+.+?(?:\s+to\s+\w+)?(?:[.!?\n]|$)/i,
+  ]
+  for (const pattern of patterns) {
+    const match = source.match(pattern)
+    if (match?.[0]) return match[0].trim()
+  }
+  return ''
 }
 
 export default function Chat() {
@@ -147,7 +161,7 @@ export default function Chat() {
 
     try {
       const storedProfile = readUserProfileFromStorage()
-      const fullUserProfile = { ...storedProfile, ...(user || {}) }
+      const fullUserProfile = normalizeUserProfileForProgram({ ...storedProfile, ...(user || {}) })
       const program = loadProgramFromStorage()
       const systemPrompt = buildSystemPrompt(fullUserProfile, program)
       const res = await sendMessageToCoachSafe(text, fullUserProfile, next.slice(-10), systemPrompt)
@@ -163,11 +177,17 @@ export default function Chat() {
         return merged
       })
 
-      if (res.ok && /\b(replace|swap|remove|add)\b/i.test(res.text || '')) {
+      const editInstruction = extractProgramEditInstruction(res.text)
+      if (res.ok && editInstruction) {
         const latestProgram = loadProgramFromStorage()
         if (latestProgram) {
-          const { updatedProgram } = applyProgramEdit(latestProgram, res.text)
-          localStorage.setItem('forma_user_program', JSON.stringify(updatedProgram))
+          const shouldApply = window.confirm(
+            `FORMA Coach suggested a program edit:\n\n"${editInstruction}"\n\nApply this change to your saved program?`,
+          )
+          if (shouldApply) {
+            const { updatedProgram } = applyProgramEdit(latestProgram, editInstruction)
+            localStorage.setItem('forma_user_program', JSON.stringify(updatedProgram))
+          }
         }
       }
     } finally {

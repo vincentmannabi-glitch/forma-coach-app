@@ -182,6 +182,48 @@ export function formatSplit(split) {
   return map[split] || split;
 }
 
+/** Merge common profile field aliases so buildProgram / prompts match app storage. */
+export function normalizeUserProfileForProgram(profile = {}) {
+  const p = profile && typeof profile === 'object' ? { ...profile } : {};
+  if (p.bodyweight == null && p.body_weight != null) p.bodyweight = p.body_weight;
+  if (p.body_weight == null && p.bodyweight != null) p.body_weight = p.bodyweight;
+  if (!p.id) p.id = p.userId || 'forma_local_user';
+  if (p.injuries_details == null && p.injury_details) p.injuries_details = p.injury_details;
+  if (p.session_minutes == null && p.sessionDuration != null) p.session_minutes = p.sessionDuration;
+  if (p.days_per_week == null && p.daysPerWeek != null) p.days_per_week = p.daysPerWeek;
+  if (!p.experience_level && p.experienceLevel) p.experience_level = p.experienceLevel;
+  if (!p.sport_or_activity && Array.isArray(p.sports_or_activities) && p.sports_or_activities.length) {
+    p.sport_or_activity = p.sports_or_activities[0];
+  }
+  return p;
+}
+
+function formatInjuriesLine(profile) {
+  const details = String(profile?.injuries_details || '').trim();
+  if (profile?.injuries === true && details) return `Yes — ${details}`;
+  if (profile?.injuries === true) return 'Yes (see app for details)';
+  if (details) return details;
+  return 'none reported';
+}
+
+function formatFullWeekSchedule(program) {
+  if (!program?.weeklySchedule?.length) return 'Program not loaded';
+  const sessions = program.sessions || {};
+  return program.weeklySchedule
+    .map((s) => {
+      if (s.sessionType === 'rest' || !s.sessionKey) {
+        return `  - ${s.day}: Rest`;
+      }
+      const sess = sessions[s.sessionKey];
+      const names = (sess?.movements || [])
+        .map((m) => m.exerciseName || m.name)
+        .filter(Boolean);
+      const preview = names.length ? names.join(', ') : `${s.exerciseCount ?? 0} exercises`;
+      return `  - ${s.day}: ${s.sessionName} — ${preview}`;
+    })
+    .join('\n');
+}
+
 // -----------------------------------------------------------
 // EXERCISE SELECTOR
 // -----------------------------------------------------------
@@ -380,10 +422,11 @@ function buildSession(sessionType, sessionName, { goal, level, equipmentTags, in
 // MAIN PROGRAM BUILDER — call this with full user profile
 // -----------------------------------------------------------
 export function buildProgram(userProfile) {
+  const userProfileN = normalizeUserProfileForProgram(userProfile || {});
   const {
     goal, experience_level, days_per_week, session_minutes,
     equipment, injuries_details, sport_or_activity, cardio_type, bodyweight,
-  } = userProfile;
+  } = userProfileN;
 
   const normalizedGoal = normalizeGoal(goal);
   const normalizedLevel = normalizeLevel(experience_level);
@@ -413,7 +456,7 @@ export function buildProgram(userProfile) {
     });
 
   return {
-    userId: userProfile.id,
+    userId: userProfileN.id,
     goal: normalizedGoal,
     trainingStyle: equipmentTags.includes('barbell') ? 'gym' : equipmentTags.includes('dumbbells') ? 'home_equipped' : 'bodyweight',
     experienceLevel: normalizedLevel,
@@ -427,7 +470,7 @@ export function buildProgram(userProfile) {
     sport: sport || null,
     bodyweight: bodyweight || null,
     createdAt: new Date().toISOString(),
-    profileSnapshot: { ...userProfile },
+    profileSnapshot: { ...userProfileN },
   };
 }
 
@@ -539,30 +582,31 @@ function toTitleCase(str) {
 // CLAUDE API SYSTEM PROMPT BUILDER
 // -----------------------------------------------------------
 export function buildSystemPrompt(userProfile, program) {
-  const goal = formatGoal(program?.goal || userProfile?.goal);
-  const level = normalizeLevel(userProfile?.experience_level);
-  const proteinTarget = userProfile?.bodyweight ? Math.round(userProfile.bodyweight * 0.8) : null;
+  const profile = normalizeUserProfileForProgram(userProfile || {});
+  const goal = formatGoal(program?.goal || profile?.goal);
+  const level = normalizeLevel(profile?.experience_level);
+  const bodyLb = profile.bodyweight ?? profile.body_weight;
+  const proteinTarget = bodyLb != null && Number(bodyLb) > 0 ? Math.round(Number(bodyLb) * 0.8) : null;
 
-  const weekSchedule = program?.weeklySchedule
-    ?.filter(s => s.sessionType !== 'rest')
-    ?.map(s => `  - ${s.day}: ${s.sessionName} (${s.exerciseCount || 0} exercises)`)
-    ?.join('\n') || 'Program not loaded';
+  const weekSchedule = formatFullWeekSchedule(program);
+  const splitLabel = program?.split ? formatSplit(program.split) : 'not set';
 
   return `You are the FORMA AI personal trainer — built by a competitive boxer and certified personal trainer with multi-sport experience.
 
 USER PROFILE:
-- Name: ${userProfile?.name || 'User'}
-- Body weight: ${userProfile?.bodyweight ? userProfile.bodyweight + ' lbs' : 'not provided'}
+- Name: ${profile?.name || 'User'}
+- Body weight: ${bodyLb != null && Number(bodyLb) > 0 ? `${bodyLb} lbs` : 'not provided'}
 - Goal: ${goal}
 - Experience: ${level}
-- Training days/week: ${userProfile?.days_per_week || 'not set'}
-- Session length: ${userProfile?.session_minutes || 60} min
-- Equipment: ${userProfile?.equipment || 'not set'}
-- Sport/hobby: ${userProfile?.sport_or_activity || userProfile?.cardio_type || 'none'}
-- Injuries: ${userProfile?.injuries_details || 'none reported'}
+- Training days/week: ${profile?.days_per_week ?? 'not set'}
+- Session length: ${profile?.session_minutes || 60} min
+- Equipment: ${profile?.equipment || 'not set'}
+- Sport / cardio: ${profile?.sport_or_activity || profile?.cardio_type || 'none'}
+- Injuries / limitations: ${formatInjuriesLine(profile)}
 ${proteinTarget ? `- Daily protein target: ${proteinTarget}g (0.8g per lb bodyweight)` : ''}
 
-THIS WEEK'S PROGRAM:
+THIS WEEK'S PROGRAM (full week — training and rest):
+- Split: ${splitLabel}
 ${weekSchedule}
 
 YOUR RULES:
@@ -757,7 +801,7 @@ export function ensureProgramLoaded() {
   } catch {
     storedProfile = {};
   }
-  const fallbackProfile = { ...getDefaultProgramProfile(), ...storedProfile };
+  const fallbackProfile = normalizeUserProfileForProgram({ ...getDefaultProgramProfile(), ...storedProfile });
   program = buildProgram(fallbackProfile);
   saveProgramToStorage(program);
   return program;

@@ -1,32 +1,41 @@
 /**
- * AI Program Generator — client side
- * Called once after onboarding. Sends the client profile to the AI,
- * gets back a custom program, saves it to localStorage.
+ * Program after onboarding — uses buildProgram() from programBuilder.js.
+ * Optionally calls the AI endpoint; merge on server still uses the same fallback shape.
  */
 
-import { saveProgramToStorage } from './programBuilder'
-import { buildProgramForProfile } from './programBuilderRouter'
+import { buildProgram, normalizeUserProfileForProgram, saveProgramToStorage } from './programBuilder'
+
+function mergeStoredProfile(profile = {}) {
+  let stored = {}
+  try {
+    if (typeof localStorage !== 'undefined') {
+      const raw = localStorage.getItem('forma_user_profile')
+      stored = raw ? JSON.parse(raw) : {}
+    }
+  } catch {
+    stored = {}
+  }
+  return normalizeUserProfileForProgram({ ...stored, ...(profile && typeof profile === 'object' ? profile : {}) })
+}
 
 /**
- * Generate a personalized program using AI coaching intelligence.
- * Falls back to the logic-based router if AI fails.
- *
  * @param {object} profile - Full client profile from onboarding
  * @returns {Promise<{ program: object, aiGenerated: boolean }>}
  */
 export async function generateAIProgram(profile) {
-  // Always build the logic-based fallback first — instant, reliable
-  const fallbackProgram = buildProgramForProfile(profile)
+  const userProfile = mergeStoredProfile(profile)
+  const fallbackProgram = buildProgram(userProfile)
 
   try {
     const response = await fetch('/api/generate-program', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ profile, fallbackProgram }),
+      body: JSON.stringify({ profile: userProfile, fallbackProgram }),
     })
 
     if (!response.ok) {
-      console.warn('AI program generation failed, using fallback')
+      console.warn('AI program generation failed, using buildProgram fallback')
+      saveProgramToStorage(fallbackProgram)
       return { program: fallbackProgram, aiGenerated: false }
     }
 
@@ -37,12 +46,10 @@ export async function generateAIProgram(profile) {
       return { program: data.program, aiGenerated: true }
     }
 
-    // AI failed or returned invalid — use fallback
     saveProgramToStorage(fallbackProgram)
     return { program: fallbackProgram, aiGenerated: false }
-
   } catch (err) {
-    console.warn('AI program generation error, using fallback:', err)
+    console.warn('AI program generation error, using buildProgram fallback:', err)
     saveProgramToStorage(fallbackProgram)
     return { program: fallbackProgram, aiGenerated: false }
   }
