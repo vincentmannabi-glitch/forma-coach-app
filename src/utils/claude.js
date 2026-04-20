@@ -275,7 +275,7 @@ async function callAnthropicViaServerless({ systemPrompt, messages }) {
 
 // ─── Main export ──────────────────────────────────────────────────────────────
 
-export async function sendMessageToCoach(userMessage, fullUserProfile, conversationHistory = []) {
+export async function sendMessageToCoach(userMessage, fullUserProfile, conversationHistory = [], systemPromptOverride = '') {
   const profile = buildPromptProfile(fullUserProfile)
 
   await getSessions()
@@ -295,7 +295,7 @@ export async function sendMessageToCoach(userMessage, fullUserProfile, conversat
   const programSummary = buildProgramSummary()
   const todaySessionSummary = buildTodaySessionSummary()
 
-  const systemPrompt = buildSystemPrompt(profile, {
+  const systemPrompt = (systemPromptOverride || '').trim() || buildSystemPrompt(profile, {
     programWeek,
     streak,
     personalRecords,

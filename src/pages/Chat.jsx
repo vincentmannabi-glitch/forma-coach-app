@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { buildWelcomeMessage, newMessageId } from '../utils/chatCoach'
 import { sendMessageToCoachSafe } from '../utils/claudeSafe'
 import { loadChatMessages, saveChatMessages } from '../utils/chatService'
+import { applyProgramEdit, buildSystemPrompt, loadProgramFromStorage } from '../utils/programBuilder'
 import {
   markReengagementEngaged,
   getReengagementSessionPending,
@@ -116,6 +117,15 @@ export default function Chat() {
     saveChatMessages(next)
   }, [])
 
+  const readUserProfileFromStorage = useCallback(() => {
+    try {
+      const raw = localStorage.getItem('forma_user_profile')
+      return raw ? JSON.parse(raw) : {}
+    } catch {
+      return {}
+    }
+  }, [])
+
   const send = async () => {
     const text = input.trim()
     if (!text || thinking) return
@@ -136,7 +146,11 @@ export default function Chat() {
     setThinking(true)
 
     try {
-      const res = await sendMessageToCoachSafe(text, user, next.slice(-10))
+      const storedProfile = readUserProfileFromStorage()
+      const fullUserProfile = { ...storedProfile, ...(user || {}) }
+      const program = loadProgramFromStorage()
+      const systemPrompt = buildSystemPrompt(fullUserProfile, program)
+      const res = await sendMessageToCoachSafe(text, fullUserProfile, next.slice(-10), systemPrompt)
       const coachMsg = {
         id: newMessageId(),
         role: 'coach',
@@ -148,6 +162,14 @@ export default function Chat() {
         saveChatMessages(merged)
         return merged
       })
+
+      if (res.ok && /\b(replace|swap|remove|add)\b/i.test(res.text || '')) {
+        const latestProgram = loadProgramFromStorage()
+        if (latestProgram) {
+          const { updatedProgram } = applyProgramEdit(latestProgram, res.text)
+          localStorage.setItem('forma_user_program', JSON.stringify(updatedProgram))
+        }
+      }
     } finally {
       setThinking(false)
     }

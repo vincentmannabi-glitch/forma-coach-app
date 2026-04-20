@@ -42,6 +42,7 @@ function applyRequiredInjuryExclusionsToProgram(program, profile) {
         const name = String(m?.exerciseName || m?.name || '').toLowerCase()
         if (!name) return true
         if (hasBackIssue && blockedBack.some((b) => name.includes(b))) return false
+        if (hasBackIssue && name.includes('deadlift') && !name.includes('single leg')) return false
         if (hasKneeIssue && blockedKnee.some((b) => name.includes(b))) return false
         return true
       })
@@ -479,5 +480,13 @@ export function buildProgramForProfile(profile = {}) {
   }
 
   // Default: full gym builder (unchanged, handles all gym goal types)
-  return applyRequiredInjuryExclusionsToProgram(buildProgram(profile), profile)
+  let storedProfile = {}
+  try {
+    const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('forma_user_profile') : null
+    storedProfile = raw ? JSON.parse(raw) : {}
+  } catch {
+    storedProfile = {}
+  }
+  const fullUserProfile = { ...storedProfile, ...(profile || {}) }
+  return applyRequiredInjuryExclusionsToProgram(buildProgram(fullUserProfile), fullUserProfile)
 }

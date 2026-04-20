@@ -124,17 +124,25 @@ export default function Home() {
     try {
       const stored = loadProgramFromStorage()
       if (hasProgramSessions(stored)) return stored
-      const built = buildProgram(
-        getDefaultProgramProfile({
+      const storedProfileRaw = localStorage.getItem('forma_user_profile')
+      const storedProfile = storedProfileRaw ? JSON.parse(storedProfileRaw) : {}
+      const fullUserProfile = {
+        ...getDefaultProgramProfile({
           id: user?.id ?? 'forma_local_user',
           name: user?.name ?? 'Friend',
         }),
+        ...storedProfile,
+      }
+      const built = buildProgram(
+        fullUserProfile,
       )
       saveProgramToStorage(built)
       return built
     } catch {
       try {
-        const fallback = buildProgram(getDefaultProgramProfile())
+        const storedProfileRaw = localStorage.getItem('forma_user_profile')
+        const storedProfile = storedProfileRaw ? JSON.parse(storedProfileRaw) : {}
+        const fallback = buildProgram({ ...getDefaultProgramProfile(), ...storedProfile })
         saveProgramToStorage(fallback)
         return fallback
       } catch {

@@ -62,7 +62,14 @@ function App() {
                 </CookbookErrorBoundary>
               }
             />
-            <Route path="/cookbook/:recipeId" element={<RecipeDetail />} />
+            <Route
+              path="/cookbook/:recipeId"
+              element={
+                <CookbookErrorBoundary>
+                  <RecipeDetail />
+                </CookbookErrorBoundary>
+              }
+            />
             <Route path="/grocery" element={<GroceryList />} />
             <Route path="/progress" element={<Progress />} />
             <Route path="/food-log" element={<FoodLogger />} />

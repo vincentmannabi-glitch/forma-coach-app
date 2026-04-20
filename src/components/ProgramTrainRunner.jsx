@@ -106,6 +106,20 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
     [program, styleId],
   )
   const session = resolvedSession
+  const displayDurationMinutes = useMemo(() => {
+    const fromSession = Number(session?.estimatedDuration)
+    if (Number.isFinite(fromSession) && fromSession > 0) return fromSession
+
+    const dayName = new Date().toLocaleDateString('en-US', { weekday: 'long' })
+    const scheduleEntry = (program?.weeklySchedule || []).find((d) => d?.day === dayName && d?.sessionKey === session?.sessionKey)
+    const fromSchedule = Number(scheduleEntry?.sessionDuration)
+    if (Number.isFinite(fromSchedule) && fromSchedule > 0) return fromSchedule
+
+    const fromProfile = Number(authProfile?.session_minutes ?? authProfile?.sessionDuration)
+    if (Number.isFinite(fromProfile) && fromProfile > 0) return fromProfile
+    return null
+  }, [session, program?.weeklySchedule, authProfile?.session_minutes, authProfile?.sessionDuration])
+
   const exercises = useMemo(() => {
     const listed = session?.exercises || []
     if (listed.length > 0) return listed
@@ -268,8 +282,8 @@ export default function ProgramTrainRunner({ styleId = 'program', title = 'Train
           Goal {prettyLabel(program?.profileSnapshot?.goal)} · Level {prettyLabel(level)}
           {fromCheckIn ? <span className="train-checkin-badge"> · adjusted from check-in</span> : null}
         </p>
-        {session?.estimatedDuration != null ? (
-          <p className="train-v2-subtitle">About {session.estimatedDuration} min</p>
+        {displayDurationMinutes != null ? (
+          <p className="train-v2-subtitle">About {displayDurationMinutes} min</p>
         ) : null}
       </header>
 
