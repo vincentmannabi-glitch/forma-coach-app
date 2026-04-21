@@ -6,6 +6,7 @@ import Onboarding from './pages/Onboarding'
 import Home from './pages/Home'
 import HomeErrorBoundary from './components/HomeErrorBoundary'
 import CookbookErrorBoundary from './components/CookbookErrorBoundary'
+import ChatErrorBoundary from './components/ChatErrorBoundary'
 import TrainLayout from './components/TrainLayout'
 import WorkoutHub from './pages/WorkoutHub'
 import AuthGuard from './components/AuthGuard'
@@ -74,7 +75,14 @@ function App() {
             <Route path="/progress" element={<Progress />} />
             <Route path="/food-log" element={<FoodLogger />} />
             <Route path="/settings" element={<Settings />} />
-            <Route path="/chat" element={<Chat />} />
+            <Route
+              path="/chat"
+              element={
+                <ChatErrorBoundary>
+                  <Chat />
+                </ChatErrorBoundary>
+              }
+            />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

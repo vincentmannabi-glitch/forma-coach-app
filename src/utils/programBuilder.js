@@ -190,11 +190,26 @@ export function normalizeUserProfileForProgram(profile = {}) {
   if (!p.id) p.id = p.userId || 'forma_local_user';
   if (p.injuries_details == null && p.injury_details) p.injuries_details = p.injury_details;
   if (p.session_minutes == null && p.sessionDuration != null) p.session_minutes = p.sessionDuration;
-  if (p.days_per_week == null && p.daysPerWeek != null) p.days_per_week = p.daysPerWeek;
-  if (!p.experience_level && p.experienceLevel) p.experience_level = p.experienceLevel;
-  if (!p.sport_or_activity && Array.isArray(p.sports_or_activities) && p.sports_or_activities.length) {
-    p.sport_or_activity = p.sports_or_activities[0];
-  }
+
+  const expFromArray = Array.isArray(p.experience_levels)
+    ? p.experience_levels.find((x) => x != null && String(x).trim() !== '')
+    : null;
+  p.experience_level = expFromArray || p.experience_level || p.experienceLevel || '';
+
+  const dpwRaw = p.days_per_week ?? p.daysPerWeek;
+  const dpwNum = Number.parseInt(String(dpwRaw ?? ''), 10);
+  p.days_per_week = Number.isFinite(dpwNum) && dpwNum > 0
+    ? Math.max(2, Math.min(6, dpwNum))
+    : 3;
+
+  const cardioRaw = p.cardio_type != null ? String(p.cardio_type) : '';
+  const cardio = cardioRaw.toLowerCase() === 'none' ? '' : (p.cardio_type || '');
+  const fromSportsArr = Array.isArray(p.sports_or_activities) && p.sports_or_activities.length
+    ? p.sports_or_activities[0]
+    : '';
+  const sportMerged = p.sport_or_activity || cardio || fromSportsArr || '';
+  p.sport_or_activity = sportMerged || null;
+
   return p;
 }
 
