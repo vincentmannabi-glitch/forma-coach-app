@@ -7,6 +7,7 @@ import {
   buildProgram,
   buildAndSaveTodaySessionFromCheckIn,
   clearTodaySessionOverride,
+  formatSplit,
   getDefaultProgramProfile,
   getTodaySessionWithOverride,
   hasProgramSessions,
@@ -39,7 +40,14 @@ function formatSplitLabel(rawSplit) {
   const map = {
     fullBody: 'Full Body',
     upperLower: 'Upper / Lower',
+    pushPullLegs: 'Push / Pull / Legs',
     calisthenics: 'Calisthenics',
+    push: 'Push',
+    pull: 'Pull',
+    legs: 'Legs',
+    upper: 'Upper',
+    lower: 'Lower',
+    generalHealth: 'General Health',
   }
   if (map[key]) return map[key]
   return key ? key.replace(/([A-Z])/g, ' $1').trim() : '—'
@@ -178,9 +186,10 @@ export default function Home() {
   const snacks = useMemo(() => pickSnacks(program, 3), [program])
 
   const exCount = Array.isArray(displaySession?.exercises) ? displaySession.exercises.length : 0
+  const durationMinutes = Number(displaySession?.estimatedDuration ?? displaySession?.sessionDuration ?? program?.sessionMinutes)
   const duration =
-    displaySession?.estimatedDuration != null && Number.isFinite(Number(displaySession.estimatedDuration))
-      ? `${displaySession.estimatedDuration} min`
+    Number.isFinite(durationMinutes) && durationMinutes > 0
+      ? `${durationMinutes} min`
       : '—'
 
   const sessionTitle = useMemo(() => {
@@ -227,7 +236,7 @@ export default function Home() {
     return pretty[lv] || lv || '—'
   }, [program?.profileSnapshot?.level, user?.experienceLevel])
 
-  const splitLabel = formatSplitLabel(program?.formulas?.frequencySplit ?? program?.weeklyVolume?.splitId ?? '')
+  const splitLabel = formatSplit(program?.split || '') || '—'
 
   return (
     <div className="home-page">
