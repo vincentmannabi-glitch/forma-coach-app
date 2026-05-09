@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { buildWelcomeMessage, newMessageId } from '../utils/chatCoach'
 import { sendMessageToCoachSafe } from '../utils/claudeSafe'
 import { loadChatMessages, saveChatMessages } from '../utils/chatService'
-import { applyProgramEdit, buildSystemPrompt, loadProgramFromStorage, normalizeUserProfileForProgram } from '../utils/programBuilder'
+import { applyProgramEdit, buildProgram, buildSystemPrompt, formatGoal, formatSplit, loadProgramFromStorage, normalizeUserProfileForProgram, saveProgramToStorage } from '../utils/programBuilder'
 import {
   markReengagementEngaged,
   getReengagementSessionPending,
@@ -40,6 +40,54 @@ function extractProgramEditInstruction(text) {
     if (match?.[0]) return match[0].trim()
   }
   return ''
+}
+
+/**
+ * Detect if the AI is proposing a FULL PROGRAM REBUILD for a new goal.
+ * Returns the new goal string if detected, null otherwise.
+ */
+function extractGoalSwitch(aiText, userText) {
+  const combined = (aiText + ' ' + userText).toLowerCase()
+  const goalMap = [
+    { keywords: ['muscle building', 'build muscle', 'hypertrophy', 'mass', 'bulk'], goal: 'muscleBuilding' },
+    { keywords: ['fat loss', 'lose weight', 'cut', 'shred', 'lose fat', 'weight loss'], goal: 'fatLoss' },
+    { keywords: ['strength', 'get stronger', 'powerlifting', 'power', '1rm', 'one rep max'], goal: 'strength' },
+    { keywords: ['general health', 'stay active', 'fitness', 'overall health', 'feel better', 'mobility'], goal: 'generalHealth' },
+  ]
+  // Only trigger if user is clearly requesting a program change / new focus
+  const switchSignals = [
+    'switch', 'change my program', 'new program', 'rebuild', 'start fresh',
+    'focus on', 'want to focus', 'pivot', 'different goal', 'new goal',
+    'revert', 'go back to', 'instead', 'try something different'
+  ]
+  const hasSwitchSignal = switchSignals.some(s => combined.includes(s))
+  if (!hasSwitchSignal) return null
+  for (const { keywords, goal } of goalMap) {
+    if (keywords.some(k => combined.includes(k))) return goal
+  }
+  return null
+}
+
+/**
+ * Rebuild the entire program for a new goal while preserving all other profile fields.
+ */
+function rebuildProgramForGoal(currentProgram, userProfile, newGoal) {
+  const updatedProfile = normalizeUserProfileForProgram({
+    ...userProfile,
+    goal: newGoal,
+    // Preserve experience, equipment, days, injuries — only goal changes
+    experience_level: currentProgram?.experienceLevel || userProfile?.experience_level,
+    days_per_week: currentProgram?.daysPerWeek || userProfile?.days_per_week,
+    session_minutes: currentProgram?.sessionMinutes || userProfile?.session_minutes,
+    equipment: userProfile?.equipment,
+    injuries_details: currentProgram?.injuries || userProfile?.injuries_details,
+    sport_or_activity: currentProgram?.sport || userProfile?.sport_or_activity,
+    bodyweight: userProfile?.bodyweight,
+  })
+  const newProgram = buildProgram(updatedProfile)
+  // Preserve session history from old program
+  newProgram.sessionHistory = currentProgram?.sessionHistory || []
+  return newProgram
 }
 
 export default function Chat() {
@@ -140,9 +188,57 @@ export default function Chat() {
     }
   }, [])
 
+  // Handle yes/no responses to pending program switches
+  const handlePendingSwitch = useCallback((userText) => {
+    const trimmed = userText.trim().toLowerCase()
+    const isYes = ['yes', 'yeah', 'yep', 'sure', 'do it', 'apply', 'switch', 'go for it', 'let\'s do it'].some(w => trimmed.startsWith(w))
+    const isNo = ['no', 'nope', 'keep', 'cancel', 'never mind', 'nevermind', 'don\'t'].some(w => trimmed.startsWith(w))
+    if (!isYes && !isNo) return false
+
+    // Find the most recent pending switch in messages
+    const pending = [...messages].reverse().find(m => m.pendingProgramSwitch)
+    if (!pending) return false
+
+    if (isYes) {
+      saveProgramToStorage(pending.pendingProgramSwitch)
+      const goal = formatGoal(pending.pendingProgramSwitch.goal)
+      const split = formatSplit(pending.pendingProgramSwitch.split)
+      const confirmMsg = {
+        id: newMessageId(),
+        role: 'coach',
+        text: `Done. Your program has been switched to ${goal} — ${split} split. Head to the Train tab to see your new sessions. Your history has been preserved.`,
+        createdAt: new Date().toISOString(),
+      }
+      setMessages((prev) => {
+        const merged = [...prev, confirmMsg]
+        saveChatMessages(merged)
+        return merged
+      })
+    } else {
+      const cancelMsg = {
+        id: newMessageId(),
+        role: 'coach',
+        text: `No problem — sticking with your current program. Let me know if you want to tweak anything else.`,
+        createdAt: new Date().toISOString(),
+      }
+      setMessages((prev) => {
+        const merged = [...prev, cancelMsg]
+        saveChatMessages(merged)
+        return merged
+      })
+    }
+    return true
+  }, [messages])
+
   const send = async () => {
     const text = input.trim()
     if (!text || thinking) return
+
+    // Check if this is a yes/no response to a pending program switch
+    if (handlePendingSwitch(text)) {
+      setInput('')
+      return
+    }
 
     if (getReengagementSessionPending()) {
       markReengagementEngaged()
@@ -177,16 +273,50 @@ export default function Chat() {
         return merged
       })
 
-      const editInstruction = extractProgramEditInstruction(res.text)
-      if (res.ok && editInstruction) {
+      // --- Program edit detection ---
+      if (res.ok) {
         const latestProgram = loadProgramFromStorage()
-        if (latestProgram) {
-          const shouldApply = window.confirm(
-            `FORMA Coach suggested a program edit:\n\n"${editInstruction}"\n\nApply this change to your saved program?`,
-          )
-          if (shouldApply) {
-            const { updatedProgram } = applyProgramEdit(latestProgram, editInstruction)
-            localStorage.setItem('forma_user_program', JSON.stringify(updatedProgram))
+        const storedProfileRaw = localStorage.getItem('forma_user_profile')
+        const storedProfile = storedProfileRaw ? JSON.parse(storedProfileRaw) : {}
+        const fullProfile = normalizeUserProfileForProgram({ ...storedProfile, ...(user || {}) })
+
+        // 1. Check for full goal/program switch first (higher priority)
+        const newGoal = extractGoalSwitch(res.text, text)
+        if (newGoal && latestProgram && newGoal !== latestProgram.goal) {
+          const newProgram = rebuildProgramForGoal(latestProgram, fullProfile, newGoal)
+          const goalLabel = formatGoal(newGoal)
+          const splitLabel = formatSplit(newProgram.split)
+          const confirmMsg = {
+            id: newMessageId(),
+            role: 'coach',
+            text: `I've built you a new ${goalLabel} program — ${splitLabel} split, ${newProgram.daysPerWeek} days/week, same equipment. Want me to apply it? Reply "yes" to switch or "no" to keep your current program.`,
+            createdAt: new Date().toISOString(),
+            pendingProgramSwitch: newProgram,
+          }
+          setMessages((prev) => {
+            const merged = [...prev, confirmMsg]
+            saveChatMessages(merged)
+            return merged
+          })
+        } else {
+          // 2. Check for single exercise edit
+          const editInstruction = extractProgramEditInstruction(res.text)
+          if (editInstruction && latestProgram) {
+            const { updatedProgram, changesMade } = applyProgramEdit(latestProgram, editInstruction)
+            saveProgramToStorage(updatedProgram)
+            const confirmMsg = {
+              id: newMessageId(),
+              role: 'coach',
+              text: changesMade.length
+                ? `Done — ${changesMade.join('. ')}. Your program has been updated.`
+                : `I've noted that. Let me know if you want me to make a specific swap in your program.`,
+              createdAt: new Date().toISOString(),
+            }
+            setMessages((prev) => {
+              const merged = [...prev, confirmMsg]
+              saveChatMessages(merged)
+              return merged
+            })
           }
         }
       }
